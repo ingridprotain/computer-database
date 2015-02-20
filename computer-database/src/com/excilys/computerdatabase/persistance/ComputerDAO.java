@@ -63,15 +63,50 @@ public class ComputerDAO extends DAO<Computer>{
 	}
 
 	@Override
-	public Computer update(Computer obj) {
-		// TODO Auto-generated method stub
-		return null;
+	public Computer update(Computer computer) {
+		PreparedStatement stmt = null;
+		
+		String query = "UPDATE computer SET name=?, introduced=?, discontinued=? WHERE id=?;";
+		
+		try {
+			stmt = MySqlConnect.getMySqlConnect().cn.prepareStatement(query);
+			
+			stmt.setString(1, computer.getName());
+			stmt.setTimestamp(2, computer.getIntroduced());
+			stmt.setTimestamp(3, computer.getDiscontinued());
+			stmt.setInt(4, computer.getId());
+			//TODO company
+			
+			int result = stmt.executeUpdate();
+			if (result == 0) {
+				computer = null;
+			}
+			
+		} catch (SQLException e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+		}
+		
+		return computer;
 	}
 
 	@Override
-	public void delete(Computer obj) {
-		// TODO Auto-generated method stub
+	public void delete(Computer computer) {
+		PreparedStatement stmt = null;
 		
+		String query = "DELETE FROM computer WHERE id=?;";
+		
+		try {
+			stmt = MySqlConnect.getMySqlConnect().cn.prepareStatement(query);
+			
+			stmt.setInt(1, computer.getId());
+			
+			stmt.executeUpdate();
+
+		} catch (SQLException e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+		}
 	}
 	
 	/**

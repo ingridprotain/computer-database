@@ -1,6 +1,10 @@
 package com.excilys.computerdatabase.model;
 
+import java.util.Date;
 import java.sql.Timestamp;
+import java.text.DateFormat;
+import java.text.ParseException;
+import java.text.SimpleDateFormat;
 
 /**
  * 
@@ -13,6 +17,8 @@ public class Computer {
 	private Timestamp introduced;
 	private Timestamp discontinued;
 	private Company company;
+	
+	private DateFormat format = new SimpleDateFormat("dd/MM/YYYY");
 	/**
 	 * @return the id
 	 */
