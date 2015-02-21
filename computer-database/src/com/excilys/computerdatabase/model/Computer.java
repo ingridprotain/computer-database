@@ -82,7 +82,10 @@ public class Computer {
 	
 	@Override
 	public String toString() {
-		return "Ordinateur nÂ°" + id + " : " + name + ", introduit en " + (introduced == null ? "?" : introduced.toString() + (discontinued == null ? "" : ", dÃ©sactivÃ© en " + discontinued.toString()));
+		return "Ordinateur n°" + id + " : " + name 
+				+ ", introduit en " + (introduced == null ? "?" : introduced.toString()
+				+ (discontinued == null ? "" : ", désactivé en " + discontinued.toString())) 
+				+ (company == null ? "" : " - Entreprise : " + company.getName());
 	}
 	
 	

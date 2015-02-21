@@ -6,13 +6,30 @@ import java.util.ArrayList;
 import java.util.List;
 
 import com.excilys.computerdatabase.model.Company;
+import com.excilys.computerdatabase.model.Computer;
 
 public class CompanyDAO extends DAO<Company> {
 
 	@Override
 	public Company find(int id) {
-		// TODO Auto-generated method stub
-		return null;
+		Company company = null;
+		
+		String query = "SELECT id, name FROM company AS c WHERE c.id=" + id;
+		
+		try {
+			ResultSet result = MySqlConnect.getMySqlConnect().selectQuery(query);
+			if (result.first()) {
+				company = new Company();
+				
+				company.setId(new Integer(result.getInt(1)));
+				company.setName(result.getString(2));
+			}
+		} catch (SQLException e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+		}
+		
+		return company;
 	}
 
 	@Override

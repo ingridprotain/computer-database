@@ -32,8 +32,8 @@ public class Main {
 				System.out.println("Aide :");
 				System.out.println("1. Consulter la liste des ordinateurs : -l computers");
 				System.out.println("2. Consulter la liste des entreprises : -l companies");
-				System.out.println("3. Consulter le dÃ©tail d'un ordi : -l computer");
-				System.out.println("4. CrÃ©er un ordinateur : -c computer");
+				System.out.println("3. Consulter le détail d'un ordi : -l computer");
+				System.out.println("4. Créer un ordinateur : -c computer");
 				System.out.println("5. Modifier un ordinateur : -u computer");
 				System.out.println("Quitter : exit");
 				break;
@@ -60,9 +60,9 @@ public class Main {
 				}
 				break;
 			
-			//Affiche le dÃ©tail d'un ordinateur
+			//Affiche le détail d'un ordinateur
 			case "-l computer":
-				System.out.println("numÃ©ro de l'ordinateur Ã  rechercher?");
+				System.out.println("Numéro de l'ordinateur à  rechercher?");
 				String computer_id_s = scan.nextLine();
 				try {
 					
@@ -72,12 +72,12 @@ public class Main {
 					System.out.println(message);
 					
 				} catch (NumberFormatException e){
-					System.out.println("numÃ©ro de l'ordinateur invalide");
+					System.out.println("numéro de l'ordinateur invalide");
 				}
 				
 				break;
 				
-			//InsÃ©rer un ordinateur
+			//Insérer un ordinateur
 			case "-c computer":
 				boolean insertComputerOk = false;
 				while(insertComputerOk != true) {
@@ -95,7 +95,7 @@ public class Main {
 			
 			//Modifier un ordinateur
 			case "-d computer":
-				System.out.println("numÃ©ro de l'ordinateur Ã  supprimer ?");
+				System.out.println("numéro de l'ordinateur à  supprimer ?");
 				String computer_id_to_del_s = scan.nextLine();
 				try {
 					
@@ -105,10 +105,10 @@ public class Main {
 						System.out.println("Ordinateur introuvable");
 					else {
 						computerDao.delete(d_computer);
-						System.out.println("Ordinateur supprimÃ©");
+						System.out.println("Ordinateur supprimé");
 					}
 				} catch (NumberFormatException e){
-					System.out.println("numÃ©ro de l'ordinateur invalide");
+					System.out.println("numéro de l'ordinateur invalide");
 				}
 			break;
 			
@@ -119,32 +119,33 @@ public class Main {
 	}
 	
 	/**
-	 * Sous-menu permettant de guider l'utilisateur pendant la crÃ©ation d'un ordinateur
+	 * Sous-menu permettant de guider l'utilisateur pendant la création d'un ordinateur
 	 */
 	public static boolean insertComputer()
 	{
 		Computer c_computer = new Computer();
 		
 		//champ name
-		System.out.println("\tNom de l'ordinateur Ã  crÃ©er ?");
+		System.out.println("\tNom de l'ordinateur à  créer ?");
 		c_computer = checkComputerName(c_computer);
 		
 		//champ introducted
-		System.out.println("InsÃ©rer une date O/N d'introduction ? (format = jj/mm/aaaa)");
+		System.out.println("Insérer une date O/N d'introduction ? (format = jj/mm/aaaa)");
 		c_computer = checkComputerIntroduced(c_computer);
 		
 		//champ discontinued
-		System.out.println("InsÃ©rer une date O/N d'interruption ? (format = jj/mm/aaaa)");
+		System.out.println("Insérer une date O/N d'interruption ? (format = jj/mm/aaaa)");
 		c_computer = checkComputerDiscontinued(c_computer);
 		
 		//champ company_id
-		//TODO
+		System.out.println("Insérer une entreprise ? ");
+		c_computer = checkComputerCompany(c_computer);
 		
 		c_computer = computerDao.create(c_computer);
 		if (c_computer == null)
-			System.out.println("ProblÃ¨me lors de l'insertion de l'ordinateur");
+			System.out.println("Problème lors de l'insertion de l'ordinateur");
 		else 
-			System.out.println("Ordinateur crÃ©Ã©\n\t-> " + c_computer.toString());
+			System.out.println("Ordinateur créé\n\t-> " + c_computer.toString());
 
 		return true;
 	}
@@ -153,7 +154,7 @@ public class Main {
 	 * Sous-menu permettant de guider l'utilisateur pendant la modification d'un ordinateur
 	 */
 	public static boolean updateComputer(){
-		System.out.println("numÃ©ro de l'ordinateur Ã  mettre Ã  jour?");
+		System.out.println("numéro de l'ordinateur à  mettre à  jour?");
 		String computer_id_s = scan.nextLine();
 		try {
 			int computer_id = Integer.valueOf(computer_id_s);
@@ -166,7 +167,7 @@ public class Main {
 				u_computer = checkComputerName(u_computer);
 				
 				//champ introducted
-				System.out.println("Modifier la date d'arrivÃ©e O/N ? (format = jj/mm/aaaa)\n\tDate d'arrivÃ©e : " + u_computer.getIntroduced());
+				System.out.println("Modifier la date d'arrivée O/N ? (format = jj/mm/aaaa)\n\tDate d'arrivée : " + u_computer.getIntroduced());
 				u_computer = checkComputerIntroduced(u_computer);
 				
 				//champ discontinued
@@ -174,14 +175,15 @@ public class Main {
 				u_computer = checkComputerDiscontinued(u_computer);
 				
 				//champ company_id
-				//TODO
+				System.out.println("Modifier l'entreprise ? " + u_computer.getCompany().getName());
+				u_computer = checkComputerCompany(u_computer);
 				
 				u_computer = computerDao.update(u_computer);
-				System.out.println("Ordinateur modifiÃ©\n\t-> " + u_computer.toString());
+				System.out.println("Ordinateur modifié\n\t-> " + u_computer.toString());
 			}
 			
 		} catch (NumberFormatException e){
-			System.out.println("numÃ©ro de l'ordinateur invalide");
+			System.out.println("numéro de l'ordinateur invalide");
 		}
 		return true;
 	}
@@ -193,12 +195,28 @@ public class Main {
 		return computer;
 	}
 	
+	private static Computer checkComputerCompany(Computer computer) {
+		String company_id_s = scan.nextLine();
+		try {
+			int company_id = Integer.valueOf(company_id_s);
+			Company company = companyDao.find(company_id);
+			if (company == null)
+				System.out.println("Entreprise introuvable");
+			else {
+				computer.setCompany(company);
+			}
+		} catch (NumberFormatException e){
+			System.out.println("numéro de l'entreprise incorrect");
+		}
+		return computer;
+	}
+	
 	private static Computer checkComputerIntroduced(Computer computer) {
 		String computer_date_i_confirm = scan.nextLine();
 		if (computer_date_i_confirm.equals("O")) {
 			
 			try {
-				System.out.print("ArrivÃ© en : ");
+				System.out.print("Arrivé en : ");
 				String computer_date_i_s = scan.nextLine();
 				Date computer_date_i = format.parse(computer_date_i_s);
 				computer.setIntroduced(new Timestamp(computer_date_i.getTime()));
@@ -215,7 +233,7 @@ public class Main {
 		String computer_date_d_confirm = scan.nextLine();
 		if (computer_date_d_confirm.equals("O")) {
 			try {
-				System.out.print("AbandonnÃ© en : ");
+				System.out.print("Abandonné en : ");
 				String computer_date_d_s = scan.nextLine();
 				Date computer_date_d = format.parse(computer_date_d_s);
 				computer.setDiscontinued(new Timestamp(computer_date_d.getTime()));
