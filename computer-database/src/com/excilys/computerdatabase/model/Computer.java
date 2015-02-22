@@ -3,7 +3,6 @@ package com.excilys.computerdatabase.model;
 import java.util.Date;
 import java.sql.Timestamp;
 import java.text.DateFormat;
-import java.text.ParseException;
 import java.text.SimpleDateFormat;
 
 /**
@@ -83,9 +82,10 @@ public class Computer {
 	@Override
 	public String toString() {
 		return "Ordinateur n°" + id + " : " + name 
-				+ ", introduit en " + (introduced == null ? "?" : introduced.toString()
-				+ (discontinued == null ? "" : ", désactivé en " + discontinued.toString())) 
-				+ (company == null ? "" : " - Entreprise : " + company.getName());
+			+ (introduced == null ? "" : ", introduit en " +  format.format(new Date(introduced.getTime())))
+			+ (discontinued == null ? "" : ", désactivé en " + format.format(new Date(discontinued.getTime()))) 
+			+ (company.getName() == null ? "" : " - Entreprise : " + company.getName());
+		
 	}
 	
 	

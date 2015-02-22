@@ -6,7 +6,6 @@ import java.util.ArrayList;
 import java.util.List;
 
 import com.excilys.computerdatabase.model.Company;
-import com.excilys.computerdatabase.model.Computer;
 
 public class CompanyDAO extends DAO<Company> {
 

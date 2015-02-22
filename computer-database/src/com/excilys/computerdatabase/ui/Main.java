@@ -42,10 +42,17 @@ public class Main {
 			case "-l computers":
 				System.out.println("List computers");
 
-				List<Computer> computers = computerDao.getListComputers();
+				List<List<Computer>> p_computers = new Pagination<Computer>().getPages(computerDao.getListComputers());
 				
-				for (Computer c : computers) {
-					System.out.println(c);
+				for (List<Computer> list : p_computers) {
+					for (Computer c : list) {
+						System.out.println(c);
+					}
+					System.out.println("Suivant ? O/N");
+					String suivant_computer_choice = scan.nextLine();
+					if (!suivant_computer_choice.equals("O")) {
+						break;
+					}
 				}
 				break;
 				
@@ -53,10 +60,17 @@ public class Main {
 			case "-l companies":
 				System.out.println("List companies");
 
-				List<Company> companies = companyDao.getListCompanies();
+				List<List<Company>> p_companies = new Pagination<Company>().getPages(companyDao.getListCompanies());
 				
-				for (Company c : companies) {
-					System.out.println(c);
+				for (List<Company> list : p_companies) {
+					for (Company c : list) {
+						System.out.println(c);
+					}
+					System.out.println("Suivant ? O/N");
+					String suivant_company_choice = scan.nextLine();
+					if (!suivant_company_choice.equals("O")) {
+						break;
+					}
 				}
 				break;
 			
