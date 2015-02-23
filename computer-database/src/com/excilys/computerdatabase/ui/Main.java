@@ -19,13 +19,11 @@ import com.excilys.computerdatabase.persistance.ComputerDAO;
 public class Main {
 	public static Scanner scan = new Scanner(System.in);
 	
-	private static ComputerDAO computerDao = new ComputerDAO();
-	private static CompanyDAO companyDao = new CompanyDAO();
+	//private static ComputerDAO computerDao = new ComputerDAO();
+	//private static CompanyDAO companyDao = new CompanyDAO();
 	
 	private static ComputerController computerControler = new ComputerController();
 	private static CompanyController companyControler = new CompanyController();
-	
-	private static DateFormat format = new SimpleDateFormat("dd/MM/YYYY");
 	
 	public enum ErrorMessage {
 		COMPUTER_NOT_INT("Numéro de l'ordinateur invalide : doit être un nombre"),
@@ -65,15 +63,15 @@ public class Main {
 			case "1":
 				System.out.println("List computers");
 
-				List<List<Computer>> p_computers = new Pagination<Computer>().getPages(computerDao.getListComputers());
+				List<List<Computer>> p_computers = new Pagination<Computer>().getPages(computerControler.getListComputers());
 				
 				for (List<Computer> list : p_computers) {
 					for (Computer c : list) {
 						System.out.println(c);
 					}
 					System.out.println("Suivant ? O/N");
-					String suivant_computer_choice = scan.nextLine();
-					if (!user_confirm(suivant_computer_choice)) {
+					//String suivant_computer_choice = scan.nextLine();
+					if (!user_confirm()) {
 						break;
 					}
 				}
@@ -84,15 +82,15 @@ public class Main {
 			case "2":
 				System.out.println("List companies");
 
-				List<List<Company>> p_companies = new Pagination<Company>().getPages(companyDao.getListCompanies());
+				List<List<Company>> p_companies = new Pagination<Company>().getPages(companyControler.getListCompanies());
 				
 				for (List<Company> list : p_companies) {
 					for (Company c : list) {
 						System.out.println(c);
 					}
 					System.out.println("Suivant ? O/N");
-					String suivant_company_choice = scan.nextLine();
-					if (!user_confirm(suivant_company_choice)) {
+					//String suivant_company_choice = scan.nextLine();
+					if (!user_confirm()) {
 						break;
 					}
 				}
@@ -132,7 +130,7 @@ public class Main {
 			case "5":
 				boolean updateComputerOk = false;
 				while(updateComputerOk != true) {
-					updateComputerOk = updateComputer();
+					//updateComputerOk = updateComputer();
 				}
 			break;
 			
@@ -145,7 +143,7 @@ public class Main {
 					int computer_id = Integer.valueOf(computer_id_to_del_s);
 					try {
 						Computer d_computer = computerControler.checkIfComputerExist(computer_id);
-						computerDao.delete(d_computer);
+						computerControler.delete(d_computer);
 						System.out.println("Ordinateur supprimé");
 					} catch (EntityNotExistException ce) {
 						ce.getStackTrace();
@@ -172,24 +170,38 @@ public class Main {
 		System.out.println("\tNom de l'ordinateur à créer ?");
 		c_computer = checkComputerName(c_computer);
 		
+		String computer_date_i_s;
+		String computer_date_d_s;
+		
 		//champ introducted
 		System.out.println("Insérer une date d'introduction (format = jj/mm/aaaa) ? O/N");
-		c_computer = checkComputerIntroduced(c_computer);
+		if (user_confirm() == true) {
+			System.out.print("Arrivé en : ");
+			computer_date_i_s = scan.nextLine();
+			c_computer = computerControler.checkComputerIntroduced(c_computer, computer_date_i_s);
+		}
 		
 		//champ discontinued
 		System.out.println("Insérer une date O/N d'interruption (format = jj/mm/aaaa) ? O/N");
-		c_computer = checkComputerDiscontinued(c_computer);
+		if (user_confirm() == true) {
+			System.out.print("Abandonné en : ");
+			computer_date_d_s = scan.nextLine();
+			c_computer = computerControler.checkComputerDiscontinued(c_computer, computer_date_d_s);
+		}
 		
 		//champ company_id
 		System.out.println("Insérer une entreprise ? O/N");
-		c_computer = checkComputerCompany(c_computer);
+		if (user_confirm() == true) {
+			System.out.print("Numéro de l'entreprise : ");
+			String company_id_s = scan.nextLine();
+			c_computer = computerControler.checkComputerCompany(c_computer, company_id_s);
+		}
 		
-		c_computer = computerDao.create(c_computer);
+		c_computer = computerControler.create(c_computer);
 		if (c_computer == null)
-			System.out.println("Probléme lors de l'insertion de l'ordinateur");
+			System.out.println("Problème lors de l'insertion de l'ordinateur");
 		else 
 			System.out.println("Ordinateur créé\n\t-> " + c_computer.toString());
-
 		return true;
 	}
 	
@@ -207,24 +219,38 @@ public class Main {
 				//champ name
 				System.out.println("Modifier le nom de l'ordinateur O/N?\n\tNom : " + u_computer.getName());
 				String computer_name_i_confirm = scan.nextLine();
-				if (user_confirm(computer_name_i_confirm)) {
+				if (user_confirm()) {
 					System.out.print("Nouveau nom : ");
 					u_computer = checkComputerName(u_computer);
 				}
+				String computer_date_i_s;
+				String computer_date_d_s;
 				
 				//champ introducted
 				System.out.println("Modifier la date d'arrivée (format = jj/mm/aaaa) ? O/N\n\tDate d'arrivée : " + u_computer.getIntroduced());
-				u_computer = checkComputerIntroduced(u_computer);
+				if (user_confirm() == true) {
+					System.out.print("Arrivé en : ");
+					computer_date_i_s = scan.nextLine();
+					u_computer = computerControler.checkComputerIntroduced(u_computer, computer_date_i_s);
+				}
 				
 				//champ discontinued
 				System.out.println("Modifier la date d'interruption (format = jj/mm/aaaa) ? O/N\n\tDate d'interruption : " + u_computer.getDiscontinued());
-				u_computer = checkComputerDiscontinued(u_computer);
+				if (user_confirm() == true) {
+					System.out.print("Abandonné en : ");
+					computer_date_d_s = scan.nextLine();
+					u_computer = computerControler.checkComputerDiscontinued(u_computer, computer_date_d_s);
+				}
 				
 				//champ company_id
 				System.out.println("Modifier l'entreprise ? O/N\n\tEntreprise : " + u_computer.getCompany().getName());
-				u_computer = checkComputerCompany(u_computer);
+				if (user_confirm() == true) {
+					System.out.print("Numéro de l'entreprise : ");
+					String company_id_s = scan.nextLine();
+					u_computer = computerControler.checkComputerCompany(u_computer, company_id_s);
+				}
 				
-				u_computer = computerDao.update(u_computer);
+				u_computer = computerControler.update(u_computer);
 				System.out.println("Ordinateur modifié\n\t-> " + u_computer.toString());
 			} catch (EntityNotExistException ce) {
 				// TODO Auto-generated catch block
@@ -242,62 +268,9 @@ public class Main {
 		
 		return computer;
 	}
-	
-	private static Computer checkComputerCompany(Computer computer) {
-		String computer_company_i_confirm = scan.nextLine();
-		if (user_confirm(computer_company_i_confirm)) {
-			System.out.print("Numéro de l'entreprise : ");
-			String company_id_s = scan.nextLine();
-			try {
-				int company_id = Integer.valueOf(company_id_s);
-				try {
-					Company company = companyControler.checkIfCompanyExist(company_id);
-					computer.setCompany(company);
-				} catch (EntityNotExistException ce) {
-					// TODO Auto-generated catch block
-					ce.getStackTrace();
-				}
-			} catch (NumberFormatException e){
-				System.out.println(ErrorMessage.COMPANY_NOT_INT);
-			}
-		}
-		return computer;
-	}
-	
-	private static Computer checkComputerIntroduced(Computer computer) {
-		String computer_date_i_confirm = scan.nextLine();
-		if (user_confirm(computer_date_i_confirm)) {
-			try {
-				System.out.print("Arrivé en : ");
-				String computer_date_i_s = scan.nextLine();
-				Date computer_date_i = format.parse(computer_date_i_s);
-				computer.setIntroduced(new Timestamp(computer_date_i.getTime()));
-			} catch (ParseException e) {
-				// TODO Auto-generated catch block
-				System.out.println(ErrorMessage.NOT_DATE);
-			}
-		}
-		
-		return computer;
-	}
-	
-	private static Computer checkComputerDiscontinued(Computer computer) {
-		String computer_date_d_confirm = scan.nextLine();
-		if (user_confirm(computer_date_d_confirm)) {
-			try {
-				System.out.print("Abandonné en : ");
-				String computer_date_d_s = scan.nextLine();
-				Date computer_date_d = format.parse(computer_date_d_s);
-				computer.setDiscontinued(new Timestamp(computer_date_d.getTime()));
-			} catch (ParseException e) {
-				// TODO Auto-generated catch block
-				System.out.println(ErrorMessage.NOT_DATE);
-			}
-		}
-		return computer;
-	}
-	
-	private static boolean user_confirm(String s_confirm) {
+
+	private static boolean user_confirm() {
+		String s_confirm = scan.nextLine();
 		if (s_confirm.equals("O") || s_confirm.equals("o")) {
 			return true;
 		} else {

@@ -1,6 +1,9 @@
 package com.excilys.computerdatabase.controller;
 
+import java.util.List;
+
 import com.excilys.computerdatabase.model.Company;
+import com.excilys.computerdatabase.model.Computer;
 import com.excilys.computerdatabase.persistance.CompanyDAO;
 
 public class CompanyController {
@@ -16,5 +19,9 @@ public class CompanyController {
 			throw new EntityNotExistException("company");
 		else 
 			return company;
+	}
+	
+	public List<Company> getListCompanies() {
+		return companyDao.getListCompanies();
 	}
 }
