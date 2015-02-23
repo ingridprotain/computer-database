@@ -81,9 +81,9 @@ public class Computer {
 	
 	@Override
 	public String toString() {
-		return "Ordinateur n°" + id + " : " + name 
+		return "Ordinateur nÂ°" + id + " : " + name 
 			+ (introduced == null ? "" : ", introduit en " +  format.format(new Date(introduced.getTime())))
-			+ (discontinued == null ? "" : ", désactivé en " + format.format(new Date(discontinued.getTime()))) 
+			+ (discontinued == null ? "" : ", dÃ©sactivÃ© en " + format.format(new Date(discontinued.getTime()))) 
 			+ (company.getName() == null ? "" : " - Entreprise : " + company.getName());
 		
 	}

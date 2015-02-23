@@ -30,7 +30,7 @@ public class ComputerDAO extends DAO<Computer>{
 				computer.setIntroduced(result.getTimestamp(3));
 				computer.setDiscontinued(result.getTimestamp(4));
 				
-				//Si l'ordinateur est lié à une compagnie
+				//Si l'ordinateur est liÃ© Ã  une compagnie
 				if (new Integer(result.getInt(5)) != null) {
 					Company company = new Company();
 					company.setId((result.getInt(5)));
@@ -128,7 +128,7 @@ public class ComputerDAO extends DAO<Computer>{
 	}
 	
 	/**
-	 * Permet de récupérer tous les computers en base
+	 * Permet de rÃ©cupÃ©rer tous les computers en base
 	 * @return une liste d'objet Computer
 	 */
 	public List<Computer> getListComputers() {
