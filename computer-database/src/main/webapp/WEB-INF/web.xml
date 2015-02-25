@@ -1,7 +1,20 @@
-<!DOCTYPE web-app PUBLIC
- "-//Sun Microsystems, Inc.//DTD Web Application 2.3//EN"
- "http://java.sun.com/dtd/web-app_2_3.dtd" >
-
+<?xml version="1.0" encoding="UTF-8"?>
 <web-app>
   <display-name>Archetype Created Web Application</display-name>
+  <servlet>
+  	<servlet-name>AddComputer</servlet-name>
+  	<servlet-class>com.excilys.computerdatabase.controller.AddComputer</servlet-class>
+  </servlet>
+   <servlet>
+  	<servlet-name>ListOfComputer</servlet-name>
+  	<servlet-class>com.excilys.computerdatabase.controller.ListOfComputer</servlet-class>
+  </servlet>
+  <servlet-mapping>
+  	<servlet-name>AddComputer</servlet-name>
+  	<url-pattern>/addComputer</url-pattern>
+  </servlet-mapping>
+  <servlet-mapping>
+  	<servlet-name>ListOfComputer</servlet-name>
+  	<url-pattern>/dashboard</url-pattern>
+  </servlet-mapping>
 </web-app>

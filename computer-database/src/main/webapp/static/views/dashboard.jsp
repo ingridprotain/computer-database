@@ -1,13 +1,13 @@
-<%@ taglib prefix="c" uri="http://java.sun.com/jsp/jstl/core" %>
+<%@ taglib uri="http://java.sun.com/jsp/jstl/core" prefix="c" %>
 <html>
 <head>
 <title>Computer Database</title>
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
 <meta charset="utf-8">
 <!-- Bootstrap -->
-<link href="../css/bootstrap.min.css" rel="stylesheet" media="screen">
-<link href="../css/font-awesome.css" rel="stylesheet" media="screen">
-<link href="../css/main.css" rel="stylesheet" media="screen">
+<link href="static/css/bootstrap.min.css" rel="stylesheet" media="screen">
+<link href="static/css/font-awesome.css" rel="stylesheet" media="screen">
+<link href="static/css/main.css" rel="stylesheet" media="screen">
 </head>
 <body>
     <header class="navbar navbar-inverse navbar-fixed-top">
@@ -19,7 +19,7 @@
     <section id="main">
         <div class="container">
             <h1 id="homeTitle">
-                121 Computers found
+                <%= request.getAttribute("totalComputers") %> <c:out value="${totalComputers}" /> Computers found
             </h1>
             <div id="actions" class="form-horizontal">
                 <div class="pull-left">
@@ -242,8 +242,9 @@
                 <a href="#" aria-label="Next">
                     <span aria-hidden="true">&raquo;</span>
                 </a>
-            </li>
-        </ul></div>
+              </li>
+           	</ul>
+        </div>
 
         <div class="btn-group btn-group-sm pull-right" role="group" >
             <button type="button" class="btn btn-default">10</button>
