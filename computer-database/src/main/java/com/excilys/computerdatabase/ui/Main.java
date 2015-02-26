@@ -3,6 +3,7 @@ package com.excilys.computerdatabase.ui;
 import java.util.List;
 import java.util.Scanner;
 
+import com.excilys.computerdatabase.dto.ComputerDTO;
 import com.excilys.computerdatabase.model.Company;
 import com.excilys.computerdatabase.model.Computer;
 import com.excilys.computerdatabase.persistence.CompanyDAO;
@@ -35,9 +36,9 @@ public class Main {
 				System.out.println("List computers");
 				
 				Pages pages = new Pages("Computer");
-				List<Computer> computers = pages.first();
+				List<ComputerDTO> computers = pages.first();
 				while(true) {
-					for (Computer c : computers) {
+					for (ComputerDTO c : computers) {
 						System.out.println(c);
 					}
 					
@@ -102,7 +103,7 @@ public class Main {
 				String idComputerToDelString = scan.nextLine();
 				ComputerValidator.getInstance().isExist(idComputerToDelString);
 				if (ComputerValidator.getInstance().getErrors().isEmpty()) {
-					ComputerDAO.getInstance().delete(ComputerValidator.getComputer());
+					//ComputerDAO.getInstance().delete(ComputerValidator.getComputer());
 				} else {
 					ComputerValidator.displayErrors();
 				}
@@ -172,9 +173,9 @@ public class Main {
 		ComputerValidator.getInstance().validate(name, introduced, discontinued, companyId, computerId);
 		if (ComputerValidator.getInstance().getErrors().isEmpty()) {
 			if (mode == "Insert") {
-				ComputerDAO.getInstance().create(ComputerValidator.getComputer());
+				//ComputerDAO.getInstance().create(ComputerValidator.getComputer());
 			} else {
-				ComputerDAO.getInstance().update(ComputerValidator.getComputer());
+				//ComputerDAO.getInstance().update(ComputerValidator.getComputer());
 			}
 		} else {
 			ComputerValidator.displayErrors();

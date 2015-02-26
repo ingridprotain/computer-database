@@ -1,20 +1,20 @@
 package com.excilys.computerdatabase.ui;
 
-import java.time.LocalDateTime;
 import java.time.format.DateTimeFormatter;
 import java.util.ArrayList;
 import java.util.List;
 
-import com.excilys.computerdatabase.model.Computer;
-import com.excilys.computerdatabase.persistence.ComputerDAO;
+import com.excilys.computerdatabase.dto.ComputerDTO;
+import com.excilys.computerdatabase.service.ComputerService;
 
 public class ComputerValidator {
 	
 	private static List<String> errors = new ArrayList<String>();
-	private static Computer computer;
+	private static ComputerDTO computer;
 	private static ComputerValidator computerValidator = null;
 	
 	private static DateTimeFormatter format = DateTimeFormatter.ofPattern("MM/dd/yyyy HH:mm:ss");
+	private static ComputerService computerService = new ComputerService();
 	
 	private ComputerValidator() {
 		
@@ -35,7 +35,7 @@ public class ComputerValidator {
 		return errors;
 	}
 	
-	public static Computer getComputer() {
+	public static ComputerDTO getComputer() {
 		return computer;
 	}
 	
@@ -48,7 +48,7 @@ public class ComputerValidator {
 			computer.setName(name);
 		}
 		
-		if (introduced == null) {
+		/*if (introduced == null) {
 			computer.setIntroduced(null);
 		} else {
 			computer.setIntroduced(LocalDateTime.parse(introduced + " 00:00:00", format));
@@ -58,7 +58,7 @@ public class ComputerValidator {
 			computer.setDiscontinued(null);
 		} else {
 			computer.setDiscontinued(LocalDateTime.parse(discontinued + " 00:00:00", format));
-		}
+		}*/
 		
 		//TODO Suite du validate
 	}
@@ -67,7 +67,7 @@ public class ComputerValidator {
 		this.initializeValue();
 		try {
 			int computerId = Integer.valueOf(IdComputerString);
-			computer = ComputerDAO.getInstance().find(computerId);
+			computer = computerService.find(computerId);
 			if (computer == null) {
 				this.addError("Computer doesn't exist");
 			}
@@ -79,7 +79,7 @@ public class ComputerValidator {
 	
 	protected void initializeValue() {
 		errors = new ArrayList<String>();
-		computer = new Computer();
+		computer = new ComputerDTO();
 	}
 	
 	public static void displayErrors() {

@@ -30,12 +30,14 @@ public class CompanyDAO {
 		Connection cn = null;
 		Statement stmt = null;
 		ResultSet result = null;
-		
+
 		try {
 			cn = MySqlConnect.getMySqlConnect().getMyInstance();
 			stmt = cn.createStatement();
 		    result = stmt.executeQuery(query);
-			company = CompanyMapper.convertToCompany(result);
+		    while (result.next()) {
+		    	company = CompanyMapper.convertToCompany(result);
+		    }
 		} catch (SQLException e) {
 			//Logs
 			throw new IllegalStateException("Problem during the recuperation of a company in database");

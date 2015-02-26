@@ -2,13 +2,19 @@ package com.excilys.computerdatabase.ui;
 
 import java.util.List;
 
+import com.excilys.computerdatabase.dto.ComputerDTO;
 import com.excilys.computerdatabase.model.Computer;
-import com.excilys.computerdatabase.persistence.ComputerDAO;
+import com.excilys.computerdatabase.service.ComputerService;
 
 public class Pages {
 	private int limit = 0;
-	private int offset = 20;
+	private int offset = 12;
 	private int total;
+	
+	/*private int actualPage = 1;
+	private int totalPages;*/
+
+	private static ComputerService computerService = new ComputerService();
 	
 	public Pages(String className) {
 		setTotal(className);
@@ -37,37 +43,43 @@ public class Pages {
 	
 	private void setTotal(String className) {
 		
-		this.total = ComputerDAO.getInstance().count();
+		this.total = computerService.count();
 	}
 	
-	public List<Computer> first() {
+	public List<ComputerDTO> first() {
 		this.limit = 0;
-		List<Computer> computers = ComputerDAO.getInstance().getAll(0, this.offset);
+		List<ComputerDTO> computers = computerService.getAll(0, this.offset);
 
 		return computers;
 	}
 	
-	public List<Computer> prev() {
+	public List<ComputerDTO> prev() {
 		this.limit = this.limit - this.offset;
 		if (this.limit < 0) {
 			this.limit = 0;
 		}
-		List<Computer> computers = ComputerDAO.getInstance().getAll(this.limit, this.offset);
+		List<ComputerDTO> computers = computerService.getAll(this.limit, this.offset);
 		
 		return computers;
 	}
 	
-	public List<Computer> next() {
+	public List<ComputerDTO> next() {
 		this.limit = this.limit + this.offset;
-		List<Computer> computers = ComputerDAO.getInstance().getAll(this.limit, this.offset);
+		List<ComputerDTO> computers = computerService.getAll(this.limit, this.offset);
 
 		return computers;
 	}
 	
-	public List<Computer> last() {
+	public List<ComputerDTO> last() {
 		this.limit = this.total - this.offset;
-		List<Computer> computers = ComputerDAO.getInstance().getAll(this.limit, this.offset);
+		List<ComputerDTO> computers = computerService.getAll(this.limit, this.offset);
 
+		return computers;
+	}
+	
+	public List<ComputerDTO> findByLimit(int limit) {
+		this.limit = limit*this.offset;
+		List<ComputerDTO> computers = computerService.getAll(this.limit, this.offset);
 		return computers;
 	}
 }

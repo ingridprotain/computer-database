@@ -73,7 +73,7 @@ public class ComputerDAO {
 		
 		return computer;
 	}
-	
+
 	public int count() {
 		
 		int count = 0;
@@ -257,6 +257,36 @@ public class ComputerDAO {
 			Connection cn = MySqlConnect.getMySqlConnect().getMyInstance();
 			Statement stmt = cn.createStatement();
 		    ResultSet result = stmt.executeQuery(query.toString());
+		    while (result.next()) {
+		    	Computer c = ComputerMapper.convertToComputer(result);
+		    	computers.add(c);
+		    }
+		} catch (SQLException e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+		}
+		
+		return computers;
+	}
+	
+	/**
+	 * Get all computers in the database by name
+	 * @return a list of Computer
+	 */
+	public List<Computer> getByName(String name) {
+		
+		StringBuilder query = new StringBuilder("SELECT c.id, c.name, c.introduced, c.discontinued, c.company_id, co.name ")
+			.append("FROM computer AS c ")
+			.append("LEFT JOIN company AS co ON c.company_id = co.id ")
+			.append("WHERE c.name LIKE ?");
+		
+		List<Computer> computers = new ArrayList<Computer>();
+		
+		try {
+			Connection cn = MySqlConnect.getMySqlConnect().getMyInstance();
+			PreparedStatement stmt = cn.prepareStatement(query.toString());
+			stmt.setString(1, "%" + name + "%");
+		    ResultSet result = stmt.executeQuery();
 		    while (result.next()) {
 		    	Computer c = ComputerMapper.convertToComputer(result);
 		    	computers.add(c);
