@@ -38,8 +38,12 @@ public class ComputerService {
 		return ComputerDAO.getInstance().count();
 	}
 	
-	public List<ComputerDTO> getByName(String name) {
-		List<Computer> computers = ComputerDAO.getInstance().getByName(name);
+	public int countSearch(String name) {
+		return ComputerDAO.getInstance().countSearch(name);
+	}
+	
+	public List<ComputerDTO> getByName(String name, int limit, int offset) {
+		List<Computer> computers = ComputerDAO.getInstance().getByName(name, limit, offset);
 		List<ComputerDTO> computerDTOs = new ArrayList<ComputerDTO>();
 		
 		if (computers != null) {

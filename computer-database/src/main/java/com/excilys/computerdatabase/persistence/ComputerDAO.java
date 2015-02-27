@@ -75,7 +75,6 @@ public class ComputerDAO {
 	}
 
 	public int count() {
-		
 		int count = 0;
 		String query = "SELECT COUNT(*) FROM computer";
 		
@@ -242,14 +241,11 @@ public class ComputerDAO {
 	 * @return a list of Computer
 	 */
 	public List<Computer> getAll(int limit, int offset) {
-		/*String query = "SELECT c.id, c.name, c.introduced, c.discontinued, c.company_id, co.name "
-				+ "FROM computer AS c "
-				+ "LEFT JOIN company AS co ON c.company_id = co.id ";*/
 		
 		StringBuilder query = new StringBuilder("SELECT c.id, c.name, c.introduced, c.discontinued, c.company_id, co.name ")
 			.append("FROM computer AS c ")
 			.append("LEFT JOIN company AS co ON c.company_id = co.id ")
-			.append(" LIMIT ").append(limit).append(", ").append(offset);
+			.append(" LIMIT ").append(limit).append(" OFFSET ").append(offset);
 		
 		List<Computer> computers = new ArrayList<Computer>();
 		
@@ -273,12 +269,13 @@ public class ComputerDAO {
 	 * Get all computers in the database by name
 	 * @return a list of Computer
 	 */
-	public List<Computer> getByName(String name) {
+	public List<Computer> getByName(String name, int limit, int offset) {
 		
 		StringBuilder query = new StringBuilder("SELECT c.id, c.name, c.introduced, c.discontinued, c.company_id, co.name ")
 			.append("FROM computer AS c ")
 			.append("LEFT JOIN company AS co ON c.company_id = co.id ")
-			.append("WHERE c.name LIKE ?");
+			.append("WHERE c.name LIKE ?")
+			.append(" LIMIT ? OFFSET ?");
 		
 		List<Computer> computers = new ArrayList<Computer>();
 		
@@ -286,6 +283,8 @@ public class ComputerDAO {
 			Connection cn = MySqlConnect.getMySqlConnect().getMyInstance();
 			PreparedStatement stmt = cn.prepareStatement(query.toString());
 			stmt.setString(1, "%" + name + "%");
+			stmt.setInt(2, limit);
+			stmt.setInt(3, offset);
 		    ResultSet result = stmt.executeQuery();
 		    while (result.next()) {
 		    	Computer c = ComputerMapper.convertToComputer(result);
@@ -297,5 +296,39 @@ public class ComputerDAO {
 		}
 		
 		return computers;
+	}
+	
+	public int countSearch(String name) {
+		int count = 0;
+		String query = "SELECT COUNT(*) FROM computer WHERE name LIKE ?";
+		
+		Connection cn = null;
+		PreparedStatement stmt = null;
+		
+		try {
+			cn = MySqlConnect.getMySqlConnect().getMyInstance();
+			stmt = cn.prepareStatement(query);
+			stmt.setString(1, "%" + name + "%");
+			ResultSet result = stmt.executeQuery();
+			if (result.first()) {
+				count = new Integer(result.getInt(1));
+			}
+		} catch (SQLException e) {
+			//Logs
+			throw new IllegalStateException("Problem during the recuperation of the count of computers in database");
+		} finally {
+			try {
+				cn.close();
+			} catch (SQLException e) {
+				throw new IllegalStateException("Problem during closing of connection to the database");
+			}
+			
+			try {
+				stmt.close();
+			} catch (SQLException e) {
+				throw new IllegalStateException("Problem during closing of the Statement");
+			}
+		}
+		return count;
 	}
 }

@@ -1,4 +1,5 @@
 <!DOCTYPE html>
+<%@taglib uri="/static/tag/linkTag.tld" prefix="l" %>
 <%@taglib uri="http://java.sun.com/jsp/jstl/core" prefix="c" %>
 <html>
 <head>
@@ -13,7 +14,7 @@
 <body>
     <header class="navbar navbar-inverse navbar-fixed-top">
         <div class="container">
-            <a class="navbar-brand" href="<c:url value="/dashboard"/>"> Application - Computer Database </a>
+        	<l:link name="Application - Computer Database" target="dashboard" myClass="navbar-brand"/>
         </div>
     </header>
 
@@ -25,14 +26,13 @@
             <div id="actions" class="form-horizontal">
                 <div class="pull-left">
                     <form id="searchForm" action="/computer-database/dashboard" method="GET" class="form-inline">
-
-                        <input type="search" id="searchbox" name="search" class="form-control" placeholder="Search name" />
+                        <input type="search" id="searchbox" name="search" class="form-control" placeholder="Search name" value="${ search }"/>
                         <input type="submit" id="searchsubmit" value="Filter by name"
                         class="btn btn-primary" />
                     </form>
                 </div>
                 <div class="pull-right">
-                    <a class="btn btn-success" id="addComputer" href="<c:url value="/addComputer"/>">Add Computer</a> 
+                	<l:link target="addComputer" name="Add Computer" myClass="btn btn-success"/>
                     <a class="btn btn-default" id="editComputer" href="#" onclick="$.fn.toggleEditMode();">Edit</a>
                 </div>
             </div>
@@ -97,27 +97,19 @@
     <footer class="navbar-fixed-bottom">
         <div class="container text-center">
             <ul class="pagination">
-                <li>
-                    <a href="/computer-database/dashboard?page=prev" aria-label="Previous">
-                      <span aria-hidden="true">&laquo;</span>
-                  </a>
-              </li>
-              <li><a href="#">1</a></li>
-              <li><a href="#">2</a></li>
-              <li><a href="#">3</a></li>
-              <li><a href="#">4</a></li>
-              <li><a href="#">5</a></li>
-              <li>
-                <a href="/computer-database/dashboard?page=next" aria-label="Next">
-                    <span aria-hidden="true">&raquo;</span>
-                </a>
-              </li>
+          		<li><l:link name="&laquo;" target="dashboard" page="first" search="${ search }"/></li>
+          		<li><c:if test="${ (actualPage -2) > 0 }"><l:link name="${ actualPage -2 }" target="dashboard" page="${ actualPage -2 }" search="${ search }"/></c:if></li>
+          		<li><c:if test="${ (actualPage -1) > 0 }"><l:link name="${ actualPage -1 }" target="dashboard" page="prev" search="${ search }"/></c:if></li>
+              	<li><l:link name="${ actualPage }" target="dashboard" page="${ actualPage }" search="${ search }"/></li>
+              	<li><c:if test="${ (actualPage + 1) < totalPages }"><l:link name="${ actualPage + 1 }" target="dashboard" page="next" search="${ search }"/></c:if></li>
+             	<li><c:if test="${ (actualPage + 2) < totalPages }"><l:link name="${ actualPage + 2 }" target="dashboard" page="${ actualPage + 2 }" search="${ search }"/></c:if></li>
+             	<li><l:link name="&raquo;" target="dashboard" page="last" search="${ search }"/></li>
            	</ul>
 
 	        <div class="btn-group btn-group-sm pull-right" role="group" >
-	            <button type="button" class="btn btn-default">10</button>
-	            <button type="button" class="btn btn-default">50</button>
-	            <button type="button" class="btn btn-default">100</button>
+	        	<l:link name="10" target="dashboard" page="${ actualPage }" search="${ search }" limit="10" myClass="btn btn-default"/>
+	        	<l:link name="50" target="dashboard" page="${ actualPage }" search="${ search }" limit="50" myClass="btn btn-default"/>
+	        	<l:link name="100" target="dashboard" page="${ actualPage }" search="${ search }" limit="100" myClass="btn btn-default"/>
 	        </div>
         </div>
     </footer>

@@ -2,9 +2,7 @@ package com.excilys.computerdatabase.dto;
 
 import java.time.format.DateTimeFormatter;
 
-import com.excilys.computerdatabase.model.Company;
 import com.excilys.computerdatabase.model.Computer;
-import com.excilys.computerdatabase.service.CompanyService;
 import com.excilys.computerdatabase.ui.DateValidator;
 
 public class ComputerDTO {

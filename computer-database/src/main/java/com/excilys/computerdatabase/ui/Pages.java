@@ -3,16 +3,12 @@ package com.excilys.computerdatabase.ui;
 import java.util.List;
 
 import com.excilys.computerdatabase.dto.ComputerDTO;
-import com.excilys.computerdatabase.model.Computer;
 import com.excilys.computerdatabase.service.ComputerService;
 
 public class Pages {
 	private int limit = 0;
 	private int offset = 12;
 	private int total;
-	
-	/*private int actualPage = 1;
-	private int totalPages;*/
 
 	private static ComputerService computerService = new ComputerService();
 	

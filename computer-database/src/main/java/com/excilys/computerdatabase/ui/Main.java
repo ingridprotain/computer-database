@@ -5,9 +5,7 @@ import java.util.Scanner;
 
 import com.excilys.computerdatabase.dto.ComputerDTO;
 import com.excilys.computerdatabase.model.Company;
-import com.excilys.computerdatabase.model.Computer;
 import com.excilys.computerdatabase.persistence.CompanyDAO;
-import com.excilys.computerdatabase.persistence.ComputerDAO;
 
 public class Main {
 	public static Scanner scan = new Scanner(System.in);

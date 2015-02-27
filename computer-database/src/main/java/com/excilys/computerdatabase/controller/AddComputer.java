@@ -11,13 +11,11 @@ import javax.servlet.http.HttpServletResponse;
 
 import com.excilys.computerdatabase.dto.CompanyDTO;
 import com.excilys.computerdatabase.dto.ComputerDTO;
-import com.excilys.computerdatabase.model.Computer;
-import com.excilys.computerdatabase.persistence.ComputerDAO;
 import com.excilys.computerdatabase.service.CompanyService;
 import com.excilys.computerdatabase.service.ComputerService;
 import com.excilys.computerdatabase.ui.DateValidator;
-import com.sun.org.apache.bcel.internal.generic.NEW;
 
+@SuppressWarnings("serial")
 public class AddComputer extends HttpServlet {
 
 	private static CompanyService companyService = new CompanyService();

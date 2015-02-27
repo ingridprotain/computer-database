@@ -1,6 +1,7 @@
 package com.excilys.computerdatabase.controller;
 
 import java.io.IOException;
+import java.util.ArrayList;
 import java.util.List;
 
 import javax.servlet.ServletException;
@@ -9,34 +10,61 @@ import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 
 import com.excilys.computerdatabase.dto.ComputerDTO;
-import com.excilys.computerdatabase.model.Computer;
-import com.excilys.computerdatabase.service.ComputerService;
-import com.excilys.computerdatabase.ui.Pages;
+import com.excilys.computerdatabase.ui.Page;
 
+@SuppressWarnings("serial")
 public class ListOfComputer extends HttpServlet{
 	
-	private static Pages pages = new Pages("Computer");
-	private static ComputerService computerService = new ComputerService();
+	//private static Pages pages = new Pages("Computer");
+	private static Page pagination = new Page();
 
 	@Override
 	protected void doGet(HttpServletRequest req, HttpServletResponse resp)
 			throws ServletException, IOException {
 		
-		String pagination = req.getParameter("page");
+		List<ComputerDTO> cDTOs = new ArrayList<ComputerDTO>();
+		String page = req.getParameter("page");
+		String limit = req.getParameter("limit");
 		
-		List<ComputerDTO> computers;
-		if (pagination != null && pagination.equals("next")) {
-			computers = pages.next();
-		} else if (pagination != null && pagination.equals("prev")) {
-			computers = pages.prev();
-		} else if (req.getParameter("search") != null) {
-			computers = computerService.getByName(req.getParameter("search"));
+		//Type of request ? search or getAll request?
+		if (req.getParameter("search") != null) {
+			pagination.setActualRequest("search");
+			pagination.setSearchParam(req.getParameter("search"));
+			req.setAttribute("search", req.getParameter("search"));
 		} else {
-			computers = pages.first();
+			pagination.setActualRequest("getAll");
 		}
 		
-		req.setAttribute("totalComputers", pages.getTotal());
-		req.setAttribute("computers", computers);
+		//Set limit of pagination
+		if (limit != null) {
+			if (Integer.valueOf(limit) != null) {
+				pagination.setLimit(Integer.valueOf(limit));
+			}
+		}
+		
+		//Page
+		if (page != null) {
+			if (page.equals("last")) {
+				cDTOs = pagination.last();
+			} else if (page.equals("first")) {
+				cDTOs = pagination.first();
+			} else if (page.equals("next")) {
+				cDTOs = pagination.next();
+			} else if (page.equals("prev")) {
+				cDTOs = pagination.prev();
+			} else if (Integer.valueOf(page) != null) {
+				cDTOs = pagination.getByPage(Integer.valueOf(page));
+			}
+		} else {
+			cDTOs = pagination.first();
+		}
+		
+		//Attribute to the jsp page
+		req.setAttribute("actualPage", pagination.getActualPage());
+		req.setAttribute("totalPages", pagination.getTotalPages());
+		req.setAttribute("totalComputers", pagination.getCount());
+		req.setAttribute("computers", cDTOs);
+		
 		this.getServletContext().getRequestDispatcher("/static/views/dashboard.jsp").forward(req, resp);
 	}
 

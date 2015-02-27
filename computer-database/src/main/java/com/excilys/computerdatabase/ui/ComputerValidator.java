@@ -1,6 +1,5 @@
 package com.excilys.computerdatabase.ui;
 
-import java.time.format.DateTimeFormatter;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -13,7 +12,6 @@ public class ComputerValidator {
 	private static ComputerDTO computer;
 	private static ComputerValidator computerValidator = null;
 	
-	private static DateTimeFormatter format = DateTimeFormatter.ofPattern("MM/dd/yyyy HH:mm:ss");
 	private static ComputerService computerService = new ComputerService();
 	
 	private ComputerValidator() {

@@ -1,5 +1,5 @@
-
 <!DOCTYPE html>
+<%@taglib uri="/static/tag/linkTag.tld" prefix="l" %>
 <%@taglib uri="http://java.sun.com/jsp/jstl/core" prefix="c" %>
 <html>
 <head>
@@ -13,7 +13,7 @@
 <body>
     <header class="navbar navbar-inverse navbar-fixed-top">
         <div class="container">
-            <a class="navbar-brand" href="<c:url value="/dashboard"/>"> Application - Computer Database </a>
+            <l:link name="Application - Computer Database" target="dashboard" myClass="navbar-brand"/>
         </div>
     </header>
 
@@ -27,7 +27,7 @@
                     	${ error } <br />
                     </c:forEach>
                     
-                    <form action="addComputer" method="POST">
+                    <form id="addComputer" action="addComputer" method="POST">
                         <fieldset>
                             <div class="form-group">
                                 <label for="computerName">Computer name</label>
@@ -62,4 +62,47 @@
         </div>
     </section>
 </body>
+<script src="static/js/jquery.min.js"></script>
+<script src="static/js/jquery.validate.min.js"></script>
+<script>
+	$(document).ready(function(){
+		
+		jQuery.validator.addMethod(
+		  "regex",
+		   function(value, element, regexp) {
+		       if (regexp.constructor != RegExp)
+		          regexp = new RegExp(regexp);
+		       else if (regexp.global)
+		          regexp.lastIndex = 0;
+		          return this.optional(element) || regexp.test(value);
+		   },"erreur expression reguliere"
+		);
+		
+		$("#addComputer").validate({
+	        rules: {
+	        	computerName: {
+	        		"required": true
+	        	},
+	        	introduced: {
+	        		"regex": /^(0[1-9]|1[0-2])\/(0[1-9]|1\d|2\d|3[01])\/(19|20)\d{2}$/
+	        	},
+	        	discontinued: {
+	        		"regex": /^(0[1-9]|1[0-2])\/(0[1-9]|1\d|2\d|3[01])\/(19|20)\d{2}$/
+	        	}
+	        },
+	        
+	        // Specify the validation error messages
+	        messages: {
+	        	computerName: "Please enter a computer name",
+	        	introduced: "Please enter a correct date to the format mm/dd/YYY",
+	        	discontinued: "Please enter a correct date to the format mm/dd/YYY"
+	        },
+	   
+	        submitHandler: function(form) {
+	            form.submit();
+	        }
+	    });
+
+	  });
+</script>
 </html>
