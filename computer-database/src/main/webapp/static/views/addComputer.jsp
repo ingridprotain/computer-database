@@ -24,8 +24,16 @@
                     <h1>Add Computer</h1>
                     
                     <c:forEach items="${ errors }" var="error">
-                    	${ error } <br />
+	                    <div class="alert alert-danger">
+						    <strong>${ error }</strong>
+						</div>
                     </c:forEach>
+                    
+                    <c:if test="${ not empty message }">
+                    	<div class="alert alert-success">
+						    <strong>${ message }</strong>
+						</div>
+                    </c:if>
                     
                     <form id="addComputer" action="addComputer" method="POST">
                         <fieldset>
@@ -64,45 +72,5 @@
 </body>
 <script src="static/js/jquery.min.js"></script>
 <script src="static/js/jquery.validate.min.js"></script>
-<script>
-	$(document).ready(function(){
-		
-		jQuery.validator.addMethod(
-		  "regex",
-		   function(value, element, regexp) {
-		       if (regexp.constructor != RegExp)
-		          regexp = new RegExp(regexp);
-		       else if (regexp.global)
-		          regexp.lastIndex = 0;
-		          return this.optional(element) || regexp.test(value);
-		   },"erreur expression reguliere"
-		);
-		
-		$("#addComputer").validate({
-	        rules: {
-	        	computerName: {
-	        		"required": true
-	        	},
-	        	introduced: {
-	        		"regex": /^(0[1-9]|1[0-2])\/(0[1-9]|1\d|2\d|3[01])\/(19|20)\d{2}$/
-	        	},
-	        	discontinued: {
-	        		"regex": /^(0[1-9]|1[0-2])\/(0[1-9]|1\d|2\d|3[01])\/(19|20)\d{2}$/
-	        	}
-	        },
-	        
-	        // Specify the validation error messages
-	        messages: {
-	        	computerName: "Please enter a computer name",
-	        	introduced: "Please enter a correct date to the format mm/dd/YYY",
-	        	discontinued: "Please enter a correct date to the format mm/dd/YYY"
-	        },
-	   
-	        submitHandler: function(form) {
-	            form.submit();
-	        }
-	    });
-
-	  });
-</script>
+<script src="static/js/addComputerValidate.js"></script>
 </html>

@@ -1,4 +1,5 @@
 <!DOCTYPE html>
+<%@taglib uri="/static/tag/paginationTag.tld" prefix="p" %>
 <%@taglib uri="/static/tag/linkTag.tld" prefix="l" %>
 <%@taglib uri="http://java.sun.com/jsp/jstl/core" prefix="c" %>
 <html>
@@ -82,7 +83,7 @@
 	                            <input type="checkbox" name="cb" class="cb" value="0">
 	                        </td>
 	                        <td>
-	                            <a href="editComputer.html" onclick="">${ computer.name }</a>
+	                        	<l:link name="${ computer.name }" target="editComputer" computerId="${ computer.id }"/>
 	                        </td>
 	                        <td>${ computer.introduced }</td>
 	                        <td>${ computer.discontinued }</td>
@@ -97,19 +98,19 @@
     <footer class="navbar-fixed-bottom">
         <div class="container text-center">
             <ul class="pagination">
-          		<li><l:link name="&laquo;" target="dashboard" page="first" search="${ search }"/></li>
-          		<li><c:if test="${ (actualPage -2) > 0 }"><l:link name="${ actualPage -2 }" target="dashboard" page="${ actualPage -2 }" search="${ search }"/></c:if></li>
-          		<li><c:if test="${ (actualPage -1) > 0 }"><l:link name="${ actualPage -1 }" target="dashboard" page="prev" search="${ search }"/></c:if></li>
-              	<li><l:link name="${ actualPage }" target="dashboard" page="${ actualPage }" search="${ search }"/></li>
-              	<li><c:if test="${ (actualPage + 1) < totalPages }"><l:link name="${ actualPage + 1 }" target="dashboard" page="next" search="${ search }"/></c:if></li>
-             	<li><c:if test="${ (actualPage + 2) < totalPages }"><l:link name="${ actualPage + 2 }" target="dashboard" page="${ actualPage + 2 }" search="${ search }"/></c:if></li>
-             	<li><l:link name="&raquo;" target="dashboard" page="last" search="${ search }"/></li>
+          		<li><p:pagination name="&laquo;" target="dashboard" page="first" search="${ search }"/></li>
+          		<li><c:if test="${ (actualPage -2) > 0 }"><p:pagination name="${ actualPage -2 }" target="dashboard" page="${ actualPage -2 }" search="${ search }"/></c:if></li>
+          		<li><c:if test="${ (actualPage -1) > 0 }"><p:pagination name="${ actualPage -1 }" target="dashboard" page="prev" search="${ search }"/></c:if></li>
+              	<li><p:pagination name="${ actualPage }" target="dashboard" page="${ actualPage }" search="${ search }"/></li>
+              	<li><c:if test="${ (actualPage + 1) < totalPages }"><p:pagination name="${ actualPage + 1 }" target="dashboard" page="next" search="${ search }"/></c:if></li>
+             	<li><c:if test="${ (actualPage + 2) < totalPages }"><p:pagination name="${ actualPage + 2 }" target="dashboard" page="${ actualPage + 2 }" search="${ search }"/></c:if></li>
+             	<li><p:pagination name="&raquo;" target="dashboard" page="last" search="${ search }"/></li>
            	</ul>
 
 	        <div class="btn-group btn-group-sm pull-right" role="group" >
-	        	<l:link name="10" target="dashboard" page="${ actualPage }" search="${ search }" limit="10" myClass="btn btn-default"/>
-	        	<l:link name="50" target="dashboard" page="${ actualPage }" search="${ search }" limit="50" myClass="btn btn-default"/>
-	        	<l:link name="100" target="dashboard" page="${ actualPage }" search="${ search }" limit="100" myClass="btn btn-default"/>
+	        	<p:pagination name="10" target="dashboard" page="${ actualPage }" search="${ search }" limit="10" myClass="btn btn-default"/>
+	        	<p:pagination name="50" target="dashboard" page="${ actualPage }" search="${ search }" limit="50" myClass="btn btn-default"/>
+	        	<p:pagination name="100" target="dashboard" page="${ actualPage }" search="${ search }" limit="100" myClass="btn btn-default"/>
 	        </div>
         </div>
     </footer>

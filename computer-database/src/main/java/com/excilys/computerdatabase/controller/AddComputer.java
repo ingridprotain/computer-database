@@ -35,6 +35,7 @@ public class AddComputer extends HttpServlet {
 	protected void doPost(HttpServletRequest req, HttpServletResponse resp)
 			throws ServletException, IOException {
 		// TODO Auto-generated method stub
+		req.setAttribute("message", null);
 		
 		List<String> errors = new ArrayList<String>();
 		
@@ -42,7 +43,8 @@ public class AddComputer extends HttpServlet {
 		cDTO.setName(req.getParameter("computerName"));
 		String introduced = req.getParameter("introduced");
 		String discontinued = req.getParameter("discontinued");
-
+		
+		
 		if (DateValidator.isValid(introduced, "introduced")) {
 			cDTO.setIntroduced(introduced);
 		} else {
@@ -62,6 +64,7 @@ public class AddComputer extends HttpServlet {
 			cDTO.setCompanyDTO(companyDTO);
 			
 			computerService.create(cDTO);
+			req.setAttribute("message", "The computer " + cDTO.getName() + " has been well added");
 		}
 
 		this.getServletContext().getRequestDispatcher("/static/views/addComputer.jsp").forward(req, resp);

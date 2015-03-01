@@ -37,7 +37,7 @@ public class DateValidator {
 				LocalDateTime.parse(date + " 00:00:00", format);
 			}
 		} catch (DateTimeParseException e) {
-			addError("Le format de date doit être mm/dd/yyyy pour " + nomDate);
+			addError("Please enter a correct date to the format mm/dd/YYY for " + nomDate);
 			return false;
 		}
 		return true;
