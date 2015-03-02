@@ -1,4 +1,4 @@
-package com.excilys.computerdatabase.ui;
+/*package com.excilys.computerdatabase.ui;
 
 import java.util.List;
 import java.util.Scanner;
@@ -33,14 +33,14 @@ public class Main {
 			case "1":
 				System.out.println("List computers");
 				
-				Pages pages = new Pages("Computer");
+				Pages pages = new Pages();
 				List<ComputerDTO> computers = pages.first();
 				while(true) {
 					for (ComputerDTO c : computers) {
 						System.out.println(c);
 					}
 					
-					System.out.println("Total of computers : " +pages.getTotal());
+					System.out.println("Total of computers : " +pages.getCount());
 					System.out.print("First : f - Previous : p - Next : n - Last : l  ");
 					String choice = scan.nextLine();
 					if (choice.equals("p")) {
@@ -116,7 +116,7 @@ public class Main {
 	/**
 	 * Under the edit menu
 	 */
-	public static void editComputer(String mode)
+	/*public static void editComputer(String mode)
 	{
 		String name = null;
 		String introduced = null;
@@ -188,4 +188,4 @@ public class Main {
 			return false;
 		}
 	}
-}
+}*/

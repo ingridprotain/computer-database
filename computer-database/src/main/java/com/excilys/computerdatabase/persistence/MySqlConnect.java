@@ -12,6 +12,18 @@ public class MySqlConnect {
 	private static MySqlConnect mySqlConnect;
 	private static Connection cn = null;
 	
+	private static boolean isTest = false;
+	
+	
+	
+	public static boolean isTest() {
+		return isTest;
+	}
+
+	public static void setTest(boolean isTest) {
+		MySqlConnect.isTest = isTest;
+	}
+
 	private MySqlConnect() {
 		try {
 			Class.forName("com.mysql.jdbc.Driver").newInstance();
@@ -32,7 +44,11 @@ public class MySqlConnect {
 	
 	public Connection getMyInstance() {
 		try {
-			cn = DriverManager.getConnection("jdbc:mysql://localhost/computer-database-db?zeroDateTimeBehavior=convertToNull","admincdb","qwerty1234");
+			if (!isTest) {
+				cn = DriverManager.getConnection("jdbc:mysql://localhost/computer-database-db?zeroDateTimeBehavior=convertToNull","admincdb","qwerty1234");
+			} else {
+				cn = DriverManager.getConnection("jdbc:mysql://localhost/computer-database-db-test?zeroDateTimeBehavior=convertToNull","admincdb","qwerty1234");
+			}
 		} catch (SQLException e) {
 			e.printStackTrace();
 		}

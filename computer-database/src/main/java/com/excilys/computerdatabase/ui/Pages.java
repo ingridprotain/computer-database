@@ -1,81 +1,143 @@
 package com.excilys.computerdatabase.ui;
 
+import java.util.ArrayList;
 import java.util.List;
 
 import com.excilys.computerdatabase.dto.ComputerDTO;
+import com.excilys.computerdatabase.dto.ComputerMapper;
+import com.excilys.computerdatabase.model.Computer;
 import com.excilys.computerdatabase.service.ComputerService;
 
 public class Pages {
-	private int limit = 0;
-	private int offset = 12;
-	private int total;
 
+	private int limit = 10;
+	private int offset = 0;
+	private int count;
+	private int totalPages;
+	private int actualPage = 0;
+	
+	private String actualRequest = "getAll";
+	private String searchParam;
+	
 	private static ComputerService computerService = new ComputerService();
 	
-	public Pages(String className) {
-		setTotal(className);
-	}
-	
-	/**
-	 * @return the total
-	 */
-	public int getTotal() {
-		return total;
-	}
-	
-	/**
-	 * @return the limit
-	 */
 	public int getLimit() {
 		return limit;
 	}
 
-	/**
-	 * @return the offset
-	 */
-	public int getOffset() {
-		return offset;
+	public void setLimit(int limit) {
+		this.limit = limit;
+	}
+
+	public int getCount() {
+		return count;
+	}
+
+	public int getTotalPages() {
+		return totalPages;
+	}
+
+	public int getActualPage() {
+		return actualPage;
 	}
 	
-	private void setTotal(String className) {
-		
-		this.total = computerService.count();
+	public String getSearchParam() {
+		return searchParam;
 	}
+
+	public void setSearchParam(String searchParam) {
+		this.searchParam = searchParam;
+	}
+	
+	public String getActualRequest() {
+		return actualRequest;
+	}
+
+	public void setActualRequest(String actualRequest) {
+		if (!this.actualRequest.equals(actualRequest)) {
+			this.actualRequest = actualRequest;
+			offset = 0;
+		}
+	}
+	
 	
 	public List<ComputerDTO> first() {
-		this.limit = 0;
-		List<ComputerDTO> computers = computerService.getAll(0, this.offset);
-
-		return computers;
+		offset = 0;
+		actualPage = 1;
+		return returnByRequest();
 	}
 	
 	public List<ComputerDTO> prev() {
-		this.limit = this.limit - this.offset;
-		if (this.limit < 0) {
-			this.limit = 0;
+		offset = offset - limit;
+		if (offset < 0) {
+			offset = 0;
 		}
-		List<ComputerDTO> computers = computerService.getAll(this.limit, this.offset);
-		
-		return computers;
+		actualPage -= 1;
+		if (actualPage <1) {
+			actualPage = 1;
+		}
+		return returnByRequest();
 	}
 	
 	public List<ComputerDTO> next() {
-		this.limit = this.limit + this.offset;
-		List<ComputerDTO> computers = computerService.getAll(this.limit, this.offset);
-
-		return computers;
+		offset = offset + limit;
+		if (offset > count) {
+			offset = count;
+		}
+		actualPage += 1;
+		if (actualPage > totalPages) {
+			actualPage = totalPages;
+		}
+		return returnByRequest();
 	}
 	
 	public List<ComputerDTO> last() {
-		this.limit = this.total - this.offset;
-		List<ComputerDTO> computers = computerService.getAll(this.limit, this.offset);
+		offset = count - limit;
+		actualPage = totalPages;
+		return returnByRequest();
+	}
 
-		return computers;
+	public List<ComputerDTO> getByPage(int page) {
+		actualPage = page;
+		offset = page*limit - limit;
+		return returnByRequest();
+	}
+
+	
+	public List<ComputerDTO> search() {
+		List<Computer> computers = computerService.getByName(searchParam, limit, offset);
+		
+		count = computerService.countSearch(searchParam);
+		totalPages = (int) Math.ceil(count/limit);
+		
+		List<ComputerDTO> computersDTO = new ArrayList<ComputerDTO>();
+		for (Computer computer : computers) {
+			computersDTO.add(ComputerMapper.createComputerDTO(computer));
+		}
+		
+		return computersDTO;
 	}
 	
-	public List<ComputerDTO> findByLimit(int limit) {
-		this.limit = limit*this.offset;
-		List<ComputerDTO> computers = computerService.getAll(this.limit, this.offset);
-		return computers;
+	public List<ComputerDTO> getAll() {
+		List<Computer> computers = computerService.getAll(limit, offset);
+		
+		count = computerService.count();
+		double total = Math.ceil((double) count / (double) limit);
+		totalPages = (int) total;
+		
+		List<ComputerDTO> computersDTO = new ArrayList<ComputerDTO>();
+		for (Computer computer : computers) {
+			computersDTO.add(ComputerMapper.createComputerDTO(computer));
+		}
+		
+		return computersDTO;
+	}
+
+	public List<ComputerDTO> returnByRequest() {
+		if (actualRequest == "search") {
+			return search();
+		} else {
+			return getAll();
+		}
 	}
 }

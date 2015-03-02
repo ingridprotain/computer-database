@@ -10,13 +10,13 @@ import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 
 import com.excilys.computerdatabase.dto.ComputerDTO;
-import com.excilys.computerdatabase.ui.Page;
+import com.excilys.computerdatabase.ui.Pages;
 
 @SuppressWarnings("serial")
 public class ListOfComputer extends HttpServlet{
 	
 	//private static Pages pages = new Pages("Computer");
-	private static Page pagination = new Page();
+	private static Pages pagination = new Pages();
 
 	@Override
 	protected void doGet(HttpServletRequest req, HttpServletResponse resp)
