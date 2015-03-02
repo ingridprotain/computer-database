@@ -62,7 +62,7 @@
                         <div class="actions pull-right">
                             <input type="submit" value="Add" class="btn btn-primary">
                             or
-                            <a href="dashboard.html" class="btn btn-default">Cancel</a>
+                            <l:link name="Cancel" target="dashboard" myClass="btn btn-default"/>
                         </div>
                     </form>
                 </div>
