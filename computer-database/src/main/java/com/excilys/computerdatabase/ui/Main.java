@@ -1,14 +1,20 @@
-/*package com.excilys.computerdatabase.ui;
+package com.excilys.computerdatabase.ui;
 
 import java.util.List;
 import java.util.Scanner;
 
 import com.excilys.computerdatabase.dto.ComputerDTO;
+import com.excilys.computerdatabase.dto.ComputerMapper;
 import com.excilys.computerdatabase.model.Company;
+import com.excilys.computerdatabase.model.Computer;
 import com.excilys.computerdatabase.persistence.CompanyDAO;
+import com.excilys.computerdatabase.service.ComputerService;
+import com.excilys.computerdatabase.utils.ComputerDTOValidate;
 
 public class Main {
 	public static Scanner scan = new Scanner(System.in);
+	
+	private static ComputerService computerService = new ComputerService();
 
 	public static void main(String[] args) {
 		String choixUser = ""; 
@@ -74,11 +80,12 @@ public class Main {
 			case "3":
 				System.out.println("Identifiant of the computer to research ?");
 				String idComputerString = scan.nextLine();
-				ComputerValidator.getInstance().isExist(idComputerString);
-				if (ComputerValidator.getInstance().getErrors().isEmpty()) {
-					System.out.println(ComputerValidator.getComputer());
+				
+				Computer computer = computerService.find(Integer.parseInt(idComputerString));
+				if (computer != null) {
+					System.out.println(computer);
 				} else {
-					ComputerValidator.displayErrors();
+					System.out.println("Computer doesn't exist");
 				}
 				break;
 				
@@ -99,11 +106,12 @@ public class Main {
 			case "6":
 				System.out.println("Identifiant of the computer to delete ?");
 				String idComputerToDelString = scan.nextLine();
-				ComputerValidator.getInstance().isExist(idComputerToDelString);
-				if (ComputerValidator.getInstance().getErrors().isEmpty()) {
-					//ComputerDAO.getInstance().delete(ComputerValidator.getComputer());
+				Computer computerToDel = computerService.find(Integer.parseInt(idComputerToDelString));
+				if (computerToDel != null) {
+					computerService.delete(computerToDel);
+					System.out.println("Computer deleted");
 				} else {
-					ComputerValidator.displayErrors();
+					System.out.println("Computer doesn't exist");
 				}
 			break;
 			
@@ -116,23 +124,20 @@ public class Main {
 	/**
 	 * Under the edit menu
 	 */
-	/*public static void editComputer(String mode)
+	public static void editComputer(String mode)
 	{
-		String name = null;
-		String introduced = null;
-		String discontinued = null;
-		String companyId = null;
+		ComputerDTO computerDTO = new ComputerDTO();
 		
 		int computerId = 0;
 		
 		if (mode == "Update") {
 			System.out.println("Identifiant of the computer to update ?");
 			String idComputerToUpdString = scan.nextLine();
-			ComputerValidator.getInstance().isExist(idComputerToUpdString);
-			if (ComputerValidator.getInstance().getErrors().isEmpty()) {
-				computerId = ComputerValidator.getComputer().getId();
+			Computer computer = computerService.find(Integer.parseInt(idComputerToUpdString));
+			if (computer != null) {
+				System.out.println(computer);
 			} else {
-				ComputerValidator.displayErrors();
+				System.out.println("Computer doesn't exist");
 			}
 		}
 		
@@ -140,11 +145,11 @@ public class Main {
 		//champ name
 		if (mode == "Insert") {
 			System.out.println("Name of the computer?");
-			name = scan.nextLine();
+			computerDTO.setName(scan.nextLine());
 		} else if (mode == "Update") {
 			System.out.println("Change name of the computer? Y/N");
 			if (userConfirm() == true) {
-				name = scan.nextLine();
+				computerDTO.setName(scan.nextLine());
 			}
 		}
 		
@@ -152,31 +157,35 @@ public class Main {
 		System.out.println(mode + " the introduction date (format = mm/jj/aaaa)? Y/N");
 		if (userConfirm() == true) {
 			System.out.print("Introduced in : ");
-			introduced = scan.nextLine();
+			computerDTO.setIntroduced(scan.nextLine());
 		}
 		
 		//champ discontinued
 		System.out.println(mode + " the discontinued date (format = mm/jj/aaaa)? Y/N");
 		if (userConfirm() == true) {
 			System.out.print("Discontinued in : ");
-			discontinued = scan.nextLine();
+			computerDTO.setDiscontinued(scan.nextLine());
 		}
 		
 		//champ company_id
 		System.out.println(mode + " the company? Y/N");
 		if (userConfirm() == true) {
 			System.out.print("Company's id: ");
-			companyId = scan.nextLine();
+			computerDTO.setCompanyId((Integer.parseInt(scan.nextLine())));
 		}
-		ComputerValidator.getInstance().validate(name, introduced, discontinued, companyId, computerId);
-		if (ComputerValidator.getInstance().getErrors().isEmpty()) {
+		
+		List<String> errors = ComputerDTOValidate.validate(computerDTO);
+		if (errors.isEmpty()) {
+			Computer computer = ComputerMapper.createComputer(computerDTO);
 			if (mode == "Insert") {
-				//ComputerDAO.getInstance().create(ComputerValidator.getComputer());
+				computerService.create(computer);
 			} else {
 				//ComputerDAO.getInstance().update(ComputerValidator.getComputer());
 			}
 		} else {
-			ComputerValidator.displayErrors();
+			for(String error : errors) {
+				System.out.println(error);
+			}
 		}
 	}
 	
@@ -188,4 +197,4 @@ public class Main {
 			return false;
 		}
 	}
-}*/
+}

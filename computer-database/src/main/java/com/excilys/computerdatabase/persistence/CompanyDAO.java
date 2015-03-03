@@ -1,5 +1,7 @@
 package com.excilys.computerdatabase.persistence;
 
+import java.beans.PropertyVetoException;
+import java.io.IOException;
 import java.sql.Connection;
 import java.sql.PreparedStatement;
 import java.sql.ResultSet;
@@ -33,7 +35,12 @@ public class CompanyDAO {
 		ResultSet result = null;
 
 		try {
-			cn = MySqlConnect.getMySqlConnect().getMyInstance();
+			try {
+				cn = DataSource.getInstance().getConnection();
+			} catch (IOException | PropertyVetoException e) {
+				// TODO Auto-generated catch block
+				e.printStackTrace();
+			}
 			stmt = cn.prepareStatement(query);
 			stmt.setInt(1, id);
 		    result = stmt.executeQuery();
@@ -78,7 +85,12 @@ public class CompanyDAO {
 		Statement stmt = null;
 		ResultSet result = null;
 		try {
-			cn = MySqlConnect.getMySqlConnect().getMyInstance();
+			try {
+				cn = DataSource.getInstance().getConnection();
+			} catch (IOException | PropertyVetoException e) {
+				// TODO Auto-generated catch block
+				e.printStackTrace();
+			}
 			stmt = cn.createStatement();
 		    result = stmt.executeQuery(query);
 		    while(result.next()) {

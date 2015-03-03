@@ -15,6 +15,10 @@ public class ComputerService {
 		return ComputerDAO.getInstance().find(id);
 	}
 	
+	public Computer update(Computer computer) {
+		return ComputerDAO.getInstance().update(computer);
+	}
+	
 	public List<Computer> getAll(int limit, int offset, String orderBy) {
 		return ComputerDAO.getInstance().getAll(limit, offset, orderBy);
 	}
@@ -29,5 +33,9 @@ public class ComputerService {
 	
 	public List<Computer> getByName(String name, int limit, int offset, String orderBy) {
 		return ComputerDAO.getInstance().getByName(name, limit, offset, orderBy);
+	}
+	
+	public void delete(Computer computer) {
+		ComputerDAO.getInstance().delete(computer);
 	}
 }

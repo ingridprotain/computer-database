@@ -24,6 +24,11 @@
             <h1 id="homeTitle">
                 <c:out value="${totalComputers}" /> Computers found
             </h1>
+             <c:if test="${ not empty message }">
+			            <div class="alert alert-success">
+			            	<strong>${ message }</strong>
+			            </div>
+			        </c:if>
             <div id="actions" class="form-horizontal">
                 <div class="pull-left">
                     <form id="searchForm" action="/computer-database/dashboard" method="GET" class="form-inline">
@@ -33,14 +38,14 @@
                     </form>
                 </div>
                 <div class="pull-right">
-                	<l:link target="addComputer" name="Add Computer" myClass="btn btn-success"/>
+                	<l:link target="editComputer" name="Add Computer" myClass="btn btn-success"/>
                     <a class="btn btn-default" id="editComputer" href="#" onclick="$.fn.toggleEditMode();">Edit</a>
                 </div>
             </div>
         </div>
 
-        <form id="deleteForm" action="#" method="POST">
-            <input type="hidden" name="selection" value="">
+        <form id="deleteForm" action="deleteComputers" method="POST">
+            <input type="hidden" name="selection" value="${ computer.id }">
         </form>
 
         <div class="container" style="margin-top: 10px;">
@@ -82,7 +87,7 @@
 	                <c:forEach items="${ computers }" var="computer">
 	                	<tr>
 	                		<td class="editMode">
-	                            <input type="checkbox" name="cb" class="cb" value="0">
+	                            <input type="checkbox" name="cb" class="cb" value="${ computer.id }">
 	                        </td>
 	                        <td>
 	                        	<l:link name="${ computer.name }" target="editComputer" computerId="${ computer.id }"/>

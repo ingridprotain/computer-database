@@ -1,5 +1,7 @@
 package com.excilys.computerdatabase.persistence;
 
+import java.beans.PropertyVetoException;
+import java.io.IOException;
 import java.sql.Connection;
 import java.sql.PreparedStatement;
 import java.sql.Statement;
@@ -14,7 +16,6 @@ import com.excilys.computerdatabase.model.Computer;
 public class ComputerDAO {
 	
 	private static ComputerDAO computerDAO = null;
-	//private static Logger logger = LoggerFactory.getLogger(ComputerDAO.class);
 	
 	private ComputerDAO() {
 		
@@ -28,8 +29,6 @@ public class ComputerDAO {
 	}
 
 	public Computer find(int id) {
-		
-		//logger.info("loog");
 		Computer computer = null;
 		
 		String query = "SELECT c.id, c.name, c.introduced, c.discontinued, c.company_id, co.name "
@@ -42,7 +41,12 @@ public class ComputerDAO {
 		ResultSet result = null;
 		
 		try {
-			cn = MySqlConnect.getMySqlConnect().getMyInstance();
+			try {
+				cn = DataSource.getInstance().getConnection();
+			} catch (IOException | PropertyVetoException e) {
+				// TODO Auto-generated catch block
+				e.printStackTrace();
+			}
 			stmt = cn.createStatement();
 			result = stmt.executeQuery(query);
 			while (result.next()) {
@@ -83,7 +87,12 @@ public class ComputerDAO {
 		ResultSet result = null;
 		
 		try {
-			cn = MySqlConnect.getMySqlConnect().getMyInstance();
+			try {
+				cn = DataSource.getInstance().getConnection();
+			} catch (IOException | PropertyVetoException e) {
+				// TODO Auto-generated catch block
+				e.printStackTrace();
+			}
 			stmt = cn.createStatement();
 			result = stmt.executeQuery(query);
 			
@@ -128,7 +137,12 @@ public class ComputerDAO {
 		Connection cn = null;
 		PreparedStatement stmt = null;
 		try {
-			cn =  MySqlConnect.getMySqlConnect().getMyInstance();
+			try {
+				cn = DataSource.getInstance().getConnection();
+			} catch (IOException | PropertyVetoException e) {
+				// TODO Auto-generated catch block
+				e.printStackTrace();
+			}
 			stmt = cn.prepareStatement(query);
 			
 			stmt.setString(1, computer.getName());
@@ -171,7 +185,12 @@ public class ComputerDAO {
 		PreparedStatement stmt = null;
 		
 		try {
-			cn = MySqlConnect.getMySqlConnect().getMyInstance();
+			try {
+				cn = DataSource.getInstance().getConnection();
+			} catch (IOException | PropertyVetoException e) {
+				// TODO Auto-generated catch block
+				e.printStackTrace();
+			}
 			stmt = cn.prepareStatement(query);
 			
 			stmt.setString(1, computer.getName());
@@ -211,7 +230,12 @@ public class ComputerDAO {
 		PreparedStatement stmt = null;
 		Connection cn = null;
 		try {
-			 cn = MySqlConnect.getMySqlConnect().getMyInstance();
+			try {
+				cn = DataSource.getInstance().getConnection();
+			} catch (IOException | PropertyVetoException e) {
+				// TODO Auto-generated catch block
+				e.printStackTrace();
+			}
 			stmt = cn.prepareStatement(query);
 			
 			stmt.setInt(1, computer.getId());
@@ -261,7 +285,12 @@ public class ComputerDAO {
 		ResultSet result = null;
 		
 		try {
-			cn = MySqlConnect.getMySqlConnect().getMyInstance();
+			try {
+				cn = DataSource.getInstance().getConnection();
+			} catch (IOException | PropertyVetoException e) {
+				// TODO Auto-generated catch block
+				e.printStackTrace();
+			}
 			stmt = cn.prepareStatement(query);
 			
 			//stmt.setString(1, "DESC");
@@ -298,6 +327,7 @@ public class ComputerDAO {
 	 */
 	public List<Computer> getByName(String name, int limit, int offset, String orderBy) {
 		
+		Connection cn = null;
 		StringBuilder query = new StringBuilder("SELECT c.id, c.name, c.introduced, c.discontinued, c.company_id, co.name ")
 			.append("FROM computer AS c ")
 			.append("LEFT JOIN company AS co ON c.company_id = co.id ")
@@ -307,7 +337,12 @@ public class ComputerDAO {
 		List<Computer> computers = new ArrayList<Computer>();
 		
 		try {
-			Connection cn = MySqlConnect.getMySqlConnect().getMyInstance();
+			try {
+				cn = DataSource.getInstance().getConnection();
+			} catch (IOException | PropertyVetoException e) {
+				// TODO Auto-generated catch block
+				e.printStackTrace();
+			}
 			PreparedStatement stmt = cn.prepareStatement(query.toString());
 			stmt.setString(1, "%" + name + "%");
 			stmt.setInt(2, limit);
@@ -333,7 +368,12 @@ public class ComputerDAO {
 		PreparedStatement stmt = null;
 		
 		try {
-			cn = MySqlConnect.getMySqlConnect().getMyInstance();
+			try {
+				cn = DataSource.getInstance().getConnection();
+			} catch (IOException | PropertyVetoException e) {
+				// TODO Auto-generated catch block
+				e.printStackTrace();
+			}
 			stmt = cn.prepareStatement(query);
 			stmt.setString(1, "%" + name + "%");
 			ResultSet result = stmt.executeQuery();

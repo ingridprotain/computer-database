@@ -30,6 +30,7 @@ final public class ComputerMapper {
 	public static Computer createComputer(ComputerDTO computerDTO) {
 		Computer computer = new Computer();
 
+		computer.setId(computerDTO.getId());
 		computer.setName(computerDTO.getName());
 		computer.setIntroduced(DateValidator.toLocalDateTime(computerDTO.getIntroduced()));
 		computer.setDiscontinued(DateValidator.toLocalDateTime(computerDTO.getDiscontinued()));

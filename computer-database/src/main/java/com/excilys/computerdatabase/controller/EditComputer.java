@@ -20,7 +20,7 @@ import com.excilys.computerdatabase.service.ComputerService;
 import com.excilys.computerdatabase.utils.ComputerDTOValidate;
 
 @SuppressWarnings("serial")
-public class AddComputer extends HttpServlet {
+public class EditComputer extends HttpServlet {
 
 	private static CompanyService companyService = new CompanyService();
 	private static ComputerService computerService = new ComputerService();
@@ -29,16 +29,34 @@ public class AddComputer extends HttpServlet {
 			throws ServletException, IOException {
 		
 		List<Company> companies = companyService.getAll();
+		String title = "Add Computer";
+		ComputerDTO computerDTO = new ComputerDTO();
 		
+		int computerId = 0;
+		if (req.getParameter("computerId") != null) {
+			computerId = Integer.valueOf(req.getParameter("computerId"));
+		}
+
 		//Creation of the DTOs
 		List<CompanyDTO> companiesDTO = new ArrayList<CompanyDTO>();
 		for (Company company : companies) {
 			companiesDTO.add(CompanyMapper.createCompanyDTO(company));
 		}
 		
+		//If isset computerId then we edit
+		if (computerId != 0) {
+			Computer computer = computerService.find(computerId);
+			if (computer != null) {
+				computerDTO = ComputerMapper.createComputerDTO(computer);
+			}
+			title = "Edit computer " + computerDTO.getName();
+		}
+		
+		req.setAttribute("title", title);
+		req.setAttribute("computerDTO", computerDTO);
 		req.setAttribute("companiesDTO", companiesDTO);
 		
-		this.getServletContext().getRequestDispatcher("/static/views/addComputer.jsp").forward(req, resp);
+		this.getServletContext().getRequestDispatcher("/static/views/editComputer.jsp").forward(req, resp);
 	}
 
 	@Override
@@ -52,18 +70,37 @@ public class AddComputer extends HttpServlet {
 		computerDTO.setDiscontinued(req.getParameter("discontinued"));
 		computerDTO.setCompanyId(Integer.valueOf(req.getParameter("companyId")));
 		
+		//Edit
+		if (req.getParameter("computerId") != null) {
+			computerDTO.setId(Integer.valueOf(req.getParameter("computerId")));
+		}
+		
 		//If the computerDTO is valid, we add the computer to the database
 		List<String> errors = ComputerDTOValidate.validate(computerDTO);
 		if (errors.isEmpty()) {
 			Computer computer = ComputerMapper.createComputer(computerDTO);
-			computer = computerService.create(computer);
-			req.setAttribute("message", "The computer " + computer.getName() + " has been well added");
+			//Create
+			if (computer.getId() == 0) {
+				computer = computerService.create(computer);
+			//Edit
+			} else {
+				computer = computerService.update(computer);
+			}
+			
+			resp.sendRedirect("/computer-database/dashboard");
 		//Else, we return a list of errors
 		} else {
+			List<Company> companies = companyService.getAll();
+			List<CompanyDTO> companiesDTO = new ArrayList<CompanyDTO>();
+			for (Company company : companies) {
+				companiesDTO.add(CompanyMapper.createCompanyDTO(company));
+			}
+			
+			req.setAttribute("companiesDTO", companiesDTO);
 			req.setAttribute("errors", errors);
+			req.setAttribute("computerDTO", computerDTO);
+			this.getServletContext().getRequestDispatcher("/static/views/editComputer.jsp").forward(req, resp);
 		}
-		
-		this.getServletContext().getRequestDispatcher("/static/views/addComputer.jsp").forward(req, resp);
 	}
 
 }

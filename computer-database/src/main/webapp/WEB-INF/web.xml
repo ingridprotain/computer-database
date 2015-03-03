@@ -8,27 +8,27 @@
 http://java.sun.com/xml/ns/j2ee/web-app_2_4.xsd">
   <display-name>Archetype Created Web Application</display-name>
   <servlet>
-  	<servlet-name>AddComputer</servlet-name>
-  	<servlet-class>com.excilys.computerdatabase.controller.AddComputer</servlet-class>
-  </servlet>
-   <servlet>
-  	<servlet-name>ListOfComputer</servlet-name>
-  	<servlet-class>com.excilys.computerdatabase.controller.ListOfComputer</servlet-class>
-  </servlet>
-  <servlet>
   	<servlet-name>EditComputer</servlet-name>
   	<servlet-class>com.excilys.computerdatabase.controller.EditComputer</servlet-class>
   </servlet>
+  <servlet>
+  	<servlet-name>DeleteComputers</servlet-name>
+  	<servlet-class>com.excilys.computerdatabase.controller.DeleteComputers</servlet-class>
+  </servlet>
+  <servlet>
+  	<servlet-name>ListOfComputer</servlet-name>
+  	<servlet-class>com.excilys.computerdatabase.controller.ListOfComputer</servlet-class>
+  </servlet>
   <servlet-mapping>
-  	<servlet-name>AddComputer</servlet-name>
-  	<url-pattern>/addComputer</url-pattern>
+  	<servlet-name>EditComputer</servlet-name>
+  	<url-pattern>/editComputer</url-pattern>
+  </servlet-mapping>
+  <servlet-mapping>
+  	<servlet-name>DeleteComputers</servlet-name>
+  	<url-pattern>/deleteComputers</url-pattern>
   </servlet-mapping>
   <servlet-mapping>
   	<servlet-name>ListOfComputer</servlet-name>
   	<url-pattern>/dashboard</url-pattern>
-  </servlet-mapping>
-  <servlet-mapping>
-  	<servlet-name>EditComputer</servlet-name>
-  	<url-pattern>/editComputer</url-pattern>
   </servlet-mapping>
 </web-app>
