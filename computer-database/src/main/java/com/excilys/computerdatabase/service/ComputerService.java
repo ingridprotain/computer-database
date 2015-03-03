@@ -15,8 +15,8 @@ public class ComputerService {
 		return ComputerDAO.getInstance().find(id);
 	}
 	
-	public List<Computer> getAll(int limit, int offset) {
-		return ComputerDAO.getInstance().getAll(limit, offset);
+	public List<Computer> getAll(int limit, int offset, String orderBy) {
+		return ComputerDAO.getInstance().getAll(limit, offset, orderBy);
 	}
 	
 	public int count() {
@@ -27,7 +27,7 @@ public class ComputerService {
 		return ComputerDAO.getInstance().countSearch(name);
 	}
 	
-	public List<Computer> getByName(String name, int limit, int offset) {
-		return ComputerDAO.getInstance().getByName(name, limit, offset);
+	public List<Computer> getByName(String name, int limit, int offset, String orderBy) {
+		return ComputerDAO.getInstance().getByName(name, limit, offset, orderBy);
 	}
 }

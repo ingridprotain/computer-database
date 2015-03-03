@@ -14,32 +14,65 @@ public class PaginationTag extends TagSupport {
 	private String search;
 	private String myClass;
 	private int limit;
+	private String orderBy;
 	
-	public void setTarget(String pTarget) {
-		target = pTarget;
+	public String getOrderBy() {
+		return orderBy;
 	}
 
-	public void setName(String pName) {
-		name = pName;
-	}
-	
-	public void setPage(String pPage) {
-		page = pPage;
-	}
-	
-	public void setLimit(int pLimit) {
-		limit = pLimit;
-	}
-	
-	public void setSearch(String pSearch) {
-		search = pSearch;
-	}
-	
-	public void setMyClass(String pClass) {
-		myClass = pClass;
+	public void setOrderBy(String orderBy) {
+		this.orderBy = orderBy;
 	}
     
-    public int doStartTag() throws JspException{
+    public String getTarget() {
+		return target;
+	}
+
+	public void setTarget(String target) {
+		this.target = target;
+	}
+
+	public String getName() {
+		return name;
+	}
+
+	public void setName(String name) {
+		this.name = name;
+	}
+
+	public String getPage() {
+		return page;
+	}
+
+	public void setPage(String page) {
+		this.page = page;
+	}
+
+	public String getSearch() {
+		return search;
+	}
+
+	public void setSearch(String search) {
+		this.search = search;
+	}
+
+	public String getMyClass() {
+		return myClass;
+	}
+
+	public void setMyClass(String myClass) {
+		this.myClass = myClass;
+	}
+
+	public int getLimit() {
+		return limit;
+	}
+
+	public void setLimit(int limit) {
+		this.limit = limit;
+	}
+
+	public int doStartTag() throws JspException{
     	JspWriter out = pageContext.getOut();
     	StringBuilder link = new StringBuilder();
     	link.append("<a class=\"");
@@ -58,6 +91,10 @@ public class PaginationTag extends TagSupport {
     	if (search != null && !search.equals("")) {
     		link.append("&search=");
         	link.append(search);
+    	}
+    	if (orderBy != null && !orderBy.equals("")) {
+    		link.append("&orderBy=");
+        	link.append(orderBy);
     	}
     	link.append("\">");
     	link.append(name);

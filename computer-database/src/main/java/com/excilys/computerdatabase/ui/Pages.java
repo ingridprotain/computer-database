@@ -18,6 +18,7 @@ public class Pages {
 	
 	private String actualRequest = "getAll";
 	private String searchParam;
+	private String orderBy;
 	
 	private static ComputerService computerService = new ComputerService();
 	
@@ -60,6 +61,19 @@ public class Pages {
 		}
 	}
 	
+	public String getOrderBy() {
+		return orderBy;
+	}
+
+	public void setOrderBy(String orderBy) {
+		/*if (orderBy == "ASC" || orderBy == "DESC") {
+			this.orderBy = orderBy;
+		} else {
+			this.orderBy = "ASC";
+		}*/
+		this.orderBy = orderBy;
+	}
+
 	
 	public List<ComputerDTO> first() {
 		offset = 0;
@@ -105,7 +119,7 @@ public class Pages {
 
 	
 	public List<ComputerDTO> search() {
-		List<Computer> computers = computerService.getByName(searchParam, limit, offset);
+		List<Computer> computers = computerService.getByName(searchParam, limit, offset, orderBy);
 		
 		count = computerService.countSearch(searchParam);
 		totalPages = (int) Math.ceil(count/limit);
@@ -119,7 +133,7 @@ public class Pages {
 	}
 	
 	public List<ComputerDTO> getAll() {
-		List<Computer> computers = computerService.getAll(limit, offset);
+		List<Computer> computers = computerService.getAll(limit, offset, orderBy);
 		
 		count = computerService.count();
 		double total = Math.ceil((double) count / (double) limit);

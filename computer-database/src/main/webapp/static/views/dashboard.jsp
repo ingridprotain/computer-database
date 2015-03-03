@@ -60,6 +60,8 @@
                         </th>
                         <th>
                             Computer name
+                            <p:pagination name="&uarr;" target="dashboard" page="${ actualPage }" search="${ search }" orderBy="ASC"/>
+                            <p:pagination name="&darr;" target="dashboard" page="${ actualPage }" search="${ search }" orderBy="DESC"/>
                         </th>
                         <th>
                             Introduced date
@@ -87,7 +89,7 @@
 	                        </td>
 	                        <td>${ computer.introduced }</td>
 	                        <td>${ computer.discontinued }</td>
-	                        <td>${ computer.companyDTO.name }</td>
+	                        <td>${ computer.companyName }</td>
 	                	</tr>
 	                </c:forEach>
                 </tbody>

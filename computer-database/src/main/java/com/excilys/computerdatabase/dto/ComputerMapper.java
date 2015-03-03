@@ -4,7 +4,7 @@ import java.time.format.DateTimeFormatter;
 
 import com.excilys.computerdatabase.model.Company;
 import com.excilys.computerdatabase.model.Computer;
-import com.excilys.computerdatabase.ui.DateValidator;
+import com.excilys.computerdatabase.utils.DateValidator;
 
 final public class ComputerMapper {
 	private ComputerMapper() {
@@ -34,10 +34,12 @@ final public class ComputerMapper {
 		computer.setIntroduced(DateValidator.toLocalDateTime(computerDTO.getIntroduced()));
 		computer.setDiscontinued(DateValidator.toLocalDateTime(computerDTO.getDiscontinued()));
 		
-		Company company = new Company();
-		company.setId(computerDTO.getCompanyId());
-		company.setName(computerDTO.getCompanyName());
-		computer.setCompany(company);
+		if (computerDTO.getCompanyId() != 0) {
+			Company company = new Company();
+			company.setId(computerDTO.getCompanyId());
+			company.setName(computerDTO.getCompanyName());
+			computer.setCompany(company);
+		}
 		
 		return computer;
 	}

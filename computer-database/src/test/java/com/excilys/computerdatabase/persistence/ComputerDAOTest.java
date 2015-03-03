@@ -48,7 +48,7 @@ public class ComputerDAOTest extends TestCase {
 		
 		computerDAO.create(computerCreate);
 		
-		List<Computer> computers = computerDAO.getAll(computerDAO.count(), 0);
+		List<Computer> computers = computerDAO.getAll(computerDAO.count(), 0, "ASC");
 		Computer computerSelect = computers.get(computers.size()-1);
 		assertEquals(computerCreate.getName(), computerSelect.getName());
 		assertEquals(computerCreate.getIntroduced(), computerSelect.getIntroduced());
@@ -61,7 +61,7 @@ public class ComputerDAOTest extends TestCase {
 	}
 	
 	public void testDelete() {
-		List<Computer> computers = computerDAO.getAll(computerDAO.count(), 0);
+		List<Computer> computers = computerDAO.getAll(computerDAO.count(), 0, "ASC");
 		Computer computerDelete = computers.get(computers.size()-1);
 		
 		computerDAO.delete(computerDelete);
@@ -70,12 +70,12 @@ public class ComputerDAOTest extends TestCase {
 	}
 	
 	public void testGetAll() {
-		List<Computer> computers = computerDAO.getAll(computerDAO.count(), 0);
+		List<Computer> computers = computerDAO.getAll(computerDAO.count(), 0, "ASC");
 		assertEquals(computers.size(), computerDAO.count());
 	}
 	
 	public void testGetByName() {
-		List<Computer> computersByName = computerDAO.getByName("test2", computerDAO.count(), 0);
+		List<Computer> computersByName = computerDAO.getByName("test2", computerDAO.count(), 0, "ASC");
 		assertEquals(computersByName.size(), 1);
 	}
 	

@@ -240,26 +240,53 @@ public class ComputerDAO {
 	 * Get all computers in the database
 	 * @return a list of Computer
 	 */
-	public List<Computer> getAll(int limit, int offset) {
-		
-		StringBuilder query = new StringBuilder("SELECT c.id, c.name, c.introduced, c.discontinued, c.company_id, co.name ")
-			.append("FROM computer AS c ")
-			.append("LEFT JOIN company AS co ON c.company_id = co.id ")
-			.append(" LIMIT ").append(limit).append(" OFFSET ").append(offset);
-		
+	public List<Computer> getAll(int limit, int offset, String orderBy) {
+		if (orderBy == null) {
+			orderBy = "ASC";
+		}
+		if (!orderBy.equals("DESC") && !orderBy.equals("ASC")) {
+			orderBy = "ASC";
+		} 
+		String query = "SELECT c.id, c.name, c.introduced, c.discontinued, c.company_id, co.name " +
+			"FROM computer AS c " +
+			"LEFT JOIN company AS co ON c.company_id = co.id " +
+			"ORDER BY c.name " + orderBy + " " +
+			"LIMIT ? OFFSET ?";
+			
+
 		List<Computer> computers = new ArrayList<Computer>();
 		
+		Connection cn = null;
+		PreparedStatement stmt = null;
+		ResultSet result = null;
+		
 		try {
-			Connection cn = MySqlConnect.getMySqlConnect().getMyInstance();
-			Statement stmt = cn.createStatement();
-		    ResultSet result = stmt.executeQuery(query.toString());
+			cn = MySqlConnect.getMySqlConnect().getMyInstance();
+			stmt = cn.prepareStatement(query);
+			
+			//stmt.setString(1, "DESC");
+			stmt.setInt(1, limit);
+			stmt.setInt(2, offset);
+
+			result = stmt.executeQuery();
 		    while (result.next()) {
 		    	Computer c = ComputerMapper.convertToComputer(result);
 		    	computers.add(c);
 		    }
 		} catch (SQLException e) {
-			// TODO Auto-generated catch block
-			e.printStackTrace();
+			throw new IllegalStateException("Problem during the recuperation of computers in database");
+		} finally {
+			try {
+				cn.close();
+			} catch (SQLException e) {
+				throw new IllegalStateException("Problem during closing of connection to the database");
+			}
+			
+			try {
+				stmt.close();
+			} catch (SQLException e) {
+				throw new IllegalStateException("Problem during closing of the Statement");
+			}
 		}
 		
 		return computers;
@@ -269,7 +296,7 @@ public class ComputerDAO {
 	 * Get all computers in the database by name
 	 * @return a list of Computer
 	 */
-	public List<Computer> getByName(String name, int limit, int offset) {
+	public List<Computer> getByName(String name, int limit, int offset, String orderBy) {
 		
 		StringBuilder query = new StringBuilder("SELECT c.id, c.name, c.introduced, c.discontinued, c.company_id, co.name ")
 			.append("FROM computer AS c ")

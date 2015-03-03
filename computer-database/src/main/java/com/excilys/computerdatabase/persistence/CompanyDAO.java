@@ -1,6 +1,7 @@
 package com.excilys.computerdatabase.persistence;
 
 import java.sql.Connection;
+import java.sql.PreparedStatement;
 import java.sql.ResultSet;
 import java.sql.SQLException;
 import java.sql.Statement;
@@ -26,16 +27,17 @@ public class CompanyDAO {
 	public Company find(int id) {
 		Company company = null;
 		
-		String query = "SELECT id, name FROM company AS c WHERE c.id=" + id;
+		String query = "SELECT id, name FROM company WHERE id=?";
 		Connection cn = null;
-		Statement stmt = null;
+		PreparedStatement stmt = null;
 		ResultSet result = null;
 
 		try {
 			cn = MySqlConnect.getMySqlConnect().getMyInstance();
-			stmt = cn.createStatement();
-		    result = stmt.executeQuery(query);
-		    while (result.next()) {
+			stmt = cn.prepareStatement(query);
+			stmt.setInt(1, id);
+		    result = stmt.executeQuery();
+		    if (result.next()) {
 		    	company = CompanyMapper.convertToCompany(result);
 		    }
 		} catch (SQLException e) {

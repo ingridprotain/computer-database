@@ -29,7 +29,7 @@ public class LinkTag extends TagSupport {
 	public void setMyClass(String pClass) {
 		myClass = pClass;
 	}
-
+	
     public int doStartTag() throws JspException{
     	JspWriter out = pageContext.getOut();
     	StringBuilder link = new StringBuilder();

@@ -25,6 +25,7 @@ public class ListOfComputer extends HttpServlet{
 		List<ComputerDTO> cDTOs = new ArrayList<ComputerDTO>();
 		String page = req.getParameter("page");
 		String limit = req.getParameter("limit");
+		String orderBy = req.getParameter("orderBy");
 		
 		//Type of request ? search or getAll request?
 		if (req.getParameter("search") != null) {
@@ -40,6 +41,11 @@ public class ListOfComputer extends HttpServlet{
 			if (Integer.valueOf(limit) != null) {
 				pagination.setLimit(Integer.valueOf(limit));
 			}
+		}
+		
+		//Order by
+		if (orderBy != null) {
+			pagination.setOrderBy(orderBy);
 		}
 		
 		//Page
@@ -60,6 +66,7 @@ public class ListOfComputer extends HttpServlet{
 		}
 		
 		//Attribute to the jsp page
+		req.setAttribute("orderBy", pagination.getOrderBy());
 		req.setAttribute("actualPage", pagination.getActualPage());
 		req.setAttribute("totalPages", pagination.getTotalPages());
 		req.setAttribute("totalComputers", pagination.getCount());

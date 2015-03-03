@@ -37,5 +37,9 @@
             <name>myClass</name>
             <required>false</required>
         </attribute>
+        <attribute>
+            <name>orderBy</name>
+            <required>false</required>
+        </attribute>
     </tag>
 </taglib>

@@ -51,15 +51,16 @@ public class AddComputer extends HttpServlet {
 		computerDTO.setIntroduced(req.getParameter("introduced"));
 		computerDTO.setDiscontinued(req.getParameter("discontinued"));
 		computerDTO.setCompanyId(Integer.valueOf(req.getParameter("companyId")));
-	
+		
 		//If the computerDTO is valid, we add the computer to the database
-		if (ComputerDTOValidate.validate(computerDTO).isEmpty()) {
+		List<String> errors = ComputerDTOValidate.validate(computerDTO);
+		if (errors.isEmpty()) {
 			Computer computer = ComputerMapper.createComputer(computerDTO);
 			computer = computerService.create(computer);
 			req.setAttribute("message", "The computer " + computer.getName() + " has been well added");
 		//Else, we return a list of errors
 		} else {
-			req.setAttribute("errors", ComputerDTOValidate.validate(computerDTO));
+			req.setAttribute("errors", errors);
 		}
 		
 		this.getServletContext().getRequestDispatcher("/static/views/addComputer.jsp").forward(req, resp);
