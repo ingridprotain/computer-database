@@ -128,8 +128,6 @@ public class Main {
 	{
 		ComputerDTO computerDTO = new ComputerDTO();
 		
-		int computerId = 0;
-		
 		if (mode == "Update") {
 			System.out.println("Identifiant of the computer to update ?");
 			String idComputerToUpdString = scan.nextLine();
