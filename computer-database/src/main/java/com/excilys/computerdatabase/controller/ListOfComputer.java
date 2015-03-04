@@ -26,6 +26,7 @@ public class ListOfComputer extends HttpServlet{
 		String page = req.getParameter("page");
 		String limit = req.getParameter("limit");
 		String orderBy = req.getParameter("orderBy");
+		String orderByColumn = req.getParameter("orderByColumn");
 		
 		//Type of request ? search or getAll request?
 		if (req.getParameter("search") != null) {
@@ -46,6 +47,9 @@ public class ListOfComputer extends HttpServlet{
 		//Order by
 		if (orderBy != null) {
 			pagination.setOrderBy(orderBy);
+		}
+		if (orderByColumn != null) {
+			pagination.setOrderByColumn(orderByColumn);
 		}
 		
 		//Page

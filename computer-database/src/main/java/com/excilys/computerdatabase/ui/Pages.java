@@ -19,6 +19,7 @@ public class Pages {
 	private String actualRequest = "getAll";
 	private String searchParam;
 	private String orderBy;
+	private String orderByColumn;
 	
 	private static ComputerService computerService = new ComputerService();
 	
@@ -74,34 +75,29 @@ public class Pages {
 		this.orderBy = orderBy;
 	}
 
+	public String getOrderByColumn() {
+		return orderByColumn;
+	}
+
+	public void setOrderByColumn(String orderByColumn) {
+		if (orderByColumn != null) {
+			if(orderByColumn.equals("company")) {
+				orderByColumn = "co.name";
+			} else if (orderByColumn.equals("introduced")) {
+				orderByColumn = "c.introduced";
+			} else if (orderByColumn.equals("discontinued")) {
+				orderByColumn = "c.discontinued";
+			}
+		} else {
+			orderByColumn = "c.name";
+		}
+		this.orderByColumn = orderByColumn;
+	}
+
 	
 	public List<ComputerDTO> first() {
 		offset = 0;
 		actualPage = 1;
-		return returnByRequest();
-	}
-	
-	public List<ComputerDTO> prev() {
-		offset = offset - limit;
-		if (offset < 0) {
-			offset = 0;
-		}
-		actualPage -= 1;
-		if (actualPage <1) {
-			actualPage = 1;
-		}
-		return returnByRequest();
-	}
-	
-	public List<ComputerDTO> next() {
-		offset = offset + limit;
-		if (offset > count) {
-			offset = count;
-		}
-		actualPage += 1;
-		if (actualPage > totalPages) {
-			actualPage = totalPages;
-		}
 		return returnByRequest();
 	}
 	
@@ -133,7 +129,7 @@ public class Pages {
 	}
 	
 	public List<ComputerDTO> getAll() {
-		List<Computer> computers = computerService.getAll(limit, offset, orderBy);
+		List<Computer> computers = computerService.getAll(limit, offset, orderBy, orderByColumn);
 		
 		count = computerService.count();
 		double total = Math.ceil((double) count / (double) limit);

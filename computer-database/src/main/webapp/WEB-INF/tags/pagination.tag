@@ -1,5 +1,6 @@
 <%@ taglib prefix="c" uri="http://java.sun.com/jsp/jstl/core" %> 
 <%@ attribute name="isOrderBy" required="false" %>
+<%@ attribute name="orderByColumn" required="false" %>
 <c:if test="${ empty isOrderBy }">
 	<div class="container text-center">
 		<ul class="pagination">
@@ -29,6 +30,6 @@
 </c:if>
 
 <c:if test="${ not empty isOrderBy }">
-	<a href="/computer-database/dashboard?page=${ actualPage }<c:if test="${ not empty search }">&search=${ search }</c:if>&orderBy=ASC">&uarr;</a>
-	<a href="/computer-database/dashboard?page=${ actualPage }<c:if test="${ not empty search }">&search=${ search }</c:if>&orderBy=DESC">&darr;</a>
+	<a title="Croissant" href="/computer-database/dashboard?page=${ actualPage }<c:if test="${ not empty search }">&search=${ search }</c:if>&orderBy=ASC<c:if test="${ not empty orderByColumn }">&orderByColumn=${ orderByColumn }</c:if>">&uarr;</a>
+	<a title="Décroissant" href="/computer-database/dashboard?page=${ actualPage }<c:if test="${ not empty search }">&search=${ search }</c:if>&orderBy=DESC<c:if test="${ not empty orderByColumn }">&orderByColumn=${ orderByColumn }</c:if>">&darr;</a>
 </c:if>

@@ -221,7 +221,12 @@ public class ComputerDAO {
 	}
 
 	public Computer update(Computer computer) {
-		String query = "UPDATE computer SET name=?, introduced=?, discontinued=?, company_id=? WHERE id=?;";
+		String query;
+		if (computer.getCompany() != null) {
+			query = "UPDATE computer SET name=?, introduced=?, discontinued=?, company_id=? WHERE id=?;";
+		} else { 
+			query = "UPDATE computer SET name=?, introduced=?, discontinued=? WHERE id=?;";
+		}
 		
 		Connection cn = null;
 		PreparedStatement stmt = null;
@@ -237,8 +242,13 @@ public class ComputerDAO {
 			stmt.setString(1, computer.getName());
 			stmt.setTimestamp(2, (computer.getIntroduced() == null ? null : Timestamp.valueOf(computer.getIntroduced())));
 			stmt.setTimestamp(3, (computer.getDiscontinued() == null ? null : Timestamp.valueOf(computer.getDiscontinued())));
-			stmt.setInt(4, computer.getCompany().getId());
-			stmt.setInt(5, computer.getId());
+			if (computer.getCompany() != null) {
+				stmt.setInt(4, computer.getCompany().getId());
+				stmt.setInt(5, computer.getId());
+			} else {
+				stmt.setInt(4, computer.getId());
+			}
+			
 			
 			int result = stmt.executeUpdate();
 			if (result == 0) {
@@ -303,18 +313,28 @@ public class ComputerDAO {
 	 * Get all computers in the database
 	 * @return a list of Computer
 	 */
-	public List<Computer> getAll(int limit, int offset, String orderBy) {
+	public List<Computer> getAll(int limit, int offset, String orderBy, String orderByColumn) {
 		if (orderBy == null) {
 			orderBy = "ASC";
 		}
 		if (!orderBy.equals("DESC") && !orderBy.equals("ASC")) {
 			orderBy = "ASC";
-		} 
+		}
+		
+		if (orderByColumn == null) {
+			orderByColumn = "c.name";
+		}
+		if (!orderByColumn.equals("co.name") && !orderByColumn.equals("c.name") && !orderByColumn.equals("c.introduced") && !orderByColumn.equals("c.discontinued")) {
+			orderByColumn = "c.name";
+		}
+		
 		StringBuilder query = new StringBuilder(); 
 		query.append("SELECT c.id, c.name, c.introduced, c.discontinued, c.company_id, co.name ")
 			.append("FROM computer AS c ")
 			.append("LEFT JOIN company AS co ON c.company_id = co.id ")
-			.append("ORDER BY c.name ")
+			.append("ORDER BY ")
+			.append(orderByColumn)
+			.append(" ")
 			.append(orderBy)
 			.append(" LIMIT ? OFFSET ?");
 

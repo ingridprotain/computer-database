@@ -17,7 +17,7 @@ import com.excilys.computerdatabase.model.Company;
 import com.excilys.computerdatabase.model.Computer;
 import com.excilys.computerdatabase.service.CompanyService;
 import com.excilys.computerdatabase.service.ComputerService;
-import com.excilys.computerdatabase.utils.ComputerDTOValidate;
+import com.excilys.computerdatabase.utils.ComputerDTOValidator;
 
 @SuppressWarnings("serial")
 public class EditComputer extends HttpServlet {
@@ -76,7 +76,7 @@ public class EditComputer extends HttpServlet {
 		}
 		
 		//If the computerDTO is valid, we add the computer to the database
-		List<String> errors = ComputerDTOValidate.validate(computerDTO);
+		List<String> errors = ComputerDTOValidator.validate(computerDTO);
 		if (errors.isEmpty()) {
 			Computer computer = ComputerMapper.createComputer(computerDTO);
 			//Create

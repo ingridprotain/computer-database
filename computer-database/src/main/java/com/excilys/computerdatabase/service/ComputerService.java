@@ -19,8 +19,8 @@ public class ComputerService {
 		return ComputerDAO.getInstance().update(computer);
 	}
 	
-	public List<Computer> getAll(int limit, int offset, String orderBy) {
-		return ComputerDAO.getInstance().getAll(limit, offset, orderBy);
+	public List<Computer> getAll(int limit, int offset, String orderBy, String orderByColumn) {
+		return ComputerDAO.getInstance().getAll(limit, offset, orderBy, orderByColumn);
 	}
 	
 	public int count() {

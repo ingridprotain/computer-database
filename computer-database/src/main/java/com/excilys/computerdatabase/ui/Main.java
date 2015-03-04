@@ -10,7 +10,7 @@ import com.excilys.computerdatabase.model.Computer;
 import com.excilys.computerdatabase.persistence.CompanyDAO;
 import com.excilys.computerdatabase.service.CompanyService;
 import com.excilys.computerdatabase.service.ComputerService;
-import com.excilys.computerdatabase.utils.ComputerDTOValidate;
+import com.excilys.computerdatabase.utils.ComputerDTOValidator;
 
 public class Main {
 	public static Scanner scan = new Scanner(System.in);
@@ -50,13 +50,9 @@ public class Main {
 					}
 					
 					System.out.println("Total of computers : " +pages.getCount());
-					System.out.print("First : f - Previous : p - Next : n - Last : l  ");
+					System.out.print("First : f - Last : l  ");
 					String choice = scan.nextLine();
-					if (choice.equals("p")) {
-						computers = pages.prev();
-					} else if (choice.equals("n")) {
-						computers = pages.next();
-					} else if (choice.equals("f")) {
+					if (choice.equals("f")) {
 						computers = pages.first();
 					} else if (choice.equals("l")){
 						computers = pages.last();
@@ -189,7 +185,7 @@ public class Main {
 			computerDTO.setCompanyId((Integer.parseInt(scan.nextLine())));
 		}
 		
-		List<String> errors = ComputerDTOValidate.validate(computerDTO);
+		List<String> errors = ComputerDTOValidator.validate(computerDTO);
 		if (errors.isEmpty()) {
 			Computer computer = ComputerMapper.createComputer(computerDTO);
 			if (mode == "Insert") {

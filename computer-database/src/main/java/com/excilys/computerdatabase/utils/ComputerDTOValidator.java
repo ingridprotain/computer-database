@@ -7,11 +7,11 @@ import com.excilys.computerdatabase.dto.ComputerDTO;
 import com.excilys.computerdatabase.model.Company;
 import com.excilys.computerdatabase.service.CompanyService;
 
-final public class ComputerDTOValidate {
+final public class ComputerDTOValidator {
 	
 	private static CompanyService companyService = new CompanyService();
 	
-	private ComputerDTOValidate() {
+	private ComputerDTOValidator() {
 	}
 
 	public static List<String> validate(ComputerDTO computerDTO) {
