@@ -8,6 +8,7 @@ import com.excilys.computerdatabase.dto.ComputerMapper;
 import com.excilys.computerdatabase.model.Company;
 import com.excilys.computerdatabase.model.Computer;
 import com.excilys.computerdatabase.persistence.CompanyDAO;
+import com.excilys.computerdatabase.service.CompanyService;
 import com.excilys.computerdatabase.service.ComputerService;
 import com.excilys.computerdatabase.utils.ComputerDTOValidate;
 
@@ -15,6 +16,7 @@ public class Main {
 	public static Scanner scan = new Scanner(System.in);
 	
 	private static ComputerService computerService = new ComputerService();
+	private static CompanyService companyService = new CompanyService();
 
 	public static void main(String[] args) {
 		String choixUser = ""; 
@@ -31,6 +33,7 @@ public class Main {
 				System.out.println("4. Create a computer: -c computer");
 				System.out.println("5. Update a computer: -u computer");
 				System.out.println("6. Delete a computer: -d computer");
+				System.out.println("7. Delete a company with related computers: -d company");
 				System.out.println("Exit: exit");
 				break;
 			
@@ -93,13 +96,13 @@ public class Main {
 			case "-c computer":
 			case "4":
 				editComputer("Insert");
-			break;
+				break;
 
 			//Update a computer
 			case "-u computer":
 			case "5":
 				editComputer("Update");
-			break;
+				break;
 			
 			//Delete a computer
 			case "-d computer":
@@ -113,7 +116,21 @@ public class Main {
 				} else {
 					System.out.println("Computer doesn't exist");
 				}
-			break;
+				break;
+			
+			case "-d company":
+			case "7":
+				System.out.println("Identifiant of the company to delete ?");
+				String companyIdString = scan.nextLine();
+				Company companyToDel = companyService.find(Integer.parseInt(companyIdString));
+				if (companyToDel != null) {
+					companyService.delete(companyToDel);
+					System.out.println("Company and computers related deleted");
+				} else {
+					System.out.println("Company doesn't exist");
+				}
+				
+				break;
 			
 			default:
 				break;

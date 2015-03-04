@@ -1,7 +1,6 @@
 <!DOCTYPE html>
-<%@taglib uri="/static/tag/paginationTag.tld" prefix="p" %>
-<%@taglib uri="/static/tag/linkTag.tld" prefix="l" %>
 <%@taglib uri="http://java.sun.com/jsp/jstl/core" prefix="c" %>
+<%@taglib tagdir="/WEB-INF/tags" prefix="my" %>
 <html>
 <head>
 <title>Computer Database</title>
@@ -15,7 +14,7 @@
 <body>
     <header class="navbar navbar-inverse navbar-fixed-top">
         <div class="container">
-        	<l:link name="Application - Computer Database" target="dashboard" myClass="navbar-brand"/>
+        	<my:link name="Application - Computer Database" target="dashboard" myClass="navbar-brand"/>
         </div>
     </header>
 
@@ -35,10 +34,12 @@
                         <input type="search" id="searchbox" name="search" class="form-control" placeholder="Search name" value="${ search }"/>
                         <input type="submit" id="searchsubmit" value="Filter by name"
                         class="btn btn-primary" />
+                        <my:link name="x" target="dashboard" myClass="btn btn-default"/>
                     </form>
+                    
                 </div>
                 <div class="pull-right">
-                	<l:link target="editComputer" name="Add Computer" myClass="btn btn-success"/>
+                	<my:link target="editComputer" name="Add Computer" myClass="btn btn-success"/>
                     <a class="btn btn-default" id="editComputer" href="#" onclick="$.fn.toggleEditMode();">Edit</a>
                 </div>
             </div>
@@ -65,8 +66,7 @@
                         </th>
                         <th>
                             Computer name
-                            <p:pagination name="&uarr;" target="dashboard" page="${ actualPage }" search="${ search }" orderBy="ASC"/>
-                            <p:pagination name="&darr;" target="dashboard" page="${ actualPage }" search="${ search }" orderBy="DESC"/>
+                            <my:pagination isOrderBy="ok"></my:pagination>
                         </th>
                         <th>
                             Introduced date
@@ -90,7 +90,7 @@
 	                            <input type="checkbox" name="cb" class="cb" value="${ computer.id }">
 	                        </td>
 	                        <td>
-	                        	<l:link name="${ computer.name }" target="editComputer" computerId="${ computer.id }"/>
+	                        	<my:link name="${ computer.name }" target="editComputer" computerId="${ computer.id }"/>
 	                        </td>
 	                        <td>${ computer.introduced }</td>
 	                        <td>${ computer.discontinued }</td>
@@ -103,23 +103,7 @@
     </section>
 
     <footer class="navbar-fixed-bottom">
-        <div class="container text-center">
-            <ul class="pagination">
-          		<li><p:pagination name="&laquo;" target="dashboard" page="first" search="${ search }"/></li>
-          		<li><c:if test="${ (actualPage -2) > 0 }"><p:pagination name="${ actualPage -2 }" target="dashboard" page="${ actualPage -2 }" search="${ search }"/></c:if></li>
-          		<li><c:if test="${ (actualPage -1) > 0 }"><p:pagination name="${ actualPage -1 }" target="dashboard" page="prev" search="${ search }"/></c:if></li>
-              	<li><p:pagination name="${ actualPage }" target="dashboard" page="${ actualPage }" search="${ search }"/></li>
-              	<li><c:if test="${ (actualPage + 1) < totalPages }"><p:pagination name="${ actualPage + 1 }" target="dashboard" page="next" search="${ search }"/></c:if></li>
-             	<li><c:if test="${ (actualPage + 2) < totalPages }"><p:pagination name="${ actualPage + 2 }" target="dashboard" page="${ actualPage + 2 }" search="${ search }"/></c:if></li>
-             	<li><p:pagination name="&raquo;" target="dashboard" page="last" search="${ search }"/></li>
-           	</ul>
-
-	        <div class="btn-group btn-group-sm pull-right" role="group" >
-	        	<p:pagination name="10" target="dashboard" page="${ actualPage }" search="${ search }" limit="10" myClass="btn btn-default"/>
-	        	<p:pagination name="50" target="dashboard" page="${ actualPage }" search="${ search }" limit="50" myClass="btn btn-default"/>
-	        	<p:pagination name="100" target="dashboard" page="${ actualPage }" search="${ search }" limit="100" myClass="btn btn-default"/>
-	        </div>
-        </div>
+        <my:pagination />
     </footer>
 </body>
 <script src="static/js/jquery.min.js"></script>

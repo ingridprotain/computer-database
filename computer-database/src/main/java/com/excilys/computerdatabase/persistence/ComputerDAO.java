@@ -34,26 +34,27 @@ public class ComputerDAO {
 		String query = "SELECT c.id, c.name, c.introduced, c.discontinued, c.company_id, co.name "
 				+ "FROM computer AS c "
 				+ "LEFT JOIN company AS co ON c.company_id = co.id "
-				+ "WHERE c.id=" + id;
+				+ "WHERE c.id = ?";
 		
 		Connection cn = null;
-		Statement stmt = null;
+		PreparedStatement stmt = null;
 		ResultSet result = null;
 		
 		try {
 			try {
 				cn = DataSource.getInstance().getConnection();
 			} catch (IOException | PropertyVetoException e) {
-				// TODO Auto-generated catch block
-				e.printStackTrace();
+				throw new IllegalStateException("Problem during connection to the database");
 			}
-			stmt = cn.createStatement();
-			result = stmt.executeQuery(query);
+			
+			stmt = cn.prepareStatement(query);
+			stmt.setInt(1, id);
+			
+			result = stmt.executeQuery();
 			while (result.next()) {
 				computer = ComputerMapper.convertToComputer(result);
 			}
 		} catch (SQLException e) {
-			//Logs
 			throw new IllegalStateException("Problem during the recuperation of a computer in database");
 		} finally {
 			try {
@@ -90,8 +91,7 @@ public class ComputerDAO {
 			try {
 				cn = DataSource.getInstance().getConnection();
 			} catch (IOException | PropertyVetoException e) {
-				// TODO Auto-generated catch block
-				e.printStackTrace();
+				throw new IllegalStateException("Problem during connection to the database");
 			}
 			stmt = cn.createStatement();
 			result = stmt.executeQuery(query);
@@ -124,7 +124,50 @@ public class ComputerDAO {
 		
 		return count;
 	}
-
+	
+	public int countSearch(String name) {
+		int count = 0;
+		StringBuilder query = new StringBuilder("SELECT COUNT(*) ")
+		.append("FROM computer AS c ")
+		.append("LEFT JOIN company AS co ON c.company_id = co.id ")
+		.append("WHERE c.name LIKE ? or co.name LIKE ?");
+		
+		Connection cn = null;
+		PreparedStatement stmt = null;
+		
+		try {
+			try {
+				cn = DataSource.getInstance().getConnection();
+			} catch (IOException | PropertyVetoException e) {
+				throw new IllegalStateException("Problem during connection to the database");
+			}
+			stmt = cn.prepareStatement(query.toString());
+			stmt.setString(1, "%" + name + "%");
+			stmt.setString(2, "%" + name + "%");
+			
+			ResultSet result = stmt.executeQuery();
+			if (result.first()) {
+				count = new Integer(result.getInt(1));
+			}
+		} catch (SQLException e) {
+			//Logs
+			throw new IllegalStateException("Problem during the recuperation of the count of computers in database");
+		} finally {
+			try {
+				cn.close();
+			} catch (SQLException e) {
+				throw new IllegalStateException("Problem during closing of connection to the database");
+			}
+			
+			try {
+				stmt.close();
+			} catch (SQLException e) {
+				throw new IllegalStateException("Problem during closing of the Statement");
+			}
+		}
+		return count;
+	}
+	
 	public Computer create(Computer computer) {
 		String query = null;
 
@@ -140,8 +183,7 @@ public class ComputerDAO {
 			try {
 				cn = DataSource.getInstance().getConnection();
 			} catch (IOException | PropertyVetoException e) {
-				// TODO Auto-generated catch block
-				e.printStackTrace();
+				throw new IllegalStateException("Problem during connection to the database");
 			}
 			stmt = cn.prepareStatement(query);
 			
@@ -188,8 +230,7 @@ public class ComputerDAO {
 			try {
 				cn = DataSource.getInstance().getConnection();
 			} catch (IOException | PropertyVetoException e) {
-				// TODO Auto-generated catch block
-				e.printStackTrace();
+				throw new IllegalStateException("Problem during connection to the database");
 			}
 			stmt = cn.prepareStatement(query);
 			
@@ -229,17 +270,15 @@ public class ComputerDAO {
 		
 		PreparedStatement stmt = null;
 		Connection cn = null;
+
 		try {
 			try {
 				cn = DataSource.getInstance().getConnection();
 			} catch (IOException | PropertyVetoException e) {
-				// TODO Auto-generated catch block
-				e.printStackTrace();
+				throw new IllegalStateException("Problem during connection to the database");
 			}
 			stmt = cn.prepareStatement(query);
-			
 			stmt.setInt(1, computer.getId());
-			
 			stmt.executeUpdate();
 
 		} catch (SQLException e) {
@@ -271,12 +310,13 @@ public class ComputerDAO {
 		if (!orderBy.equals("DESC") && !orderBy.equals("ASC")) {
 			orderBy = "ASC";
 		} 
-		String query = "SELECT c.id, c.name, c.introduced, c.discontinued, c.company_id, co.name " +
-			"FROM computer AS c " +
-			"LEFT JOIN company AS co ON c.company_id = co.id " +
-			"ORDER BY c.name " + orderBy + " " +
-			"LIMIT ? OFFSET ?";
-			
+		StringBuilder query = new StringBuilder(); 
+		query.append("SELECT c.id, c.name, c.introduced, c.discontinued, c.company_id, co.name ")
+			.append("FROM computer AS c ")
+			.append("LEFT JOIN company AS co ON c.company_id = co.id ")
+			.append("ORDER BY c.name ")
+			.append(orderBy)
+			.append(" LIMIT ? OFFSET ?");
 
 		List<Computer> computers = new ArrayList<Computer>();
 		
@@ -288,12 +328,10 @@ public class ComputerDAO {
 			try {
 				cn = DataSource.getInstance().getConnection();
 			} catch (IOException | PropertyVetoException e) {
-				// TODO Auto-generated catch block
-				e.printStackTrace();
+				throw new IllegalStateException("Problem during connection to the database");
 			}
-			stmt = cn.prepareStatement(query);
+			stmt = cn.prepareStatement(query.toString());
 			
-			//stmt.setString(1, "DESC");
 			stmt.setInt(1, limit);
 			stmt.setInt(2, offset);
 
@@ -316,6 +354,12 @@ public class ComputerDAO {
 			} catch (SQLException e) {
 				throw new IllegalStateException("Problem during closing of the Statement");
 			}
+			
+			try {
+				result.close();
+			} catch (SQLException e) {
+				throw new IllegalStateException("Problem during closing of the ResultSet");
+			}
 		}
 		
 		return computers;
@@ -328,61 +372,36 @@ public class ComputerDAO {
 	public List<Computer> getByName(String name, int limit, int offset, String orderBy) {
 		
 		Connection cn = null;
+		PreparedStatement stmt = null;
+		ResultSet result = null;
+		
 		StringBuilder query = new StringBuilder("SELECT c.id, c.name, c.introduced, c.discontinued, c.company_id, co.name ")
 			.append("FROM computer AS c ")
 			.append("LEFT JOIN company AS co ON c.company_id = co.id ")
-			.append("WHERE c.name LIKE ?")
+			.append("WHERE c.name LIKE ? or co.name LIKE ? ")
 			.append(" LIMIT ? OFFSET ?");
-		
+			
 		List<Computer> computers = new ArrayList<Computer>();
 		
 		try {
 			try {
 				cn = DataSource.getInstance().getConnection();
 			} catch (IOException | PropertyVetoException e) {
-				// TODO Auto-generated catch block
-				e.printStackTrace();
+				throw new IllegalStateException("Problem during connection to the database");
 			}
-			PreparedStatement stmt = cn.prepareStatement(query.toString());
+			stmt = cn.prepareStatement(query.toString());
 			stmt.setString(1, "%" + name + "%");
-			stmt.setInt(2, limit);
-			stmt.setInt(3, offset);
-		    ResultSet result = stmt.executeQuery();
+			stmt.setString(2, "%" + name + "%");
+			stmt.setInt(3, limit);
+			stmt.setInt(4, offset);
+			
+		    result = stmt.executeQuery();
 		    while (result.next()) {
 		    	Computer c = ComputerMapper.convertToComputer(result);
 		    	computers.add(c);
 		    }
 		} catch (SQLException e) {
-			// TODO Auto-generated catch block
-			e.printStackTrace();
-		}
-		
-		return computers;
-	}
-	
-	public int countSearch(String name) {
-		int count = 0;
-		String query = "SELECT COUNT(*) FROM computer WHERE name LIKE ?";
-		
-		Connection cn = null;
-		PreparedStatement stmt = null;
-		
-		try {
-			try {
-				cn = DataSource.getInstance().getConnection();
-			} catch (IOException | PropertyVetoException e) {
-				// TODO Auto-generated catch block
-				e.printStackTrace();
-			}
-			stmt = cn.prepareStatement(query);
-			stmt.setString(1, "%" + name + "%");
-			ResultSet result = stmt.executeQuery();
-			if (result.first()) {
-				count = new Integer(result.getInt(1));
-			}
-		} catch (SQLException e) {
-			//Logs
-			throw new IllegalStateException("Problem during the recuperation of the count of computers in database");
+			throw new IllegalStateException("Problem during the recuperation of computers in database");
 		} finally {
 			try {
 				cn.close();
@@ -395,7 +414,17 @@ public class ComputerDAO {
 			} catch (SQLException e) {
 				throw new IllegalStateException("Problem during closing of the Statement");
 			}
+			
+			if (result != null) {
+				try {
+					result.close();
+				} catch (SQLException e) {
+					throw new IllegalStateException("Problem during closing of the ResultSet");
+				}
+			}
 		}
-		return count;
+		
+		return computers;
 	}
+
 }

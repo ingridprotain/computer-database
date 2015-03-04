@@ -14,4 +14,8 @@ public class CompanyService {
 	public Company find(int id) {
 		return CompanyDAO.getInstance().find(id);
 	}
+	
+	public void delete(Company company) {
+		CompanyDAO.getInstance().delete(company);
+	}
 }

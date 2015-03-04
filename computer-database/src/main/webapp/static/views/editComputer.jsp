@@ -1,5 +1,5 @@
 <!DOCTYPE html>
-<%@taglib uri="/static/tag/linkTag.tld" prefix="l" %>
+<%@taglib tagdir="/WEB-INF/tags" prefix="my" %>
 <%@taglib uri="http://java.sun.com/jsp/jstl/core" prefix="c" %>
 <html>
 <head>
@@ -13,7 +13,7 @@
 <body>
     <header class="navbar navbar-inverse navbar-fixed-top">
         <div class="container">
-            <l:link name="Application - Computer Database" target="dashboard" myClass="navbar-brand"/>
+            <my:link name="Application - Computer Database" target="dashboard" myClass="navbar-brand"/>
         </div>
     </header>
 
@@ -62,7 +62,7 @@
                         <div class="actions pull-right">
                             <input type="submit" value="Add/Edit" class="btn btn-primary">
                             or
-                            <l:link name="Cancel" target="dashboard" myClass="btn btn-default"/>
+                            <my:link name="Cancel" target="dashboard" myClass="btn btn-default"/>
                         </div>
                     </form>
                 </div>

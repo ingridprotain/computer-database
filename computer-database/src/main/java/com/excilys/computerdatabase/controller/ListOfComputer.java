@@ -54,10 +54,6 @@ public class ListOfComputer extends HttpServlet{
 				cDTOs = pagination.last();
 			} else if (page.equals("first")) {
 				cDTOs = pagination.first();
-			} else if (page.equals("next")) {
-				cDTOs = pagination.next();
-			} else if (page.equals("prev")) {
-				cDTOs = pagination.prev();
 			} else if (Integer.valueOf(page) != null) {
 				cDTOs = pagination.getByPage(Integer.valueOf(page));
 			}

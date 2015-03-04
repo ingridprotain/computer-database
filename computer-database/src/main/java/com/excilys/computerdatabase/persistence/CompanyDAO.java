@@ -38,8 +38,7 @@ public class CompanyDAO {
 			try {
 				cn = DataSource.getInstance().getConnection();
 			} catch (IOException | PropertyVetoException e) {
-				// TODO Auto-generated catch block
-				e.printStackTrace();
+				throw new IllegalStateException("Problem during connection to the database");
 			}
 			stmt = cn.prepareStatement(query);
 			stmt.setInt(1, id);
@@ -88,8 +87,7 @@ public class CompanyDAO {
 			try {
 				cn = DataSource.getInstance().getConnection();
 			} catch (IOException | PropertyVetoException e) {
-				// TODO Auto-generated catch block
-				e.printStackTrace();
+				throw new IllegalStateException("Problem during connection to the database");
 			}
 			stmt = cn.createStatement();
 		    result = stmt.executeQuery(query);
@@ -121,5 +119,64 @@ public class CompanyDAO {
 		}
 		
 		return companies;
+	}
+
+	/**
+	 * Delete a company with all computers related to this company
+	 */
+	public void delete(Company company) {
+		String deleteComputersByCompanyQuery = "DELETE FROM computer WHERE company_id = ?";
+		String deleteCompany = "DELETE FROM company WHERE id = ?";
+		
+		Connection cn = null;
+		PreparedStatement deleteComputersStmt = null;
+		PreparedStatement deleteCompanyStmt = null;
+
+		try {
+			try {
+				cn = DataSource.getInstance().getConnection();
+			} catch (IOException | PropertyVetoException e) {
+				throw new IllegalStateException("Problem during connection to the database");
+			}
+			
+			cn.setAutoCommit(false);
+			
+			deleteComputersStmt = cn.prepareStatement(deleteComputersByCompanyQuery);
+			deleteCompanyStmt = cn.prepareStatement(deleteCompany);
+			
+			deleteComputersStmt.setInt(1, company.getId());
+			deleteCompanyStmt.setInt(1, company.getId());
+			
+			deleteComputersStmt.executeUpdate();
+			deleteCompanyStmt.executeUpdate();
+			cn.commit();
+		} catch (SQLException e) {
+			if (cn != null) {
+				try {
+					cn.rollback();
+				} catch (SQLException e1) {
+					throw new IllegalStateException("Problem during the closing of transaction");
+				}
+			}
+		} finally {
+			try {
+				cn.setAutoCommit(true);
+				cn.close();
+			} catch (SQLException e) {
+				throw new IllegalStateException("Problem during closing of connection to the database");
+			}
+			
+			try {
+				deleteComputersStmt.close();
+			} catch (SQLException e) {
+				throw new IllegalStateException("Problem during closing of the Statement");
+			}
+			
+			try {
+				deleteCompanyStmt.close();
+			} catch (SQLException e) {
+				throw new IllegalStateException("Problem during closing of the Statement");
+			}
+		}
 	}
 }
