@@ -49,10 +49,10 @@ public class ListOfComputer extends HttpServlet{
 		if (search != null) {
 			pagination.setSearch(search);
 			count = computerService.countSearch(search);
-			computers = computerService.getByName(search, pagination.getLimit(), pagination.getOffset(), pagination.getOrderBy(), pagination.getOrderByColumn());
+			computers = computerService.getByName(pagination);
 		} else {
 			count = computerService.count();
-			computers = computerService.getAll(pagination.getLimit(), pagination.getOffset(), pagination.getOrderBy(), pagination.getOrderByColumn());
+			computers = computerService.getAll(pagination);
 		}
 		pagination.setTotalPages(count / pagination.getLimit());
 		

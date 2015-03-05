@@ -20,8 +20,8 @@ public class ComputerService {
 		return ComputerDAO.getInstance().update(computer);
 	}
 	
-	public List<Computer> getAll(int limit, int offset, String orderBy, String orderByColumn) {
-		return ComputerDAO.getInstance().getAll(limit, offset, orderBy, orderByColumn);
+	public List<Computer> getAll(Pages pagination) {
+		return ComputerDAO.getInstance().getAll(pagination.getLimit(), pagination.getOffset(), pagination.getOrderBy(), pagination.getOrderByColumn());
 	}
 	
 	public int count() {
@@ -35,8 +35,8 @@ public class ComputerService {
 		return ComputerDAO.getInstance().countSearch(name);
 	}
 	
-	public List<Computer> getByName(String name, int limit, int offset, String orderBy, String orderByColumn) {
-		return ComputerDAO.getInstance().getByName(name, limit, offset, orderBy, orderByColumn);
+	public List<Computer> getByName(Pages pagination) {
+		return ComputerDAO.getInstance().getByName(pagination.getSearch(), pagination.getLimit(), pagination.getOffset(), pagination.getOrderBy(), pagination.getOrderByColumn());
 	}
 	
 	public void delete(Computer computer) {
