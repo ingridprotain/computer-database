@@ -17,7 +17,7 @@ final public class ComputerDTOValidator {
 	public static List<String> validate(ComputerDTO computerDTO) {
 		List<String> errors = new ArrayList<String>();
 		
-		if (computerDTO.getName() == null || computerDTO.equals("")) {
+		if (computerDTO.getName() == null || computerDTO.getName().equals("")) {
 			errors.add("Please enter a computer name");
 		}
 		

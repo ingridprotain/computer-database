@@ -2,6 +2,7 @@ package com.excilys.computerdatabase.utils;
 
 import java.time.LocalDateTime;
 import java.time.format.DateTimeFormatter;
+import java.time.format.DateTimeParseException;
 
 import org.apache.commons.validator.GenericValidator;
 
@@ -14,7 +15,12 @@ final public class DateValidator {
 	
 	public static boolean isDate(String date) {
 		if (GenericValidator.isDate(date, "MM/dd/YYYY", true)) {
-			return true;
+			try {
+				LocalDateTime.parse(date + " 00:00:00", format);
+				return true;
+			} catch (DateTimeParseException e) {
+				return false;
+			}
 		}else {
 			return false;
 		}
