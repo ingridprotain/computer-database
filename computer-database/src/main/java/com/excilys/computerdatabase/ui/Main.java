@@ -40,7 +40,7 @@ public class Main {
 			//Display the computers list
 			case "-l computers":
 			case "1":
-				System.out.println("List computers");
+				/*System.out.println("List computers");
 				
 				Pages pages = new Pages();
 				List<ComputerDTO> computers = pages.first();
@@ -59,7 +59,7 @@ public class Main {
 					} else {
 						break;
 					}
-				}
+				}*/
 				break;
 				
 			//Display the companies list

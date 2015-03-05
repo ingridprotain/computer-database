@@ -21,7 +21,7 @@
     <section id="main">
         <div class="container">
             <h1 id="homeTitle">
-                <c:out value="${totalComputers}" /> Computers found
+                <c:out value="${count}" /> Computers found
             </h1>
              <c:if test="${ not empty message }">
 			            <div class="alert alert-success">
@@ -66,21 +66,15 @@
                         </th>
                         <th>
                             Computer name
-                            <my:pagination isOrderBy="ok" orderByColumn="name"></my:pagination>
                         </th>
                         <th>
                             Introduced date
-                            <my:pagination isOrderBy="ok" orderByColumn="introduced"></my:pagination>
                         </th>
-                        <!-- Table header for Discontinued Date -->
                         <th>
                             Discontinued date
-                            <my:pagination isOrderBy="ok" orderByColumn="discontinued"></my:pagination>
                         </th>
-                        <!-- Table header for Company -->
                         <th>
                             Company
-                            <my:pagination isOrderBy="ok" orderByColumn="company"></my:pagination>
                         </th>
 
                     </tr>
@@ -106,7 +100,7 @@
     </section>
 
     <footer class="navbar-fixed-bottom">
-        <my:pagination />
+        <my:pagination page="${ page }"/>
     </footer>
 </body>
 <script src="static/js/jquery.min.js"></script>

@@ -389,7 +389,7 @@ public class ComputerDAO {
 	 * Get all computers in the database by name
 	 * @return a list of Computer
 	 */
-	public List<Computer> getByName(String name, int limit, int offset, String orderBy) {
+	public List<Computer> getByName(String name, int limit, int offset, String orderBy, String orderByColumn) {
 		
 		Connection cn = null;
 		PreparedStatement stmt = null;

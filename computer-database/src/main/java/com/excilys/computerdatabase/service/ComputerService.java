@@ -4,6 +4,7 @@ import java.util.List;
 
 import com.excilys.computerdatabase.model.Computer;
 import com.excilys.computerdatabase.persistence.ComputerDAO;
+import com.excilys.computerdatabase.utils.Pages;
 
 public class ComputerService {
 
@@ -26,13 +27,16 @@ public class ComputerService {
 	public int count() {
 		return ComputerDAO.getInstance().count();
 	}
-	
 	public int countSearch(String name) {
 		return ComputerDAO.getInstance().countSearch(name);
 	}
 	
-	public List<Computer> getByName(String name, int limit, int offset, String orderBy) {
-		return ComputerDAO.getInstance().getByName(name, limit, offset, orderBy);
+	public int search(String name) {
+		return ComputerDAO.getInstance().countSearch(name);
+	}
+	
+	public List<Computer> getByName(String name, int limit, int offset, String orderBy, String orderByColumn) {
+		return ComputerDAO.getInstance().getByName(name, limit, offset, orderBy, orderByColumn);
 	}
 	
 	public void delete(Computer computer) {

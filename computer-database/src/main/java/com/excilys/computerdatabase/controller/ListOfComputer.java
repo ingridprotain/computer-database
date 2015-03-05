@@ -10,75 +10,62 @@ import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 
 import com.excilys.computerdatabase.dto.ComputerDTO;
-import com.excilys.computerdatabase.ui.Pages;
+import com.excilys.computerdatabase.dto.ComputerMapper;
+import com.excilys.computerdatabase.model.Computer;
+import com.excilys.computerdatabase.service.ComputerService;
+import com.excilys.computerdatabase.utils.Pages;
 
 @SuppressWarnings("serial")
 public class ListOfComputer extends HttpServlet{
 	
-	//private static Pages pages = new Pages("Computer");
-	private static Pages pagination = new Pages();
-
+	private static ComputerService computerService = new ComputerService();
+	
 	@Override
 	protected void doGet(HttpServletRequest req, HttpServletResponse resp)
 			throws ServletException, IOException {
 		
+		List<Computer> computers;
+		
+		//Set the pagination
+		Pages pagination = new Pages();
+		String limitString = req.getParameter("limit");
+		String pageString = req.getParameter("page");
+		String search = req.getParameter("search");
+		int count;
+		
+		if (limitString != null) {
+			pagination.setLimit(Integer.valueOf(limitString));
+		}
+		if (pageString != null) {
+			pagination.setPage(Integer.valueOf(pageString));
+		}
+		pagination.setOffset(pagination.getPage() * pagination.getLimit() -pagination.getLimit());
+		if (req.getParameter("orderBy") != null) {
+			pagination.setOrderBy(req.getParameter("orderBy"));
+		}
+		if (req.getParameter("orderByColumn") != null) {
+			pagination.setOrderByColumn(req.getParameter("orderByColumn"));
+		}
+		if (search != null) {
+			pagination.setSearch(search);
+			count = computerService.countSearch(search);
+			computers = computerService.getByName(search, pagination.getLimit(), pagination.getOffset(), pagination.getOrderBy(), pagination.getOrderByColumn());
+		} else {
+			count = computerService.count();
+			computers = computerService.getAll(pagination.getLimit(), pagination.getOffset(), pagination.getOrderBy(), pagination.getOrderByColumn());
+		}
+		pagination.setTotalPages(count / pagination.getLimit());
+		
+		//get the computers to display
 		List<ComputerDTO> cDTOs = new ArrayList<ComputerDTO>();
-		String page = req.getParameter("page");
-		String limit = req.getParameter("limit");
-		String orderBy = req.getParameter("orderBy");
-		String orderByColumn = req.getParameter("orderByColumn");
-		
-		//Type of request ? search or getAll request?
-		if (req.getParameter("search") != null) {
-			pagination.setActualRequest("search");
-			pagination.setSearchParam(req.getParameter("search"));
-			req.setAttribute("search", req.getParameter("search"));
-		} else {
-			pagination.setActualRequest("getAll");
+		for (Computer c : computers) {
+			cDTOs.add(ComputerMapper.createComputerDTO(c));
 		}
 		
-		//Set limit of pagination
-		if (limit != null) {
-			if (Integer.valueOf(limit) != null) {
-				pagination.setLimit(Integer.valueOf(limit));
-			}
-		}
-		
-		//Order by
-		if (orderBy != null) {
-			pagination.setOrderBy(orderBy);
-		}
-		if (orderByColumn != null) {
-			pagination.setOrderByColumn(orderByColumn);
-		}
-		
-		//Page
-		if (page != null) {
-			if (page.equals("last")) {
-				cDTOs = pagination.last();
-			} else if (page.equals("first")) {
-				cDTOs = pagination.first();
-			} else if (Integer.valueOf(page) != null) {
-				cDTOs = pagination.getByPage(Integer.valueOf(page));
-			}
-		} else {
-			cDTOs = pagination.first();
-		}
-		
-		//Attribute to the jsp page
-		req.setAttribute("orderBy", pagination.getOrderBy());
-		req.setAttribute("actualPage", pagination.getActualPage());
-		req.setAttribute("totalPages", pagination.getTotalPages());
-		req.setAttribute("totalComputers", pagination.getCount());
+		req.setAttribute("page", pagination);
 		req.setAttribute("computers", cDTOs);
+		req.setAttribute("count", count);
 		
 		this.getServletContext().getRequestDispatcher("/static/views/dashboard.jsp").forward(req, resp);
 	}
-
-	@Override
-	protected void doPost(HttpServletRequest req, HttpServletResponse resp)
-			throws ServletException, IOException {
-		super.doPost(req, resp);
-	}
-
 }
