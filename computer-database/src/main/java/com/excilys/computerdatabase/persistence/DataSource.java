@@ -23,6 +23,9 @@ public class DataSource {
     private static final String PROPERTY_DRIVER = "driver";
     private static final String PROPERTY_USER = "user";
     private static final String PROPERTY_PASSWORD = "password";
+    private static final String PROPERTY_MIN_CONNECTIONS = "minConnectionPerPartition";
+    private static final String PROPERTY_MAX_CONNECTIONS = "maxConnectionPerPartition";
+    private static final String PROPERTY_PARTITIONS_COUNT = "partitionCount";
     
     private DataSource() throws IOException, SQLException, PropertyVetoException {
         
@@ -36,6 +39,9 @@ public class DataSource {
         String driver;
         String user;
         String password;
+        int minConnections;
+        int maxConnections;
+        int partitionCount;
         
         try {
             properties.load( fichierProperties );
@@ -44,7 +50,10 @@ public class DataSource {
             driver = properties.getProperty(PROPERTY_DRIVER);
             user = properties.getProperty(PROPERTY_USER);
             password = properties.getProperty(PROPERTY_PASSWORD);
-
+            minConnections = Integer.valueOf(properties.getProperty(PROPERTY_MIN_CONNECTIONS));
+            maxConnections = Integer.valueOf(properties.getProperty(PROPERTY_MAX_CONNECTIONS));
+            partitionCount = Integer.valueOf(properties.getProperty(PROPERTY_PARTITIONS_COUNT));
+            
         } catch ( FileNotFoundException e ) {
         	throw new IllegalStateException("Not found file: " + FICHIER_PROPERTIES);
         } catch ( IOException e ) {
@@ -69,9 +78,9 @@ public class DataSource {
 			}
             config.setUsername(user);
             config.setPassword(password);
-            config.setMinConnectionsPerPartition(5);
-            config.setMaxConnectionsPerPartition(10);
-            config.setPartitionCount(1);
+            config.setMinConnectionsPerPartition(minConnections);
+            config.setMaxConnectionsPerPartition(maxConnections);
+            config.setPartitionCount(partitionCount);
             // setup the connection pool
             connectionPool = new BoneCP(config);
             

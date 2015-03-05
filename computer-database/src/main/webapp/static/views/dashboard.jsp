@@ -1,37 +1,17 @@
-<!DOCTYPE html>
+<jsp:include page="header.jsp"></jsp:include>
 <%@taglib uri="http://java.sun.com/jsp/jstl/core" prefix="c" %>
 <%@taglib tagdir="/WEB-INF/tags" prefix="my" %>
-<html>
-<head>
-<title>Computer Database</title>
-<meta name="viewport" content="width=device-width, initial-scale=1.0">
-<meta charset="utf-8">
-<!-- Bootstrap -->
-<link href="static/css/bootstrap.min.css" rel="stylesheet" media="screen">
-<link href="static/css/font-awesome.css" rel="stylesheet" media="screen">
-<link href="static/css/main.css" rel="stylesheet" media="screen">
-</head>
-<body>
-    <header class="navbar navbar-inverse navbar-fixed-top">
-        <div class="container">
-        	<my:link name="Application - Computer Database" target="dashboard" myClass="navbar-brand"/>
-        </div>
-    </header>
 
     <section id="main">
         <div class="container">
             <h1 id="homeTitle">
                 <c:out value="${count}" /> Computers found
             </h1>
-             <c:if test="${ not empty message }">
-			            <div class="alert alert-success">
-			            	<strong>${ message }</strong>
-			            </div>
-			        </c:if>
+            
             <div id="actions" class="form-horizontal">
                 <div class="pull-left">
                     <form id="searchForm" action="/computer-database/dashboard" method="GET" class="form-inline">
-                        <input type="search" id="searchbox" name="search" class="form-control" placeholder="Search name" value="${ search }"/>
+                        <input type="search" id="searchbox" name="search" class="form-control" placeholder="Search name" value="${ page.search }"/>
                         <input type="submit" id="searchsubmit" value="Filter by name"
                         class="btn btn-primary" />
                         <my:link name="x" target="dashboard" myClass="btn btn-default"/>
