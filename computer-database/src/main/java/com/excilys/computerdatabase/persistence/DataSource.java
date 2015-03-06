@@ -1,6 +1,5 @@
 package com.excilys.computerdatabase.persistence;
 
-import java.beans.PropertyVetoException;
 import java.io.FileNotFoundException;
 import java.io.IOException;
 import java.io.InputStream;
@@ -11,11 +10,12 @@ import java.util.Properties;
 import com.jolbox.bonecp.BoneCP;
 import com.jolbox.bonecp.BoneCPConfig;
 
-public class DataSource {
-	private static DataSource     datasource;
-    private BoneCP connectionPool;
+public enum DataSource {
+	INSTANCE; 
+	
+    public BoneCP connectionPool = null;
     
-    private static boolean isTest = false;
+    private boolean isTest = false;
 
     private static final String FICHIER_PROPERTIES = "persistence.properties";
     private static final String PROPERTY_URL = "urlBdd";
@@ -27,7 +27,9 @@ public class DataSource {
     private static final String PROPERTY_MAX_CONNECTIONS = "maxConnectionPerPartition";
     private static final String PROPERTY_PARTITIONS_COUNT = "partitionCount";
     
-    private DataSource() throws IOException, SQLException, PropertyVetoException {
+    private static ThreadLocal<Connection> connectionThreadLocal = new ThreadLocal<Connection>();
+    
+    private DataSource() {
         
     	Properties properties = new Properties();
     	//file persistence.properties
@@ -84,23 +86,76 @@ public class DataSource {
             // setup the connection pool
             connectionPool = new BoneCP(config);
             
-        } catch (Exception e) {
-            e.printStackTrace();
-            return;
+        } catch (SQLException e) {
+        	throw new IllegalStateException("Problem with the pools of connection");
         }
 
     }
+    
+    public Connection getConnection() {
+		Connection cn = null;
+		if (connectionThreadLocal.get() != null) {
+			return connectionThreadLocal.get();
+		}
 
-    public static DataSource getInstance() throws IOException, SQLException, PropertyVetoException {
-        if (datasource == null) {
-            datasource = new DataSource();
-            return datasource;
-        } else {
-            return datasource;
-        }
+		try {
+			cn = DataSource.INSTANCE.connectionPool.getConnection();
+			connectionThreadLocal.set(cn);
+			cn.setAutoCommit(true);
+		} catch (SQLException e) {
+			throw new IllegalStateException("Problem during connection to the database");
+		}
+		
+		return cn;
+	}
+    
+    public void initTransaction() {
+    	Connection cn = null;
+    	try {
+			cn = DataSource.INSTANCE.connectionPool.getConnection();
+			cn.setAutoCommit(false);
+		} catch (SQLException e) {
+			throw new IllegalStateException("Problem during init transaction to the database");
+		}
+    	connectionThreadLocal.set(cn);
     }
+    
+    public void closeTransaction() {
+    	Connection cn = connectionThreadLocal.get();
+    	
+    	try {
+			cn.commit();
+			cn.close();
+		} catch (SQLException e) {
+			throw new IllegalStateException("Problem during closing transaction to the database");
+		}
+    	connectionThreadLocal.remove();
+    }
+	
+	public void closeConnection() {
+		Connection cn = connectionThreadLocal.get();
+		boolean isAutoComit = false;
+		try {
+			isAutoComit = cn.getAutoCommit();
+		} catch (SQLException e) {
+			throw new IllegalStateException("Problem during closing connection to the database");
+		}
+		if (isAutoComit) {
+			try {
+				cn.close();
+			} catch (SQLException e) {
+				throw new IllegalStateException("Problem during closing connection to the database");
+			}
+			connectionThreadLocal.remove();
+		}
+	}
+	
+	public void rollback() {
+		try {
+			connectionThreadLocal.get().rollback();
+		} catch (SQLException e) {
+			throw new IllegalStateException("Problem during rollback");
 
-    public Connection getConnection() throws SQLException {
-        return this.connectionPool.getConnection();
-    }
+		}
+	}
 }

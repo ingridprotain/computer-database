@@ -19,7 +19,7 @@ public class Pages {
 		page =1;
 		search = "";
 		orderBy = "ASC";
-		orderBy = "name";
+		orderByColumn = "c.name";
 	}
 	
 	public int getLimit() {

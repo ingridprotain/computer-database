@@ -1,10 +1,6 @@
 package com.excilys.computerdatabase.persistence;
 
-import java.beans.PropertyVetoException;
-import java.io.IOException;
-import java.sql.Connection;
 import java.sql.PreparedStatement;
-import java.sql.Statement;
 import java.sql.ResultSet;
 import java.sql.SQLException;
 import java.sql.Timestamp;
@@ -12,8 +8,9 @@ import java.util.ArrayList;
 import java.util.List;
 
 import com.excilys.computerdatabase.model.Computer;
+import com.excilys.computerdatabase.utils.Pages;
 
-public class ComputerDAO {
+public class ComputerDAO implements IComputerDAO {
 	
 	private static ComputerDAO computerDAO = null;
 	
@@ -27,27 +24,18 @@ public class ComputerDAO {
 		}
 		return computerDAO;
 	}
+	
+	private static String startGetAllQuery = "SELECT c.id, c.name, c.introduced, c.discontinued, c.company_id, co.name FROM computer AS c LEFT JOIN company AS co ON c.company_id = co.id";
 
+	@Override
 	public Computer find(int id) {
 		Computer computer = null;
 		
-		String query = "SELECT c.id, c.name, c.introduced, c.discontinued, c.company_id, co.name "
-				+ "FROM computer AS c "
-				+ "LEFT JOIN company AS co ON c.company_id = co.id "
-				+ "WHERE c.id = ?";
-		
-		Connection cn = null;
+		String query = "SELECT * FROM computer AS c LEFT JOIN company AS co ON c.company_id = co.id WHERE c.id = ?";
 		PreparedStatement stmt = null;
 		ResultSet result = null;
-		
 		try {
-			try {
-				cn = DataSource.getInstance().getConnection();
-			} catch (IOException | PropertyVetoException e) {
-				throw new IllegalStateException("Problem during connection to the database");
-			}
-			
-			stmt = cn.prepareStatement(query);
+			stmt = DataSource.INSTANCE.getConnection().prepareStatement(query);
 			stmt.setInt(1, id);
 			
 			result = stmt.executeQuery();
@@ -55,171 +43,67 @@ public class ComputerDAO {
 				computer = ComputerMapper.convertToComputer(result);
 			}
 		} catch (SQLException e) {
-			throw new IllegalStateException("Problem during the recuperation of a computer in database");
+			DataSource.INSTANCE.rollback();
+			throw new IllegalStateException("Problem during the recuperation of a computer in the database");
 		} finally {
-			try {
-				cn.close();
-			} catch (SQLException e) {
-				throw new IllegalStateException("Problem during closing of connection to the database");
+			if (result != null) {
+				try {
+					result.close();
+				} catch (SQLException e) {
+					throw new IllegalStateException("Problem during closing the ResultSet");
+				}
 			}
-			
-			try {
-				stmt.close();
-			} catch (SQLException e) {
-				throw new IllegalStateException("Problem during closing of the Statement");
-			}
-			
-			try {
-				result.close();
-			} catch (SQLException e) {
-				throw new IllegalStateException("Problem during closing of the ResultSet");
+			if (stmt != null) {
+				try {
+					stmt.close();
+				} catch (SQLException e) {
+					throw new IllegalStateException("Problem during closing the PreparedStatement");
+				}
 			}
 		}
-		
 		return computer;
 	}
-
-	public int count() {
-		int count = 0;
-		String query = "SELECT COUNT(*) FROM computer";
-		
-		Connection cn = null;
-		Statement stmt = null;
-		ResultSet result = null;
-		
-		try {
-			try {
-				cn = DataSource.getInstance().getConnection();
-			} catch (IOException | PropertyVetoException e) {
-				throw new IllegalStateException("Problem during connection to the database");
-			}
-			stmt = cn.createStatement();
-			result = stmt.executeQuery(query);
-			
-			if (result.first()) {
-				count = new Integer(result.getInt(1));
-			}
-		} catch (SQLException e) {
-			//Logs
-			throw new IllegalStateException("Problem during the recuperation of the count of computers in database");
-		} finally {
-			try {
-				cn.close();
-			} catch (SQLException e) {
-				throw new IllegalStateException("Problem during closing of connection to the database");
-			}
-			
-			try {
-				stmt.close();
-			} catch (SQLException e) {
-				throw new IllegalStateException("Problem during closing of the Statement");
-			}
-			
-			try {
-				result.close();
-			} catch (SQLException e) {
-				throw new IllegalStateException("Problem during closing of the ResultSet");
-			}
-		}
-		
-		return count;
-	}
 	
-	public int countSearch(String name) {
-		int count = 0;
-		StringBuilder query = new StringBuilder("SELECT COUNT(*) ")
-		.append("FROM computer AS c ")
-		.append("LEFT JOIN company AS co ON c.company_id = co.id ")
-		.append("WHERE c.name LIKE ? or co.name LIKE ?");
-		
-		Connection cn = null;
-		PreparedStatement stmt = null;
-		
-		try {
-			try {
-				cn = DataSource.getInstance().getConnection();
-			} catch (IOException | PropertyVetoException e) {
-				throw new IllegalStateException("Problem during connection to the database");
-			}
-			stmt = cn.prepareStatement(query.toString());
-			stmt.setString(1, "%" + name + "%");
-			stmt.setString(2, "%" + name + "%");
-			
-			ResultSet result = stmt.executeQuery();
-			if (result.first()) {
-				count = new Integer(result.getInt(1));
-			}
-		} catch (SQLException e) {
-			//Logs
-			throw new IllegalStateException("Problem during the recuperation of the count of computers in database");
-		} finally {
-			try {
-				cn.close();
-			} catch (SQLException e) {
-				throw new IllegalStateException("Problem during closing of connection to the database");
-			}
-			
-			try {
-				stmt.close();
-			} catch (SQLException e) {
-				throw new IllegalStateException("Problem during closing of the Statement");
-			}
-		}
-		return count;
-	}
-	
+	@Override
 	public Computer create(Computer computer) {
-		String query = null;
-
+		String query;
 		if (computer.getCompany() != null) {
 			query = "INSERT INTO computer(name, introduced, discontinued, company_id) VALUES(?,?,?,?);";
 		} else { 
 			query = "INSERT INTO computer(name, introduced, discontinued) VALUES(?,?,?);";
 		}
 		
-		Connection cn = null;
 		PreparedStatement stmt = null;
+		
 		try {
-			try {
-				cn = DataSource.getInstance().getConnection();
-			} catch (IOException | PropertyVetoException e) {
-				throw new IllegalStateException("Problem during connection to the database");
-			}
-			stmt = cn.prepareStatement(query);
-			
+			stmt = DataSource.INSTANCE.getConnection().prepareStatement(query);
 			stmt.setString(1, computer.getName());
 			stmt.setTimestamp(2, (computer.getIntroduced() == null ? null : Timestamp.valueOf(computer.getIntroduced())));
 			stmt.setTimestamp(3, (computer.getDiscontinued() == null ? null : Timestamp.valueOf(computer.getDiscontinued())));
-			
+			//If computer is linked to a company
 			if (computer.getCompany() != null) {
 				stmt.setInt(4, computer.getCompany().getId());
 			}
-			
-			int result = stmt.executeUpdate();
-			if (result == 0) {
+			//If no result, return null
+			if (stmt.executeUpdate() == 0) {
 				computer = null;
 			}
-			
 		} catch (SQLException e) {
-			//Logs
-			throw new IllegalStateException("Problem during the creation of a computer in database");
+			DataSource.INSTANCE.rollback();
+			throw new IllegalStateException("Problem during the creation of one computer in the database");
 		} finally {
-			try {
-				cn.close();
-			} catch (SQLException e) {
-				throw new IllegalStateException("Problem during closing of connection to the database");
-			}
-			
-			try {
-				stmt.close();
-			} catch (SQLException e) {
-				throw new IllegalStateException("Problem during closing of the Statement");
+			if (stmt != null) {
+				try {
+					stmt.close();
+				} catch (SQLException e) {
+					throw new IllegalStateException("Problem during closing the PreparedStatement");
+				}
 			}
 		}
-		
 		return computer;
 	}
-
+	
+	@Override
 	public Computer update(Computer computer) {
 		String query;
 		if (computer.getCompany() != null) {
@@ -228,17 +112,10 @@ public class ComputerDAO {
 			query = "UPDATE computer SET name=?, introduced=?, discontinued=? WHERE id=?;";
 		}
 		
-		Connection cn = null;
 		PreparedStatement stmt = null;
 		
 		try {
-			try {
-				cn = DataSource.getInstance().getConnection();
-			} catch (IOException | PropertyVetoException e) {
-				throw new IllegalStateException("Problem during connection to the database");
-			}
-			stmt = cn.prepareStatement(query);
-			
+			stmt = DataSource.INSTANCE.getConnection().prepareStatement(query);
 			stmt.setString(1, computer.getName());
 			stmt.setTimestamp(2, (computer.getIntroduced() == null ? null : Timestamp.valueOf(computer.getIntroduced())));
 			stmt.setTimestamp(3, (computer.getDiscontinued() == null ? null : Timestamp.valueOf(computer.getDiscontinued())));
@@ -248,203 +125,257 @@ public class ComputerDAO {
 			} else {
 				stmt.setInt(4, computer.getId());
 			}
-			
-			
-			int result = stmt.executeUpdate();
-			if (result == 0) {
+			if (stmt.executeUpdate() == 0) {
 				computer = null;
-			}
-			
+			}	
 		} catch (SQLException e) {
-			//Logs
-			throw new IllegalStateException("Problem during the updating of a computer in database");
+			DataSource.INSTANCE.rollback();
+			throw new IllegalStateException("Problem during the updating of one computer in the database");
 		} finally {
-			try {
-				cn.close();
-			} catch (SQLException e) {
-				throw new IllegalStateException("Problem during closing of connection to the database");
-			}
-			
-			try {
-				stmt.close();
-			} catch (SQLException e) {
-				throw new IllegalStateException("Problem during closing of the Statement");
+			if (stmt != null) {
+				try {
+					stmt.close();
+				} catch (SQLException e) {
+					throw new IllegalStateException("Problem during closing the PreparedStatement");
+				}
 			}
 		}
-		
 		return computer;
 	}
 
+	@Override
 	public void delete(Computer computer) {
-		String query = "DELETE FROM computer WHERE id=?;";
-		
 		PreparedStatement stmt = null;
-		Connection cn = null;
-
 		try {
-			try {
-				cn = DataSource.getInstance().getConnection();
-			} catch (IOException | PropertyVetoException e) {
-				throw new IllegalStateException("Problem during connection to the database");
-			}
-			stmt = cn.prepareStatement(query);
+			stmt = DataSource.INSTANCE.getConnection().prepareStatement("DELETE FROM computer WHERE id=?;");
 			stmt.setInt(1, computer.getId());
 			stmt.executeUpdate();
-
 		} catch (SQLException e) {
-			//Logs
-			throw new IllegalStateException("Problem during the deleting of a computer in database");
+			DataSource.INSTANCE.rollback();
+			throw new IllegalStateException("Problem during the deleting of a computer in the database");
 		} finally {
-			try {
-				cn.close();
-			} catch (SQLException e) {
-				throw new IllegalStateException("Problem during closing of connection to the database");
-			}
-			
-			try {
-				stmt.close();
-			} catch (SQLException e) {
-				throw new IllegalStateException("Problem during closing of the Statement");
+			if (stmt != null) {
+				try {
+					stmt.close();
+				} catch (SQLException e) {
+					throw new IllegalStateException("Problem during closing the PreparedStatement");
+				}
 			}
 		}
 	}
-	
-	/**
-	 * Get all computers in the database
-	 * @return a list of Computer
-	 */
-	public List<Computer> getAll(int limit, int offset, String orderBy, String orderByColumn) {
-		if (orderBy == null) {
-			orderBy = "ASC";
-		}
-		if (!orderBy.equals("DESC") && !orderBy.equals("ASC")) {
-			orderBy = "ASC";
-		}
-		
-		if (orderByColumn == null) {
-			orderByColumn = "c.name";
-		}
-		if (!orderByColumn.equals("co.name") && !orderByColumn.equals("c.name") && !orderByColumn.equals("c.introduced") && !orderByColumn.equals("c.discontinued")) {
-			orderByColumn = "c.name";
-		}
-		
-		StringBuilder query = new StringBuilder(); 
-		query.append("SELECT c.id, c.name, c.introduced, c.discontinued, c.company_id, co.name ")
-			.append("FROM computer AS c ")
-			.append("LEFT JOIN company AS co ON c.company_id = co.id ")
-			.append("ORDER BY ")
-			.append(orderByColumn)
-			.append(" ")
-			.append(orderBy)
-			.append(" LIMIT ? OFFSET ?");
 
-		List<Computer> computers = new ArrayList<Computer>();
+	@Override
+	public int count() {
+		int count = 0;
 		
-		Connection cn = null;
 		PreparedStatement stmt = null;
 		ResultSet result = null;
 		
 		try {
-			try {
-				cn = DataSource.getInstance().getConnection();
-			} catch (IOException | PropertyVetoException e) {
-				throw new IllegalStateException("Problem during connection to the database");
-			}
-			stmt = cn.prepareStatement(query.toString());
-			
-			stmt.setInt(1, limit);
-			stmt.setInt(2, offset);
-
+			stmt = DataSource.INSTANCE.getConnection().prepareStatement("SELECT COUNT(*) FROM computer");
 			result = stmt.executeQuery();
-		    while (result.next()) {
-		    	Computer c = ComputerMapper.convertToComputer(result);
-		    	computers.add(c);
-		    }
+			
+			if (result.first()) {
+				count = new Integer(result.getInt(1));
+			}
+			
 		} catch (SQLException e) {
-			throw new IllegalStateException("Problem during the recuperation of computers in database");
+			DataSource.INSTANCE.rollback();
+			throw new IllegalStateException("Problem during the recuperation of all computers in the database");
 		} finally {
-			try {
-				cn.close();
-			} catch (SQLException e) {
-				throw new IllegalStateException("Problem during closing of connection to the database");
-			}
-			
-			try {
-				stmt.close();
-			} catch (SQLException e) {
-				throw new IllegalStateException("Problem during closing of the Statement");
-			}
-			
-			try {
-				result.close();
-			} catch (SQLException e) {
-				throw new IllegalStateException("Problem during closing of the ResultSet");
-			}
-		}
-		
-		return computers;
-	}
-	
-	/**
-	 * Get all computers in the database by name
-	 * @return a list of Computer
-	 */
-	public List<Computer> getByName(String name, int limit, int offset, String orderBy, String orderByColumn) {
-		
-		Connection cn = null;
-		PreparedStatement stmt = null;
-		ResultSet result = null;
-		
-		StringBuilder query = new StringBuilder("SELECT c.id, c.name, c.introduced, c.discontinued, c.company_id, co.name ")
-			.append("FROM computer AS c ")
-			.append("LEFT JOIN company AS co ON c.company_id = co.id ")
-			.append("WHERE c.name LIKE ? or co.name LIKE ? ")
-			.append(" LIMIT ? OFFSET ?");
-			
-		List<Computer> computers = new ArrayList<Computer>();
-		
-		try {
-			try {
-				cn = DataSource.getInstance().getConnection();
-			} catch (IOException | PropertyVetoException e) {
-				throw new IllegalStateException("Problem during connection to the database");
-			}
-			stmt = cn.prepareStatement(query.toString());
-			stmt.setString(1, "%" + name + "%");
-			stmt.setString(2, "%" + name + "%");
-			stmt.setInt(3, limit);
-			stmt.setInt(4, offset);
-			
-		    result = stmt.executeQuery();
-		    while (result.next()) {
-		    	Computer c = ComputerMapper.convertToComputer(result);
-		    	computers.add(c);
-		    }
-		} catch (SQLException e) {
-			throw new IllegalStateException("Problem during the recuperation of computers in database");
-		} finally {
-			try {
-				cn.close();
-			} catch (SQLException e) {
-				throw new IllegalStateException("Problem during closing of connection to the database");
-			}
-			
-			try {
-				stmt.close();
-			} catch (SQLException e) {
-				throw new IllegalStateException("Problem during closing of the Statement");
-			}
-			
 			if (result != null) {
 				try {
 					result.close();
 				} catch (SQLException e) {
-					throw new IllegalStateException("Problem during closing of the ResultSet");
+					throw new IllegalStateException("Problem during closing the ResultSet");
+				}
+			}
+			if (stmt != null) {
+				try {
+					stmt.close();
+				} catch (SQLException e) {
+					throw new IllegalStateException("Problem during closing the PreparedStatement");
+				}
+			}
+		}
+		
+		return count;
+	}
+	
+	@Override
+	public int countSearch(String name) {
+		int count = 0;
+		
+		PreparedStatement stmt = null;
+		ResultSet result = null;
+		
+		try {
+			stmt = DataSource.INSTANCE.getConnection().prepareStatement("SELECT COUNT(*) FROM computer FROM computer AS c LEFT JOIN company AS co ON c.company_id = co.id WHERE c.name LIKE ? or co.name LIKE ?");
+			stmt.setString(1, "%" + name + "%");
+			stmt.setString(2, "%" + name + "%");
+			
+			result = stmt.executeQuery();
+			
+			if (result.first()) {
+				count = new Integer(result.getInt(1));
+			}
+			
+		} catch (SQLException e) {
+			DataSource.INSTANCE.rollback();
+			throw new IllegalStateException("Problem during the recuperation of all computers in the database");
+		} finally {
+			if (result != null) {
+				//this.closeConnection(cn);
+				try {
+					result.close();
+				} catch (SQLException e) {
+					throw new IllegalStateException("Problem during closing the ResultSet");
+				}
+			}
+			if (stmt != null) {
+				try {
+					stmt.close();
+				} catch (SQLException e) {
+					throw new IllegalStateException("Problem during closing the PreparedStatement");
+				}
+			}
+		}
+		
+		return count;
+	}
+	
+	@Override
+	public List<Computer> getAll() {
+		PreparedStatement stmt = null;
+		ResultSet result = null;
+		
+		List<Computer> computers = new ArrayList<Computer>();
+		
+		try {
+			stmt = DataSource.INSTANCE.getConnection().prepareStatement(startGetAllQuery);
+			result = stmt.executeQuery();
+			
+			while(result.next()) {
+				computers.add(ComputerMapper.convertToComputer(result));
+			}
+		} catch (SQLException e) {
+			DataSource.INSTANCE.rollback();
+			throw new IllegalStateException("Problem during the recuperation of all computers in the database");
+		} finally {
+			if (result != null) {
+				try {
+					result.close();
+				} catch (SQLException e) {
+					throw new IllegalStateException("Problem during closing the ResultSet");
+				}
+			}
+			if (stmt != null) {
+				try {
+					stmt.close();
+				} catch (SQLException e) {
+					throw new IllegalStateException("Problem during closing the PreparedStatement");
 				}
 			}
 		}
 		
 		return computers;
 	}
+	
+	@Override
+	public List<Computer> getAll(Pages pagination) {
+		PreparedStatement stmt = null;
+		ResultSet result = null;
+		
+		List<Computer> computers = new ArrayList<Computer>();
+		
+		StringBuilder query = new StringBuilder();
+		query.append(startGetAllQuery);
+		query.append(" ORDER BY ");
+		query.append(pagination.getOrderByColumn());
+		query.append(" ");
+		query.append(pagination.getOrderBy());
+		query.append(" LIMIT ? OFFSET ?");
+		
+		try {
+			stmt = DataSource.INSTANCE.getConnection().prepareStatement(query.toString());
+			stmt.setInt(1, pagination.getLimit());
+			stmt.setInt(2, pagination.getOffset());
+			result = stmt.executeQuery();
+			
+			while(result.next()) {
+				computers.add(ComputerMapper.convertToComputer(result));
+			}
+		} catch (SQLException e) {
+			DataSource.INSTANCE.rollback();
+			throw new IllegalStateException("Problem during the recuperation of computers in the database");
+		} finally {
+			//this.closeConnection(cn);
+			if (result != null) {
+				try {
+					result.close();
+				} catch (SQLException e) {
+					throw new IllegalStateException("Problem during closing the ResultSet");
+				}
+			}
+			if (stmt != null) {
+				try {
+					stmt.close();
+				} catch (SQLException e) {
+					throw new IllegalStateException("Problem during closing the PreparedStatement");
+				}
+			}
+		}
+		return computers;
+	}
+	
+	@Override
+	public List<Computer> getByName(Pages pagination) {
+		PreparedStatement stmt = null;
+		ResultSet result = null;
 
+		StringBuilder query = new StringBuilder();
+		query.append(startGetAllQuery);
+		query.append(" WHERE c.name LIKE ? or co.name LIKE ?");
+		query.append(" ORDER BY ");
+		query.append(pagination.getOrderByColumn());
+		query.append(" ");
+		query.append(pagination.getOrderBy());
+		query.append(" LIMIT ? OFFSET ?");
+		
+		List<Computer> computers = new ArrayList<Computer>();
+		
+		try {
+			stmt = DataSource.INSTANCE.getConnection().prepareStatement(query.toString());
+			stmt.setString(1, "%" + pagination.getSearch() + "%");
+			stmt.setString(2, "%" + pagination.getSearch() + "%");
+			stmt.setInt(3, pagination.getLimit());
+			stmt.setInt(4, pagination.getOffset());
+			result = stmt.executeQuery();
+			
+			while(result.next()) {
+				computers.add(ComputerMapper.convertToComputer(result));
+			}
+		} catch (SQLException e) {
+			DataSource.INSTANCE.rollback();
+			throw new IllegalStateException("Problem during the recuperation of computers in the database");
+		} finally {
+			//this.closeConnection(cn);
+			if (result != null) {
+				try {
+					result.close();
+				} catch (SQLException e) {
+					throw new IllegalStateException("Problem during closing the ResultSet");
+				}
+			}
+			if (stmt != null) {
+				try {
+					stmt.close();
+				} catch (SQLException e) {
+					throw new IllegalStateException("Problem during closing the PreparedStatement");
+				}
+			}
+		}
+		return computers;
+	}
+	
 }
