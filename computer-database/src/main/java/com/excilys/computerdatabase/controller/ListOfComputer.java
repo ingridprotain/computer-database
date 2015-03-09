@@ -15,9 +15,9 @@ import com.excilys.computerdatabase.model.Computer;
 import com.excilys.computerdatabase.service.ComputerService;
 import com.excilys.computerdatabase.utils.Pages;
 
-@SuppressWarnings("serial")
 public class ListOfComputer extends HttpServlet{
-	
+
+	private static final long serialVersionUID = 1L;
 	private static ComputerService computerService = new ComputerService();
 	
 	@Override

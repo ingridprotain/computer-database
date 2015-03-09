@@ -66,6 +66,7 @@ public enum DataSource {
             // load the database driver (make sure this is in your classpath!)
             Class.forName(driver);
         } catch (Exception e) {
+        	e.printStackTrace();
         	throw new IllegalStateException("Problem during loading the Driver JDBC");
         }
 
@@ -154,7 +155,6 @@ public enum DataSource {
 		try {
 			connectionThreadLocal.get().rollback();
 		} catch (SQLException e) {
-			e.printStackTrace();
 			throw new IllegalStateException("Problem during rollback");
 			
 		}
