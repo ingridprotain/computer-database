@@ -40,26 +40,11 @@ public class Main {
 			//Display the computers list
 			case "-l computers":
 			case "1":
-				/*System.out.println("List computers");
-				
-				Pages pages = new Pages();
-				List<ComputerDTO> computers = pages.first();
-				while(true) {
-					for (ComputerDTO c : computers) {
-						System.out.println(c);
-					}
-					
-					System.out.println("Total of computers : " +pages.getCount());
-					System.out.print("First : f - Last : l  ");
-					String choice = scan.nextLine();
-					if (choice.equals("f")) {
-						computers = pages.first();
-					} else if (choice.equals("l")){
-						computers = pages.last();
-					} else {
-						break;
-					}
-				}*/
+				System.out.println("List computers");
+				List<Computer> computers = computerService.getAll();
+				for (Computer c : computers) {
+					System.out.println(c);
+				}
 				break;
 				
 			//Display the companies list

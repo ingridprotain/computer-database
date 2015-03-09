@@ -154,8 +154,10 @@ public enum DataSource {
 		try {
 			connectionThreadLocal.get().rollback();
 		} catch (SQLException e) {
+			e.printStackTrace();
 			throw new IllegalStateException("Problem during rollback");
-
+			
 		}
+
 	}
 }

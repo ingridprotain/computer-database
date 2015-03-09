@@ -46,6 +46,7 @@
                         </th>
                         <th>
                             Computer name
+                            <my:pagination page="${ page }" isOrderBy="true"/>
                         </th>
                         <th>
                             Introduced date

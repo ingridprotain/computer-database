@@ -15,9 +15,7 @@
 						    <strong>${ error }</strong>
 						</div>
                     </c:forEach>
-                    
-                   
-                   	
+
                     <form id="addComputer" action="editComputer" method="POST">
                         <fieldset>
                             <div class="form-group">

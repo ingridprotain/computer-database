@@ -96,6 +96,27 @@ public class CompanyDAO implements ICompanyDAO {
 		}
 		return companies;
 	}
+
+	@Override
+	public void delete(Company company) {
+		PreparedStatement stmt = null;
+		try {
+			stmt = DataSource.INSTANCE.getConnection().prepareStatement("DELETE FROM company WHERE id=?;");
+			stmt.setInt(1, company.getId());
+			stmt.executeUpdate();
+		} catch (SQLException e) {
+			DataSource.INSTANCE.rollback();
+			throw new IllegalStateException("Problem during the deleting of a computer in the database");
+		} finally {
+			if (stmt != null) {
+				try {
+					stmt.close();
+				} catch (SQLException e) {
+					throw new IllegalStateException("Problem during closing the PreparedStatement");
+				}
+			}
+		}
+	}
 	
 
 }

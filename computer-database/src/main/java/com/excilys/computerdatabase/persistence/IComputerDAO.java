@@ -10,6 +10,7 @@ public interface IComputerDAO {
 	public Computer create(Computer computer);
 	public Computer update(Computer computer);
 	public void delete(Computer computer);
+	public void deleteByCompanyId(int company_id);
 	
 	public int count();
 	public int countSearch(String name);

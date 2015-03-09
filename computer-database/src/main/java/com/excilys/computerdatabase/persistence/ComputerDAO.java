@@ -163,6 +163,27 @@ public class ComputerDAO implements IComputerDAO {
 			}
 		}
 	}
+	
+	@Override
+	public void deleteByCompanyId(int company_id) {
+		PreparedStatement stmt = null;
+		try {
+			stmt = DataSource.INSTANCE.getConnection().prepareStatement("DELETE FROM computer WHERE company_id=?;");
+			stmt.setInt(1, company_id);
+			stmt.executeUpdate();
+		} catch (SQLException e) {
+			DataSource.INSTANCE.rollback();
+			throw new IllegalStateException("Problem during the deleting of a computer in the database");
+		} finally {
+			if (stmt != null) {
+				try {
+					stmt.close();
+				} catch (SQLException e) {
+					throw new IllegalStateException("Problem during closing the PreparedStatement");
+				}
+			}
+		}
+	}
 
 	@Override
 	public int count() {
@@ -210,7 +231,7 @@ public class ComputerDAO implements IComputerDAO {
 		ResultSet result = null;
 		
 		try {
-			stmt = DataSource.INSTANCE.getConnection().prepareStatement("SELECT COUNT(*) FROM computer FROM computer AS c LEFT JOIN company AS co ON c.company_id = co.id WHERE c.name LIKE ? or co.name LIKE ?");
+			stmt = DataSource.INSTANCE.getConnection().prepareStatement("SELECT COUNT(*) FROM computer AS c LEFT JOIN company AS co ON c.company_id = co.id WHERE c.name LIKE ? or co.name LIKE ?");
 			stmt.setString(1, "%" + name + "%");
 			stmt.setString(2, "%" + name + "%");
 			
@@ -221,7 +242,6 @@ public class ComputerDAO implements IComputerDAO {
 			}
 			
 		} catch (SQLException e) {
-			DataSource.INSTANCE.rollback();
 			throw new IllegalStateException("Problem during the recuperation of all computers in the database");
 		} finally {
 			if (result != null) {
@@ -259,7 +279,6 @@ public class ComputerDAO implements IComputerDAO {
 				computers.add(ComputerMapper.convertToComputer(result));
 			}
 		} catch (SQLException e) {
-			DataSource.INSTANCE.rollback();
 			throw new IllegalStateException("Problem during the recuperation of all computers in the database");
 		} finally {
 			if (result != null) {
@@ -306,7 +325,6 @@ public class ComputerDAO implements IComputerDAO {
 				computers.add(ComputerMapper.convertToComputer(result));
 			}
 		} catch (SQLException e) {
-			DataSource.INSTANCE.rollback();
 			throw new IllegalStateException("Problem during the recuperation of computers in the database");
 		} finally {
 			//this.closeConnection(cn);
@@ -377,5 +395,4 @@ public class ComputerDAO implements IComputerDAO {
 		}
 		return computers;
 	}
-	
 }
