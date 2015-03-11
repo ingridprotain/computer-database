@@ -1,42 +1,28 @@
 package com.excilys.computerdatabase.controller;
 
-import java.io.IOException;
-import java.io.PrintWriter;
-
-import javax.servlet.ServletConfig;
-import javax.servlet.ServletException;
-import javax.servlet.http.HttpServlet;
-import javax.servlet.http.HttpServletRequest;
-import javax.servlet.http.HttpServletResponse;
+import java.util.List;
 
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.beans.factory.annotation.Configurable;
-import org.springframework.web.context.support.SpringBeanAutowiringSupport;
+import org.springframework.stereotype.Controller;
+import org.springframework.web.bind.annotation.RequestMapping;
+import org.springframework.web.bind.annotation.RequestMethod;
+import org.springframework.web.servlet.ModelAndView;
 
-import com.excilys.computerdatabase.ui.SpringTest;
+import com.excilys.computerdatabase.model.Company;
+import com.excilys.computerdatabase.service.CompanyService;
 
-@Configurable
-public class TestServlet extends HttpServlet {
+@Controller
+@RequestMapping("/welcome")
+public class TestServlet {
 
-	private static final long serialVersionUID = 1L;
-	
 	@Autowired
-	private SpringTest test;
+	CompanyService companyService;
 	
-	@Override
-	public void init(ServletConfig config) throws ServletException{
-		super.init(config);
-		SpringBeanAutowiringSupport.processInjectionBasedOnCurrentContext(this);
-	}
 	
-	public TestServlet() {
-		test = new SpringTest();
+	@RequestMapping(method = RequestMethod.GET)
+	protected ModelAndView helloWorld() {
+		
+		List<Company> userList = companyService.getAll();  
+		return new ModelAndView("userList", "userList", userList);  
 	}
-	
-	protected void doGet(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {	       
-        PrintWriter out=response.getWriter();
-        out.println("<br>Test : "+ test.getMessage());
-        out.close();		
-	}
-
 }

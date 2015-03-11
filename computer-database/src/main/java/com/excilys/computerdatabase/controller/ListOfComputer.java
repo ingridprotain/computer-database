@@ -1,13 +1,13 @@
 package com.excilys.computerdatabase.controller;
 
-import java.io.IOException;
 import java.util.ArrayList;
 import java.util.List;
 
-import javax.servlet.ServletException;
-import javax.servlet.http.HttpServlet;
-import javax.servlet.http.HttpServletRequest;
-import javax.servlet.http.HttpServletResponse;
+import org.springframework.stereotype.Controller;
+import org.springframework.web.bind.annotation.RequestMapping;
+import org.springframework.web.bind.annotation.RequestMethod;
+import org.springframework.web.bind.annotation.RequestParam;
+import org.springframework.web.servlet.ModelAndView;
 
 import com.excilys.computerdatabase.dto.ComputerDTO;
 import com.excilys.computerdatabase.dto.ComputerMapper;
@@ -15,23 +15,27 @@ import com.excilys.computerdatabase.model.Computer;
 import com.excilys.computerdatabase.service.ComputerService;
 import com.excilys.computerdatabase.utils.Pages;
 
-public class ListOfComputer extends HttpServlet{
+@Controller
+@RequestMapping("/dashboard")
+public class ListOfComputer {
 
-	private static final long serialVersionUID = 1L;
 	private static ComputerService computerService = new ComputerService();
 	
-	@Override
-	protected void doGet(HttpServletRequest req, HttpServletResponse resp)
-			throws ServletException, IOException {
+	@RequestMapping(method = RequestMethod.GET)
+	protected ModelAndView doGet(
+			@RequestParam(value = "limit", required = false) String limitString,
+			@RequestParam(value = "page", required = false) String pageString,
+			@RequestParam(value = "search", required = false) String search,
+			@RequestParam(value = "orderBy", required = false) String orderBy,
+			@RequestParam(value = "orderByColumn", required = false) String orderByColumn) {
+		
+		ModelAndView model = new ModelAndView("dashboard");
 		
 		List<Computer> computers;
+		int count;
 		
 		//Set the pagination
 		Pages pagination = new Pages();
-		String limitString = req.getParameter("limit");
-		String pageString = req.getParameter("page");
-		String search = req.getParameter("search");
-		int count;
 		
 		if (limitString != null) {
 			pagination.setLimit(Integer.valueOf(limitString));
@@ -40,11 +44,11 @@ public class ListOfComputer extends HttpServlet{
 			pagination.setPage(Integer.valueOf(pageString));
 		}
 		pagination.setOffset(pagination.getPage() * pagination.getLimit() -pagination.getLimit());
-		if (req.getParameter("orderBy") != null) {
-			pagination.setOrderBy(req.getParameter("orderBy"));
+		if (orderBy != null) {
+			pagination.setOrderBy(orderBy);
 		}
-		if (req.getParameter("orderByColumn") != null) {
-			pagination.setOrderByColumn(req.getParameter("orderByColumn"));
+		if (orderByColumn != null) {
+			pagination.setOrderByColumn(orderByColumn);
 		}
 		if (search != null) {
 			pagination.setSearch(search);
@@ -62,10 +66,10 @@ public class ListOfComputer extends HttpServlet{
 			cDTOs.add(ComputerMapper.createComputerDTO(c));
 		}
 		
-		req.setAttribute("page", pagination);
-		req.setAttribute("computers", cDTOs);
-		req.setAttribute("count", count);
+		model.addObject("page", pagination);
+		model.addObject("computers", cDTOs);
+		model.addObject("count", count);
 		
-		this.getServletContext().getRequestDispatcher("/static/views/dashboard.jsp").forward(req, resp);
+		return model;
 	}
 }

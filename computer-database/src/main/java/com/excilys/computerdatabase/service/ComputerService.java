@@ -3,63 +3,62 @@ package com.excilys.computerdatabase.service;
 import java.util.List;
 
 import com.excilys.computerdatabase.model.Computer;
-import com.excilys.computerdatabase.persistence.ComputerDAO;
-import com.excilys.computerdatabase.persistence.DataSource;
 import com.excilys.computerdatabase.utils.Pages;
 
-public class ComputerService extends AbstractService<Computer>{
+public class ComputerService implements IComputerService{
 
 	@Override
-	public Computer findAbstract(int id) {
-		return ComputerDAO.getInstance().find(id);
+	public Computer find(int id) {
+		// TODO Auto-generated method stub
+		return null;
 	}
 
 	@Override
-	public Computer createAbstract(Computer object) {
-		return ComputerDAO.getInstance().create(object);
+	public Computer create(Computer computer) {
+		// TODO Auto-generated method stub
+		return null;
 	}
 
 	@Override
-	public Computer updateAbstract(Computer object) {
-		return ComputerDAO.getInstance().update(object);
+	public Computer update(Computer computer) {
+		// TODO Auto-generated method stub
+		return null;
 	}
 
 	@Override
-	public void deleteAbstract(Computer object) {
-		ComputerDAO.getInstance().delete(object);
+	public void delete(Computer computer) {
+		// TODO Auto-generated method stub
 		
 	}
 
 	@Override
-	public List<Computer> getAllAbstract() {
-		return ComputerDAO.getInstance().getAll();
+	public List<Computer> getAll() {
+		// TODO Auto-generated method stub
+		return null;
 	}
-	
+
+	@Override
 	public List<Computer> getAll(Pages pagination) {
-		DataSource.INSTANCE.getConnection();
-		List<Computer> computers = ComputerDAO.getInstance().getAll(pagination);
-		DataSource.INSTANCE.closeConnection();
-		return computers;
+		// TODO Auto-generated method stub
+		return null;
 	}
-	
+
+	@Override
 	public List<Computer> getByName(Pages pagination) {
-		DataSource.INSTANCE.getConnection();
-		List<Computer> computers = ComputerDAO.getInstance().getByName(pagination);
-		DataSource.INSTANCE.closeConnection();
-		return computers;
+		// TODO Auto-generated method stub
+		return null;
 	}
-	
+
+	@Override
 	public int count() {
-		DataSource.INSTANCE.getConnection();
-		int count = ComputerDAO.getInstance().count();
-		DataSource.INSTANCE.closeConnection();
-		return count;
+		// TODO Auto-generated method stub
+		return 0;
 	}
-	
-	public int countSearch(String name) {
-		DataSource.INSTANCE.getConnection();
-		int count = ComputerDAO.getInstance().countSearch(name);
-		DataSource.INSTANCE.closeConnection();
-		return count;
+
+	@Override
+	public int countSearch() {
+		// TODO Auto-generated method stub
+		return 0;
 	}
+
 }

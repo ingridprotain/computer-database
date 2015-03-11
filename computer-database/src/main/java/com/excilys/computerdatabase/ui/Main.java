@@ -3,6 +3,9 @@ package com.excilys.computerdatabase.ui;
 import java.util.List;
 import java.util.Scanner;
 
+import org.springframework.context.ConfigurableApplicationContext;
+import org.springframework.context.support.ClassPathXmlApplicationContext;
+
 import com.excilys.computerdatabase.dto.ComputerDTO;
 import com.excilys.computerdatabase.dto.ComputerMapper;
 import com.excilys.computerdatabase.model.Company;
@@ -19,6 +22,8 @@ public class Main {
 	private static CompanyService companyService = new CompanyService();
 
 	public static void main(String[] args) {
+		
+		ConfigurableApplicationContext context = new ClassPathXmlApplicationContext("applicationContext.xml");
 		String choixUser = ""; 
 		while (!choixUser.equals("exit"))
 		{
@@ -52,11 +57,11 @@ public class Main {
 			case "2":
 				System.out.println("List companies");
 
-				List<Company> companies = CompanyDAO.getInstance().getAll();
+				//List<Company> companies = CompanyDAO.getInstance().getAll();
 				
-				for (Company c : companies) {
+				/*for (Company c : companies) {
 					System.out.println(c);
-				}
+				}*/
 				break;
 			
 			//Display one computer's details
@@ -70,6 +75,21 @@ public class Main {
 					System.out.println(computer);
 				} else {
 					System.out.println("Computer doesn't exist");
+				}
+				break;
+				
+			case "-l company":
+				System.out.println("Identifiant of the company to research ?");
+				String companyIdString = scan.nextLine();
+				
+				CompanyDAO companyDAO = (CompanyDAO) context.getBean("companyDAO");
+				
+				
+				Company company = companyDAO.find(Integer.valueOf(companyIdString));
+				if (company != null) {
+					System.out.println(company);
+				} else {
+					System.out.println("Company doesn't exist");
 				}
 				break;
 				
@@ -102,8 +122,8 @@ public class Main {
 			case "-d company":
 			case "7":
 				System.out.println("Identifiant of the company to delete ?");
-				String companyIdString = scan.nextLine();
-				Company companyToDel = companyService.find(Integer.parseInt(companyIdString));
+				String companyIdToDelString = scan.nextLine();
+				Company companyToDel = companyService.find(Integer.parseInt(companyIdToDelString));
 				if (companyToDel != null) {
 					companyService.delete(companyToDel);
 					System.out.println("Company and computers related deleted");

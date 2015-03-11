@@ -14,4 +14,15 @@
 		<property name="message" value="Tuto spring"></property>
 	</bean>
 	
+	<bean id="companyDAO" class="com.excilys.computerdatabase.persistence.CompanyDAO">
+		<property name="dataSource" ref="dataSource" />
+	</bean>
+	
+	<bean id="dataSource" class="org.springframework.jdbc.datasource.DriverManagerDataSource">
+		<property name="driverClassName" value="com.mysql.jdbc.Driver" />
+		<property name="url" value="jdbc:mysql://localhost/computer-database-db?zeroDateTimeBehavior=convertToNull" />
+		<property name="username" value="admincdb" />
+		<property name="password" value="qwerty1234" />
+	</bean>
+	
 </beans>

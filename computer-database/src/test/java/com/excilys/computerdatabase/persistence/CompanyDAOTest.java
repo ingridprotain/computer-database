@@ -11,7 +11,7 @@ public class CompanyDAOTest extends TestCase {
 	
 	protected void setUp() throws Exception {
 		MySqlConnect.setTest(true);
-		companyDAO = CompanyDAO.getInstance();
+		//companyDAO = CompanyDAO.getInstance();
 	}
 	
 	public void testFind() {

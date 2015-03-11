@@ -1,13 +1,14 @@
 package com.excilys.computerdatabase.controller;
 
-import java.io.IOException;
 import java.util.ArrayList;
 import java.util.List;
 
-import javax.servlet.ServletException;
-import javax.servlet.http.HttpServlet;
-import javax.servlet.http.HttpServletRequest;
-import javax.servlet.http.HttpServletResponse;
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.stereotype.Controller;
+import org.springframework.web.bind.annotation.RequestMapping;
+import org.springframework.web.bind.annotation.RequestMethod;
+import org.springframework.web.bind.annotation.RequestParam;
+import org.springframework.web.servlet.ModelAndView;
 
 import com.excilys.computerdatabase.dto.CompanyDTO;
 import com.excilys.computerdatabase.dto.CompanyMapper;
@@ -15,26 +16,32 @@ import com.excilys.computerdatabase.dto.ComputerDTO;
 import com.excilys.computerdatabase.dto.ComputerMapper;
 import com.excilys.computerdatabase.model.Company;
 import com.excilys.computerdatabase.model.Computer;
-import com.excilys.computerdatabase.service.CompanyService;
 import com.excilys.computerdatabase.service.ComputerService;
+import com.excilys.computerdatabase.service.ICompanyService;
 import com.excilys.computerdatabase.utils.ComputerDTOValidator;
 
-@SuppressWarnings("serial")
-public class EditComputer extends HttpServlet {
-
-	private static CompanyService companyService = new CompanyService();
+@Controller
+@RequestMapping("/editComputer")
+public class EditComputer {
+	
+	@Autowired
+	private ICompanyService companyService;
+	
 	private static ComputerService computerService = new ComputerService();
-	@Override
-	protected void doGet(HttpServletRequest req, HttpServletResponse resp)
-			throws ServletException, IOException {
+	
+	@RequestMapping(method = RequestMethod.GET)
+	protected ModelAndView doGet(
+			@RequestParam(value = "computerId", required = false) String id) {
+		
+		ModelAndView model = new ModelAndView("editComputer");
 		
 		List<Company> companies = companyService.getAll();
 		String title = "Add Computer";
 		ComputerDTO computerDTO = new ComputerDTO();
 		
 		int computerId = 0;
-		if (req.getParameter("computerId") != null) {
-			computerId = Integer.valueOf(req.getParameter("computerId"));
+		if (id != null) {
+			computerId = Integer.valueOf(id);
 		}
 
 		//Creation of the DTOs
@@ -52,27 +59,33 @@ public class EditComputer extends HttpServlet {
 			title = "Edit computer " + computerDTO.getName();
 		}
 		
-		req.setAttribute("title", title);
-		req.setAttribute("computerDTO", computerDTO);
-		req.setAttribute("companiesDTO", companiesDTO);
+		model.addObject("title", title);
+		model.addObject("computerDTO", computerDTO);
+		model.addObject("companiesDTO", companiesDTO);
 		
-		this.getServletContext().getRequestDispatcher("/static/views/editComputer.jsp").forward(req, resp);
+		return model;
 	}
 
-	@Override
-	protected void doPost(HttpServletRequest req, HttpServletResponse resp)
-			throws ServletException, IOException {
+	@RequestMapping(method = RequestMethod.POST)
+	protected ModelAndView doPost(
+			@RequestParam(value = "computerName", required = true) String computerName,
+			@RequestParam(value = "introduced", required = true) String introduced,
+			@RequestParam(value = "discontinued", required = true) String discontinued,
+			@RequestParam(value = "companyId", required = true) String companyId,
+			@RequestParam(value = "computerId", required = false) String computerId) {
+		
+		ModelAndView model;
 		
 		//Received a computerDTO from the client
 		ComputerDTO computerDTO = new ComputerDTO();
-		computerDTO.setName(req.getParameter("computerName"));
-		computerDTO.setIntroduced(req.getParameter("introduced"));
-		computerDTO.setDiscontinued(req.getParameter("discontinued"));
-		computerDTO.setCompanyId(Integer.valueOf(req.getParameter("companyId")));
+		computerDTO.setName(computerName);
+		computerDTO.setIntroduced(introduced);
+		computerDTO.setDiscontinued(discontinued);
+		computerDTO.setCompanyId(Integer.valueOf(companyId));
 		
 		//Edit
-		if (req.getParameter("computerId") != null) {
-			computerDTO.setId(Integer.valueOf(req.getParameter("computerId")));
+		if (computerId != null) {
+			computerDTO.setId(Integer.valueOf(computerId));
 		}
 		
 		//If the computerDTO is valid, we add the computer to the database
@@ -86,8 +99,7 @@ public class EditComputer extends HttpServlet {
 			} else {
 				computer = computerService.update(computer);
 			}
-			
-			resp.sendRedirect("/computer-database/dashboard");
+			model = new ModelAndView("dashboard");
 		//Else, we return a list of errors
 		} else {
 			List<Company> companies = companyService.getAll();
@@ -95,12 +107,12 @@ public class EditComputer extends HttpServlet {
 			for (Company company : companies) {
 				companiesDTO.add(CompanyMapper.createCompanyDTO(company));
 			}
-			
-			req.setAttribute("companiesDTO", companiesDTO);
-			req.setAttribute("errors", errors);
-			req.setAttribute("computerDTO", computerDTO);
-			this.getServletContext().getRequestDispatcher("/static/views/editComputer.jsp").forward(req, resp);
+			model = new ModelAndView("editComputer");
+			model.addObject("companiesDTO", companiesDTO);
+			model.addObject("errors", errors);
+			model.addObject("computerDTO", computerDTO);
 		}
+		return model;
 	}
 
 }
