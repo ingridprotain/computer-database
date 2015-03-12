@@ -2,63 +2,60 @@ package com.excilys.computerdatabase.service;
 
 import java.util.List;
 
+import org.springframework.beans.factory.annotation.Autowired;
+
 import com.excilys.computerdatabase.model.Computer;
+import com.excilys.computerdatabase.persistence.IComputerDAO;
 import com.excilys.computerdatabase.utils.Pages;
 
 public class ComputerService implements IComputerService{
+	
+	@Autowired
+	private IComputerDAO computerDao;
 
 	@Override
 	public Computer find(int id) {
-		// TODO Auto-generated method stub
-		return null;
+		return computerDao.find(id);
 	}
 
 	@Override
-	public Computer create(Computer computer) {
-		// TODO Auto-generated method stub
-		return null;
+	public void create(Computer computer) {
+		computerDao.create(computer);
 	}
 
 	@Override
-	public Computer update(Computer computer) {
-		// TODO Auto-generated method stub
-		return null;
+	public void update(Computer computer) {
+		computerDao.update(computer);
 	}
 
 	@Override
 	public void delete(Computer computer) {
-		// TODO Auto-generated method stub
-		
+		computerDao.delete(computer);
 	}
 
 	@Override
 	public List<Computer> getAll() {
-		// TODO Auto-generated method stub
-		return null;
+		return computerDao.getAll();
 	}
 
 	@Override
 	public List<Computer> getAll(Pages pagination) {
-		// TODO Auto-generated method stub
-		return null;
+		return computerDao.getAll(pagination);
 	}
 
 	@Override
 	public List<Computer> getByName(Pages pagination) {
-		// TODO Auto-generated method stub
-		return null;
+		return computerDao.getByName(pagination);
 	}
 
 	@Override
 	public int count() {
-		// TODO Auto-generated method stub
-		return 0;
+		return computerDao.count();
 	}
 
 	@Override
-	public int countSearch() {
-		// TODO Auto-generated method stub
-		return 0;
+	public int countSearch(String name) {
+		return computerDao.countSearch(name);
 	}
 
 }

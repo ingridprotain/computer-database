@@ -15,7 +15,6 @@ public class CompanyService implements ICompanyService{
 
 	@Override
 	public Company find(int id) {
-		// TODO Auto-generated method stub
 		return companyDao.find(id);
 	}
 

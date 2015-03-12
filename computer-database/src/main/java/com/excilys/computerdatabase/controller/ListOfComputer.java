@@ -3,6 +3,7 @@ package com.excilys.computerdatabase.controller;
 import java.util.ArrayList;
 import java.util.List;
 
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
@@ -12,14 +13,15 @@ import org.springframework.web.servlet.ModelAndView;
 import com.excilys.computerdatabase.dto.ComputerDTO;
 import com.excilys.computerdatabase.dto.ComputerMapper;
 import com.excilys.computerdatabase.model.Computer;
-import com.excilys.computerdatabase.service.ComputerService;
+import com.excilys.computerdatabase.service.IComputerService;
 import com.excilys.computerdatabase.utils.Pages;
 
 @Controller
 @RequestMapping("/dashboard")
 public class ListOfComputer {
 
-	private static ComputerService computerService = new ComputerService();
+	@Autowired
+	private IComputerService computerService;
 	
 	@RequestMapping(method = RequestMethod.GET)
 	protected ModelAndView doGet(

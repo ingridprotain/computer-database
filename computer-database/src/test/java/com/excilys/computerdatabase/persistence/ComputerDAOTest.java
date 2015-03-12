@@ -13,7 +13,6 @@ public class ComputerDAOTest extends TestCase {
 	
 	protected void setUp() throws Exception {
 		MySqlConnect.setTest(true);
-		computerDAO = ComputerDAO.getInstance();
 	}
 	
 	public void testFind() {

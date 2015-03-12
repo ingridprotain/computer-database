@@ -3,18 +3,19 @@ package com.excilys.computerdatabase.utils;
 import java.util.ArrayList;
 import java.util.List;
 
+import org.springframework.beans.factory.annotation.Autowired;
+
 import com.excilys.computerdatabase.dto.ComputerDTO;
 import com.excilys.computerdatabase.model.Company;
-import com.excilys.computerdatabase.service.CompanyService;
+import com.excilys.computerdatabase.service.ICompanyService;
 
-final public class ComputerDTOValidator {
+public class ComputerDTOValidator implements Validatable<ComputerDTO>{
 	
-	private static CompanyService companyService = new CompanyService();
+	@Autowired
+	private ICompanyService companyService;
 	
-	private ComputerDTOValidator() {
-	}
-
-	public static List<String> validate(ComputerDTO computerDTO) {
+	@Override
+	public List<String> validate(ComputerDTO computerDTO) {
 		List<String> errors = new ArrayList<String>();
 		
 		if (computerDTO.getName() == null || computerDTO.getName().equals("")) {
@@ -39,7 +40,6 @@ final public class ComputerDTOValidator {
 				errors.add("The company doesn't exist");
 			}
 		}
-		
 		return errors;
 	}
 }

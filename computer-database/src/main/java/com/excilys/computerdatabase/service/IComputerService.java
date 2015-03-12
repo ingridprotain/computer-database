@@ -7,8 +7,8 @@ import com.excilys.computerdatabase.utils.Pages;
 
 public interface IComputerService {
 	public Computer find(int id);
-	public Computer create(Computer computer);
-	public Computer update(Computer computer);
+	public void create(Computer computer);
+	public void update(Computer computer);
 	public void delete(Computer computer);
 	
 	public List<Computer> getAll();
@@ -16,5 +16,5 @@ public interface IComputerService {
 	public List<Computer> getByName(Pages pagination);
 	
 	public int count();
-	public int countSearch();
+	public int countSearch(String name);
 }

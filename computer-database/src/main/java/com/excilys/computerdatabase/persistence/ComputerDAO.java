@@ -1,10 +1,7 @@
 package com.excilys.computerdatabase.persistence;
 
-import java.sql.PreparedStatement;
-import java.sql.ResultSet;
-import java.sql.SQLException;
 import java.sql.Timestamp;
-import java.util.ArrayList;
+import java.time.LocalDateTime;
 import java.util.List;
 
 import javax.sql.DataSource;
@@ -31,20 +28,25 @@ public class ComputerDAO implements IComputerDAO {
 		return computer;
 	}
 	
+	private Timestamp getTimestampValue(LocalDateTime date) {
+		return (date == null ? null : Timestamp.valueOf(date));
+	}
+	
 	@Override
 	public void create(Computer computer) {
 		String query;
 		Object[] objectQuery;
 		if (computer.getCompany() != null) {
 			query = "INSERT INTO computer(name, introduced, discontinued, company_id) VALUES(?,?,?,?);";
-			objectQuery = new Object[]{computer.getName(), computer.getIntroduced(), computer.getDiscontinued(), computer.getCompany().getId()};
+			objectQuery = new Object[]{computer.getName(), getTimestampValue(computer.getIntroduced()), getTimestampValue(computer.getDiscontinued()), computer.getCompany().getId()};
 		} else { 
 			query = "INSERT INTO computer(name, introduced, discontinued) VALUES(?,?,?);";
-			objectQuery = new Object[]{computer.getName(), computer.getIntroduced(), computer.getDiscontinued()};
+			objectQuery = new Object[]{computer.getName(), getTimestampValue(computer.getIntroduced()), getTimestampValue(computer.getDiscontinued())};
 		}
 		JdbcTemplate jdbcTemplate = new JdbcTemplate(dataSource);
 		jdbcTemplate.update(query, objectQuery);
 	}
+	
 	
 	@Override
 	public void update(Computer computer) {
@@ -52,12 +54,11 @@ public class ComputerDAO implements IComputerDAO {
 		Object[] objectQuery;
 		if (computer.getCompany() != null) {
 			query = "UPDATE computer SET name=?, introduced=?, discontinued=?, company_id=? WHERE id=?;";
-			objectQuery = new Object[]{computer.getName(), computer.getIntroduced(), computer.getDiscontinued(), computer.getCompany().getId(), computer.getId()};
+			objectQuery = new Object[]{computer.getName(), getTimestampValue(computer.getIntroduced()), getTimestampValue(computer.getDiscontinued()), computer.getCompany().getId(), computer.getId()};
 		} else { 
 			query = "UPDATE computer SET name=?, introduced=?, discontinued=? WHERE id=?;";
-			objectQuery = new Object[]{computer.getName(), computer.getIntroduced(), computer.getDiscontinued(), computer.getId()};
+			objectQuery = new Object[]{computer.getName(), getTimestampValue(computer.getIntroduced()), getTimestampValue(computer.getDiscontinued()), computer.getId()};
 		}
-		
 		JdbcTemplate jdbcTemplate = new JdbcTemplate(dataSource);
 		jdbcTemplate.update(query, objectQuery);
 	}
@@ -78,27 +79,27 @@ public class ComputerDAO implements IComputerDAO {
 
 	@Override
 	public int count() {
+		JdbcTemplate jdbcTemplate = new JdbcTemplate(dataSource);
 		String query = "SELECT COUNT(*) FROM computer";
-		return 0;
+		return jdbcTemplate.queryForObject(query, Integer.class);
 	}
 	
 	@Override
 	public int countSearch(String name) {
+		JdbcTemplate jdbcTemplate = new JdbcTemplate(dataSource);
 		String query = "SELECT COUNT(*) FROM computer AS c LEFT JOIN company AS co ON c.company_id = co.id WHERE c.name LIKE ? or co.name LIKE ?";
-		return 0;
+		return jdbcTemplate.queryForObject(query, new Object[]{name, name}, Integer.class);
 	}
 	
 	@Override
 	public List<Computer> getAll() {
-		return null;
+		JdbcTemplate jdbcTemplate = new JdbcTemplate(dataSource);
+		return jdbcTemplate.query(startGetAllQuery, new ComputerMapper());
 	}
 	
 	@Override
 	public List<Computer> getAll(Pages pagination) {
-		PreparedStatement stmt = null;
-		ResultSet result = null;
-		
-		List<Computer> computers = new ArrayList<Computer>();
+		JdbcTemplate jdbcTemplate = new JdbcTemplate(dataSource);
 		
 		StringBuilder query = new StringBuilder();
 		query.append(startGetAllQuery);
@@ -108,42 +109,13 @@ public class ComputerDAO implements IComputerDAO {
 		query.append(pagination.getOrderBy());
 		query.append(" LIMIT ? OFFSET ?");
 		
-		try {
-			stmt = DataSource.INSTANCE.getConnection().prepareStatement(query.toString());
-			stmt.setInt(1, pagination.getLimit());
-			stmt.setInt(2, pagination.getOffset());
-			result = stmt.executeQuery();
-			
-			while(result.next()) {
-				computers.add(ComputerMapper.convertToComputer(result));
-			}
-		} catch (SQLException e) {
-			throw new IllegalStateException("Problem during the recuperation of computers in the database");
-		} finally {
-			//this.closeConnection(cn);
-			if (result != null) {
-				try {
-					result.close();
-				} catch (SQLException e) {
-					throw new IllegalStateException("Problem during closing the ResultSet");
-				}
-			}
-			if (stmt != null) {
-				try {
-					stmt.close();
-				} catch (SQLException e) {
-					throw new IllegalStateException("Problem during closing the PreparedStatement");
-				}
-			}
-		}
-		return computers;
+		return jdbcTemplate.query(query.toString(), new Object[]{ pagination.getLimit(), pagination.getOffset()}, new ComputerMapper());
 	}
 	
 	@Override
 	public List<Computer> getByName(Pages pagination) {
-		PreparedStatement stmt = null;
-		ResultSet result = null;
-
+		JdbcTemplate jdbcTemplate = new JdbcTemplate(dataSource);
+		
 		StringBuilder query = new StringBuilder();
 		query.append(startGetAllQuery);
 		query.append(" WHERE c.name LIKE ? or co.name LIKE ?");
@@ -152,40 +124,7 @@ public class ComputerDAO implements IComputerDAO {
 		query.append(" ");
 		query.append(pagination.getOrderBy());
 		query.append(" LIMIT ? OFFSET ?");
-		
-		List<Computer> computers = new ArrayList<Computer>();
-		
-		try {
-			stmt = DataSource.INSTANCE.getConnection().prepareStatement(query.toString());
-			stmt.setString(1, "%" + pagination.getSearch() + "%");
-			stmt.setString(2, "%" + pagination.getSearch() + "%");
-			stmt.setInt(3, pagination.getLimit());
-			stmt.setInt(4, pagination.getOffset());
-			result = stmt.executeQuery();
-			
-			while(result.next()) {
-				computers.add(ComputerMapper.convertToComputer(result));
-			}
-		} catch (SQLException e) {
-			DataSource.INSTANCE.rollback();
-			throw new IllegalStateException("Problem during the recuperation of computers in the database");
-		} finally {
-			//this.closeConnection(cn);
-			if (result != null) {
-				try {
-					result.close();
-				} catch (SQLException e) {
-					throw new IllegalStateException("Problem during closing the ResultSet");
-				}
-			}
-			if (stmt != null) {
-				try {
-					stmt.close();
-				} catch (SQLException e) {
-					throw new IllegalStateException("Problem during closing the PreparedStatement");
-				}
-			}
-		}
-		return computers;
+
+		return jdbcTemplate.query(query.toString(), new Object[]{"%" + pagination.getSearch() + "%", "%" + pagination.getSearch() + "%", pagination.getLimit(), pagination.getOffset()}, new ComputerMapper());
 	}
 }

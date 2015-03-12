@@ -7,13 +7,11 @@ import org.springframework.context.ConfigurableApplicationContext;
 import org.springframework.context.support.ClassPathXmlApplicationContext;
 
 import com.excilys.computerdatabase.dto.ComputerDTO;
-import com.excilys.computerdatabase.dto.ComputerMapper;
 import com.excilys.computerdatabase.model.Company;
 import com.excilys.computerdatabase.model.Computer;
 import com.excilys.computerdatabase.persistence.CompanyDAO;
 import com.excilys.computerdatabase.service.CompanyService;
 import com.excilys.computerdatabase.service.ComputerService;
-import com.excilys.computerdatabase.utils.ComputerDTOValidator;
 
 public class Main {
 	public static Scanner scan = new Scanner(System.in);
@@ -190,7 +188,7 @@ public class Main {
 			computerDTO.setCompanyId((Integer.parseInt(scan.nextLine())));
 		}
 		
-		List<String> errors = ComputerDTOValidator.validate(computerDTO);
+		/*List<String> errors = ComputerDTOValidator.validate(computerDTO);
 		if (errors.isEmpty()) {
 			Computer computer = ComputerMapper.createComputer(computerDTO);
 			if (mode == "Insert") {
@@ -202,7 +200,7 @@ public class Main {
 			for(String error : errors) {
 				System.out.println(error);
 			}
-		}
+		}*/
 	}
 	
 	private static boolean userConfirm() {

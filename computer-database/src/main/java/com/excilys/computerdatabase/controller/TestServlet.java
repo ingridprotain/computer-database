@@ -18,7 +18,6 @@ public class TestServlet {
 	@Autowired
 	CompanyService companyService;
 	
-	
 	@RequestMapping(method = RequestMethod.GET)
 	protected ModelAndView helloWorld() {
 		

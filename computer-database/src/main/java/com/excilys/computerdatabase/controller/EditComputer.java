@@ -16,9 +16,9 @@ import com.excilys.computerdatabase.dto.ComputerDTO;
 import com.excilys.computerdatabase.dto.ComputerMapper;
 import com.excilys.computerdatabase.model.Company;
 import com.excilys.computerdatabase.model.Computer;
-import com.excilys.computerdatabase.service.ComputerService;
 import com.excilys.computerdatabase.service.ICompanyService;
-import com.excilys.computerdatabase.utils.ComputerDTOValidator;
+import com.excilys.computerdatabase.service.IComputerService;
+import com.excilys.computerdatabase.utils.Validatable;
 
 @Controller
 @RequestMapping("/editComputer")
@@ -27,7 +27,11 @@ public class EditComputer {
 	@Autowired
 	private ICompanyService companyService;
 	
-	private static ComputerService computerService = new ComputerService();
+	@Autowired
+	private IComputerService computerService;
+	
+	@Autowired
+	private Validatable<ComputerDTO> computerDtoValidator;
 	
 	@RequestMapping(method = RequestMethod.GET)
 	protected ModelAndView doGet(
@@ -89,15 +93,15 @@ public class EditComputer {
 		}
 		
 		//If the computerDTO is valid, we add the computer to the database
-		List<String> errors = ComputerDTOValidator.validate(computerDTO);
+		List<String> errors = computerDtoValidator.validate(computerDTO);
 		if (errors.isEmpty()) {
 			Computer computer = ComputerMapper.createComputer(computerDTO);
 			//Create
 			if (computer.getId() == 0) {
-				computer = computerService.create(computer);
+				computerService.create(computer);
 			//Edit
 			} else {
-				computer = computerService.update(computer);
+				computerService.update(computer);
 			}
 			model = new ModelAndView("dashboard");
 		//Else, we return a list of errors
