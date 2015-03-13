@@ -2,6 +2,7 @@ package com.excilys.computerdatabase.dto;
 
 public class CompanyDTO {
 	private int id;
+	
 	private String name;
 	
 	public int getId() {

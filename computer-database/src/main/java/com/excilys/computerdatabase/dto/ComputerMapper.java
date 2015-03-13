@@ -1,6 +1,9 @@
 package com.excilys.computerdatabase.dto;
 
 import java.time.format.DateTimeFormatter;
+import java.util.Locale;
+
+import org.springframework.context.i18n.LocaleContextHolder;
 
 import com.excilys.computerdatabase.model.Company;
 import com.excilys.computerdatabase.model.Computer;
@@ -12,12 +15,18 @@ final public class ComputerMapper {
 	}
 	
 	public static ComputerDTO createComputerDTO(Computer computer) {
-		ComputerDTO computerDTO = new ComputerDTO();
+		Locale locale = LocaleContextHolder.getLocale();
 		
+		ComputerDTO computerDTO = new ComputerDTO();
 		computerDTO.setId(computer.getId());
 		computerDTO.setName(computer.getName());
 		if (computer.getIntroduced() != null) {
-			computerDTO.setIntroduced(computer.getIntroduced().format(DateTimeFormatter.ofPattern("MM/dd/yyyy")));
+			if (locale.getLanguage() == "fr") {
+				computerDTO.setIntroduced(computer.getIntroduced().format(DateTimeFormatter.ofPattern("d MMMM yyyy", locale)));
+			} else {
+				computerDTO.setIntroduced(computer.getIntroduced().format(DateTimeFormatter.ofPattern("MMM, dd yyyy", locale)));
+			}
+			
 		}
 		if (computer.getDiscontinued() != null) {
 			computerDTO.setDiscontinued(computer.getDiscontinued().format(DateTimeFormatter.ofPattern("MM/dd/yyyy")));

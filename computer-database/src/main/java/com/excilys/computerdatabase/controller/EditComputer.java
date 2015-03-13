@@ -40,7 +40,6 @@ public class EditComputer {
 		ModelAndView model = new ModelAndView("editComputer");
 		
 		List<Company> companies = companyService.getAll();
-		String title = "Add Computer";
 		ComputerDTO computerDTO = new ComputerDTO();
 		
 		int computerId = 0;
@@ -60,10 +59,8 @@ public class EditComputer {
 			if (computer != null) {
 				computerDTO = ComputerMapper.createComputerDTO(computer);
 			}
-			title = "Edit computer " + computerDTO.getName();
 		}
-		
-		model.addObject("title", title);
+
 		model.addObject("computerDTO", computerDTO);
 		model.addObject("companiesDTO", companiesDTO);
 		

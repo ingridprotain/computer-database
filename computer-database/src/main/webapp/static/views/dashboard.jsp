@@ -1,26 +1,27 @@
 <jsp:include page="header.jsp"></jsp:include>
 <%@taglib uri="http://java.sun.com/jsp/jstl/core" prefix="c" %>
+<%@taglib uri="http://www.springframework.org/tags" prefix="spring"%>
 <%@taglib tagdir="/WEB-INF/tags" prefix="my" %>
 
     <section id="main">
         <div class="container">
             <h1 id="homeTitle">
-                <c:out value="${count}" /> Computers found
+                <c:out value="${count}" /> <spring:message code="computer.found"></spring:message>
             </h1>
             
             <div id="actions" class="form-horizontal">
                 <div class="pull-left">
                     <form id="searchForm" action="/computer-database/dashboard" method="GET" class="form-inline">
-                        <input type="search" id="searchbox" name="search" class="form-control" placeholder="Search name" value="${ page.search }"/>
-                        <input type="submit" id="searchsubmit" value="Filter by name"
+                        <input type="search" id="searchbox" name="search" class="form-control" placeholder="<spring:message code="form.searchbox"></spring:message>" value="${ page.search }"/>
+                        <input type="submit" id="searchsubmit" value="<spring:message code="form.filter"></spring:message>"
                         class="btn btn-primary" />
                         <my:link name="x" target="dashboard" myClass="btn btn-default"/>
                     </form>
                     
                 </div>
                 <div class="pull-right">
-                	<my:link target="editComputer" name="Add Computer" myClass="btn btn-success"/>
-                    <a class="btn btn-default" id="editComputer" href="#" onclick="$.fn.toggleEditMode();">Edit</a>
+                	<a class="btn btn-success" href="/computer-database/editComputer"><spring:message code="computer.add"/></a>
+                    <a class="btn btn-default" id="editComputer" href="#" onclick="$.fn.toggleEditMode();"><spring:message code="form.edit"></spring:message></a>
                 </div>
             </div>
         </div>
@@ -45,17 +46,17 @@
                             </span>
                         </th>
                         <th>
-                            Computer name
+                            <spring:message code="computer.name"></spring:message>
                             <my:pagination page="${ page }" isOrderBy="true"/>
                         </th>
                         <th>
-                            Introduced date
+                            <spring:message code="computer.introduced"></spring:message>
                         </th>
                         <th>
-                            Discontinued date
+                            <spring:message code="computer.discontinued"></spring:message>
                         </th>
                         <th>
-                            Company
+                            <spring:message code="company.name"></spring:message>
                         </th>
 
                     </tr>
@@ -70,6 +71,7 @@
 	                        <td>
 	                        	<my:link name="${ computer.name }" target="editComputer" computerId="${ computer.id }"/>
 	                        </td>
+	                        
 	                        <td>${ computer.introduced }</td>
 	                        <td>${ computer.discontinued }</td>
 	                        <td>${ computer.companyName }</td>
@@ -84,6 +86,12 @@
         <my:pagination page="${ page }"/>
     </footer>
 </body>
+<script type="text/javascript">
+  var strings = new Array();
+  strings['computer.delete.ask'] = '<spring:message code="computer.delete.ask" javaScriptEscape="true" />';
+  strings['form.edit'] = '<spring:message code="form.edit" javaScriptEscape="true" />';
+  strings['form.view'] = '<spring:message code="form.view" javaScriptEscape="true" />';
+</script>
 <script src="${pageContext.request.contextPath}/static/js/jquery.min.js"></script>
 <script src="${pageContext.request.contextPath}/static/js/bootstrap.min.js"></script>
 <script src="${pageContext.request.contextPath}/static/js/dashboard.js"></script>

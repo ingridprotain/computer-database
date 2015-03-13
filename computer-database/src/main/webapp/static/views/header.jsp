@@ -1,5 +1,6 @@
 <!DOCTYPE html>
 <%@taglib tagdir="/WEB-INF/tags" prefix="my" %>
+<%@taglib uri="http://www.springframework.org/tags" prefix="spring"%>
 <html>
 <head>
 <title>Computer Database</title>
@@ -16,3 +17,4 @@
         	<my:link name="Application - Computer Database" target="dashboard" myClass="navbar-brand"/>
         </div>
     </header>
+   	<div style="text-align : right;"><a href="?lang=en">EN</a>/<a href="?lang=fr">FR</a></div>

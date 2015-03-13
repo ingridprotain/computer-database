@@ -7,7 +7,7 @@ public class ComputerDTO {
 	private String discontinued;
 	private int companyId;
 	private String companyName;
-	
+
 	public int getId() {
 		return id;
 	}
