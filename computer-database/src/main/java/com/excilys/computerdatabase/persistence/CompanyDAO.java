@@ -30,6 +30,8 @@ public class CompanyDAO implements ICompanyDAO {
 
 	@Override
 	public void delete(Company company) {
-		// TODO Auto-generated method stub
+		String query = "DELETE FROM company WHERE id=?;";
+		JdbcTemplate jdbcTemplate = new JdbcTemplate(dataSource);
+		jdbcTemplate.update(query, new Object[]{company.getId()});
 	}
 }

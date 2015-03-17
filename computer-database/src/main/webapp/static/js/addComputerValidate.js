@@ -24,9 +24,10 @@ $(document).ready(function(){
 	        	}
 	        },
 	        
+	        
 	        // Specify the validation error messages
 	        messages: {
-	        	computerName: "Please enter a computer name",
+	        	computerName: strings['form.check.name'],
 	        	introduced: "Please enter a correct date to the format mm/dd/YYYY",
 	        	discontinued: "Please enter a correct date to the format mm/dd/YYYY"
 	        },

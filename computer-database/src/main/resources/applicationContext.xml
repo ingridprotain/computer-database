@@ -9,16 +9,17 @@
 		http://www.springframework.org/schema/util/spring-util-3.2.xsd
 		http://www.springframework.org/schema/context
 		http://www.springframework.org/schema/context/spring-context-3.2.xsd">
-		
-	<bean id="springTest" class="com.excilys.computerdatabase.ui.SpringTest">
-		<property name="message" value="Tuto spring"></property>
-	</bean>
 	
-	<bean id="companyDAO" class="com.excilys.computerdatabase.persistence.CompanyDAO">
-		<property name="dataSource" ref="dataSource" />
-	</bean>
+	<context:annotation-config />  
+ 	<context:component-scan base-package="com.excilys.computerdatabase" />
+	<bean id="computerDao" class="com.excilys.computerdatabase.persistence.ComputerDAO" />
+    <bean id="computerService" class="com.excilys.computerdatabase.service.ComputerService" />
+    <bean id="computerDtoValidator" class="com.excilys.computerdatabase.utils.ComputerDTOValidator" />
+    
+    <bean id="companyDao" class="com.excilys.computerdatabase.persistence.CompanyDAO" />
+    <bean id="companyService" class="com.excilys.computerdatabase.service.CompanyService" />
 	
-	<bean id="dataSource" class="org.springframework.jdbc.datasource.DriverManagerDataSource">
+    <bean id="dataSource" class="org.springframework.jdbc.datasource.DriverManagerDataSource">
 		<property name="driverClassName" value="com.mysql.jdbc.Driver" />
 		<property name="url" value="jdbc:mysql://localhost/computer-database-db?zeroDateTimeBehavior=convertToNull" />
 		<property name="username" value="admincdb" />

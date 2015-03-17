@@ -62,6 +62,10 @@
         </div>
     </section>
 </body>
+<script type="text/javascript">
+  var strings = new Array();
+  strings['form.check.name'] = '<spring:message code="form.check.name" javaScriptEscape="true" />';
+</script>
 <script src="static/js/jquery.min.js"></script>
 <script src="static/js/jquery.validate.min.js"></script>
 <script src="static/js/addComputerValidate.js"></script>

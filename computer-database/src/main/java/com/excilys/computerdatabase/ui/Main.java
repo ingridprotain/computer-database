@@ -3,25 +3,25 @@ package com.excilys.computerdatabase.ui;
 import java.util.List;
 import java.util.Scanner;
 
-import org.springframework.context.ConfigurableApplicationContext;
+import org.springframework.context.ApplicationContext;
 import org.springframework.context.support.ClassPathXmlApplicationContext;
 
 import com.excilys.computerdatabase.dto.ComputerDTO;
 import com.excilys.computerdatabase.model.Company;
 import com.excilys.computerdatabase.model.Computer;
-import com.excilys.computerdatabase.persistence.CompanyDAO;
-import com.excilys.computerdatabase.service.CompanyService;
-import com.excilys.computerdatabase.service.ComputerService;
+import com.excilys.computerdatabase.service.ICompanyService;
+import com.excilys.computerdatabase.service.IComputerService;
 
 public class Main {
 	public static Scanner scan = new Scanner(System.in);
 	
-	private static ComputerService computerService = new ComputerService();
-	private static CompanyService companyService = new CompanyService();
+	private static ApplicationContext context = new ClassPathXmlApplicationContext("applicationContext.xml");
 
 	public static void main(String[] args) {
 		
-		ConfigurableApplicationContext context = new ClassPathXmlApplicationContext("applicationContext.xml");
+		IComputerService computerService = (IComputerService) context.getBean("computerService");
+		ICompanyService companyService = (ICompanyService) context.getBean("companyService");
+
 		String choixUser = ""; 
 		while (!choixUser.equals("exit"))
 		{
@@ -55,11 +55,11 @@ public class Main {
 			case "2":
 				System.out.println("List companies");
 
-				//List<Company> companies = CompanyDAO.getInstance().getAll();
+				List<Company> companies = companyService.getAll();
 				
-				/*for (Company c : companies) {
+				for (Company c : companies) {
 					System.out.println(c);
-				}*/
+				}
 				break;
 			
 			//Display one computer's details
@@ -79,11 +79,8 @@ public class Main {
 			case "-l company":
 				System.out.println("Identifiant of the company to research ?");
 				String companyIdString = scan.nextLine();
-				
-				CompanyDAO companyDAO = (CompanyDAO) context.getBean("companyDAO");
-				
-				
-				Company company = companyDAO.find(Integer.valueOf(companyIdString));
+
+				Company company = companyService.find(Integer.valueOf(companyIdString));
 				if (company != null) {
 					System.out.println(company);
 				} else {
@@ -94,13 +91,13 @@ public class Main {
 			//Add a computer
 			case "-c computer":
 			case "4":
-				editComputer("Insert");
+				//editComputer("Insert");
 				break;
 
 			//Update a computer
 			case "-u computer":
 			case "5":
-				editComputer("Update");
+				//editComputer("Update");
 				break;
 			
 			//Delete a computer
@@ -128,7 +125,6 @@ public class Main {
 				} else {
 					System.out.println("Company doesn't exist");
 				}
-				
 				break;
 			
 			default:
@@ -144,7 +140,7 @@ public class Main {
 	{
 		ComputerDTO computerDTO = new ComputerDTO();
 		
-		if (mode == "Update") {
+		/*if (mode == "Update") {
 			System.out.println("Identifiant of the computer to update ?");
 			String idComputerToUpdString = scan.nextLine();
 			Computer computer = computerService.find(Integer.parseInt(idComputerToUpdString));
@@ -153,7 +149,7 @@ public class Main {
 			} else {
 				System.out.println("Computer doesn't exist");
 			}
-		}
+		}*/
 		
 		
 		//champ name

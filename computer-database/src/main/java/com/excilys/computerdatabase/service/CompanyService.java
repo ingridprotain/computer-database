@@ -4,14 +4,19 @@ import java.util.List;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Transactional;
 
 import com.excilys.computerdatabase.model.Company;
 import com.excilys.computerdatabase.persistence.ICompanyDAO;
+import com.excilys.computerdatabase.persistence.IComputerDAO;
 
 @Service
 public class CompanyService implements ICompanyService{
 	@Autowired
 	private ICompanyDAO companyDao;
+	
+	@Autowired
+	private IComputerDAO computerDao;
 
 	@Override
 	public Company find(int id) {
@@ -24,8 +29,10 @@ public class CompanyService implements ICompanyService{
 	}
 
 	@Override
+	@Transactional
 	public void delete(Company company) {
 		// TODO Auto-generated method stub
-		
+		computerDao.deleteByCompanyId(company.getId());
+		companyDao.delete(company);
 	}
 }

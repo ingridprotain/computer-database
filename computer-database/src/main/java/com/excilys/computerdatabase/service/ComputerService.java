@@ -3,11 +3,13 @@ package com.excilys.computerdatabase.service;
 import java.util.List;
 
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.stereotype.Service;
 
 import com.excilys.computerdatabase.model.Computer;
 import com.excilys.computerdatabase.persistence.IComputerDAO;
 import com.excilys.computerdatabase.utils.Pages;
 
+@Service
 public class ComputerService implements IComputerService{
 	
 	@Autowired

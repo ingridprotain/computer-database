@@ -88,7 +88,7 @@ public class ComputerDAO implements IComputerDAO {
 	public int countSearch(String name) {
 		JdbcTemplate jdbcTemplate = new JdbcTemplate(dataSource);
 		String query = "SELECT COUNT(*) FROM computer AS c LEFT JOIN company AS co ON c.company_id = co.id WHERE c.name LIKE ? or co.name LIKE ?";
-		return jdbcTemplate.queryForObject(query, new Object[]{name, name}, Integer.class);
+		return jdbcTemplate.queryForObject(query, new Object[]{"%" + name + "%", "%" + name + "%"}, Integer.class);
 	}
 	
 	@Override
