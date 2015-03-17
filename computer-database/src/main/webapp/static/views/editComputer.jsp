@@ -65,6 +65,7 @@
 <script type="text/javascript">
   var strings = new Array();
   strings['form.check.name'] = '<spring:message code="form.check.name" javaScriptEscape="true" />';
+  strings['form.check.date'] = '<spring:message code="form.check.date" javaScriptEscape="true" />';
 </script>
 <script src="static/js/jquery.min.js"></script>
 <script src="static/js/jquery.validate.min.js"></script>

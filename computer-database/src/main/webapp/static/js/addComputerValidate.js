@@ -17,10 +17,10 @@ $(document).ready(function(){
 	        		"required": true
 	        	},
 	        	introduced: {
-	        		"regex": /^(0[1-9]|1[0-2])\/(0[1-9]|1\d|2\d|3[01])\/(19|20)\d{2}$/
+	        		"dateISO": true
 	        	},
 	        	discontinued: {
-	        		"regex": /^(0[1-9]|1[0-2])\/(0[1-9]|1\d|2\d|3[01])\/(19|20)\d{2}$/
+	        		"dateISO": true
 	        	}
 	        },
 	        
@@ -28,8 +28,8 @@ $(document).ready(function(){
 	        // Specify the validation error messages
 	        messages: {
 	        	computerName: strings['form.check.name'],
-	        	introduced: "Please enter a correct date to the format mm/dd/YYYY",
-	        	discontinued: "Please enter a correct date to the format mm/dd/YYYY"
+	        	introduced: strings['form.check.date'],
+	        	discontinued: strings['form.check.date']
 	        },
 	   
 	        submitHandler: function(form) {
