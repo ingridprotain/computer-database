@@ -23,16 +23,20 @@ final public class ComputerMapper {
 		if (computer.getIntroduced() != null) {
 			if (locale.getLanguage() == "fr") {
 				computerDTO.setIntroduced(computer.getIntroduced().format(DateTimeFormatter.ofPattern("d MMMM yyyy", locale)));
+				computerDTO.setIntroducedDateFormat(computer.getIntroduced().format(DateTimeFormatter.ofPattern("dd/MM/yyyy", locale)));
 			} else {
 				computerDTO.setIntroduced(computer.getIntroduced().format(DateTimeFormatter.ofPattern("MMM, dd yyyy", locale)));
+				computerDTO.setIntroducedDateFormat(computer.getIntroduced().format(DateTimeFormatter.ofPattern("MM/dd/yyyy", locale)));
 			}
 			
 		}
 		if (computer.getDiscontinued() != null) {
 			if (locale.getLanguage() == "fr") {
 				computerDTO.setDiscontinued(computer.getDiscontinued().format(DateTimeFormatter.ofPattern("d MMMM yyyy", locale)));
+				computerDTO.setDiscontinuedDateFormat(computer.getDiscontinued().format(DateTimeFormatter.ofPattern("dd/MM/yyyy", locale)));
 			} else {
 				computerDTO.setDiscontinued(computer.getDiscontinued().format(DateTimeFormatter.ofPattern("MMM, dd yyyy", locale)));
+				computerDTO.setDiscontinuedDateFormat(computer.getDiscontinued().format(DateTimeFormatter.ofPattern("MM/dd/yyyy", locale)));
 			}
 		}
 		computerDTO.setCompanyId(computer.getCompany().getId());
