@@ -47,7 +47,7 @@
                         </th>
                         <th>
                             <spring:message code="computer.name"></spring:message>
-                            <my:pagination page="${ page }" isOrderBy="true"/>
+                            <my:pagination pagination="${ pagination }" isOrderBy="true"/>
                         </th>
                         <th>
                             <spring:message code="computer.introduced"></spring:message>
@@ -83,7 +83,7 @@
     </section>
 
     <footer class="navbar-fixed-bottom">
-        <my:pagination page="${ page }"/>
+        <my:pagination pagination="${ pagination }"/>
     </footer>
 </body>
 <script type="text/javascript">

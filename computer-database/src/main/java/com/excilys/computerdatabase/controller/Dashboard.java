@@ -5,10 +5,10 @@ import java.util.List;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
+import org.springframework.ui.ModelMap;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.bind.annotation.RequestParam;
-import org.springframework.web.servlet.ModelAndView;
 
 import com.excilys.computerdatabase.dto.ComputerDTO;
 import com.excilys.computerdatabase.dto.ComputerMapper;
@@ -17,22 +17,21 @@ import com.excilys.computerdatabase.service.IComputerService;
 import com.excilys.computerdatabase.utils.Pages;
 
 @Controller
-@RequestMapping("/dashboard")
-public class ListOfComputer {
+
+public class Dashboard {
 
 	@Autowired
 	private IComputerService computerService;
 	
-	@RequestMapping(method = RequestMethod.GET)
-	protected ModelAndView doGet(
+	@RequestMapping(value="/dashboard", method = RequestMethod.GET)
+	protected String getListOfComputer(
+			ModelMap model,
 			@RequestParam(value = "limit", required = false) String limitString,
 			@RequestParam(value = "page", required = false) String pageString,
 			@RequestParam(value = "search", required = false) String search,
 			@RequestParam(value = "orderBy", required = false) String orderBy,
 			@RequestParam(value = "orderByColumn", required = false) String orderByColumn) {
-		
-		ModelAndView model = new ModelAndView("dashboard");
-		
+
 		List<Computer> computers;
 		int count;
 		
@@ -68,10 +67,25 @@ public class ListOfComputer {
 			cDTOs.add(ComputerMapper.createComputerDTO(c));
 		}
 		
-		model.addObject("page", pagination);
-		model.addObject("computers", cDTOs);
-		model.addObject("count", count);
+		model.addAttribute("page", pagination);
+		model.addAttribute("computers", cDTOs);
+		model.addAttribute("count", count);
 		
-		return model;
+		return "dashboard";
+	}
+
+	@RequestMapping(value="/deleteComputers", method = RequestMethod.POST)
+	protected String doPost(
+			@RequestParam(value = "selection", required = true) String selection) {
+
+		for (String field : selection.split(",")) {
+			int id = Integer.parseInt(field);
+			Computer computer = computerService.find(id);
+			if (computer != null) {
+				computerService.delete(computer);
+			}
+		}
+		
+		return "redirect:dashboard";
 	}
 }

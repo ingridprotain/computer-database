@@ -16,26 +16,26 @@
   	<spring-version>4.0.2.RELEASE</spring-version>
   </properties>
   <dependencies>
-  	<dependency>
+	<dependency>
 		<groupId>junit</groupId>
 		<artifactId>junit</artifactId>
 		<version>${junit-version}</version>
 		<scope>test</scope>
-    </dependency>
+  	</dependency>
     <dependency>
 	    <groupId>mysql</groupId>
 	    <artifactId>mysql-connector-java</artifactId>
 	    <version>${mysql-version}</version>
 	</dependency>
 	<dependency>
-	  <groupId>jstl</groupId>
-	  <artifactId>jstl</artifactId>
-	  <version>${jstl-version}</version>
+		 <groupId>jstl</groupId>
+		 <artifactId>jstl</artifactId>
+		 <version>${jstl-version}</version>
 	</dependency>
 	<dependency>
-	  <groupId>taglibs</groupId>
-	  <artifactId>standard</artifactId>
-	  <version>${taglibs-version}</version>
+		 <groupId>taglibs</groupId>
+		 <artifactId>standard</artifactId>
+		 <version>${taglibs-version}</version>
 	</dependency>
 	<dependency>
 		<groupId>commons-validator</groupId>
@@ -43,50 +43,25 @@
 		<version>${commons-validator-version}</version>
 	</dependency>
 	<dependency>
-	    <groupId>com.jolbox</groupId>
-	    <artifactId>bonecp</artifactId>
-	    <version>0.8.0.RELEASE</version>
+		<groupId>org.springframework</groupId>
+		<artifactId>spring-context</artifactId>
+		<version>${spring-version}</version>
 	</dependency>
 	<dependency>
-			<groupId>org.springframework</groupId>
-			<artifactId>spring-context</artifactId>
-			<version>${spring-version}</version>
-		</dependency>
-		<dependency>
-			<groupId>org.springframework</groupId>
-			<artifactId>spring-context-support</artifactId>
-			<version>${spring-version}</version>
-		</dependency>
-		<dependency>
-			<artifactId>spring-web</artifactId>
-			<groupId>org.springframework</groupId>
-			<version>${spring-version}</version>
-		</dependency>
-		<dependency>
-			<artifactId>spring-context</artifactId>
-			<groupId>org.springframework</groupId>
-			<version>${spring-version}</version>
-		</dependency>
-		<dependency>
-			<artifactId>spring-core</artifactId>
-			<groupId>org.springframework</groupId>
-			<version>${spring-version}</version>
-		</dependency>
-		<dependency>
-			<artifactId>spring-beans</artifactId>
-			<groupId>org.springframework</groupId>
-			<version>${spring-version}</version>
-		</dependency>
-		<dependency>
-			<artifactId>spring-jdbc</artifactId>
-			<groupId>org.springframework</groupId>
-			<version>${spring-version}</version>
-		</dependency>
-		<dependency>
-	        <groupId>org.springframework</groupId>
-	        <artifactId>spring-webmvc</artifactId>
-	        <version>${spring-version}</version>
-	    </dependency>
+		<artifactId>spring-web</artifactId>
+		<groupId>org.springframework</groupId>
+		<version>${spring-version}</version>
+	</dependency>
+	<dependency>
+		<artifactId>spring-jdbc</artifactId>
+		<groupId>org.springframework</groupId>
+		<version>${spring-version}</version>
+	</dependency>
+	<dependency>
+        <groupId>org.springframework</groupId>
+        <artifactId>spring-webmvc</artifactId>
+        <version>${spring-version}</version>
+    </dependency>
   </dependencies>
   <build>
     <plugins>

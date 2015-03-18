@@ -1,5 +1,5 @@
 <%@ taglib prefix="c" uri="http://java.sun.com/jsp/jstl/core" %> 
-<%@ attribute type="com.excilys.computerdatabase.utils.Pages" name="page" required="true" %>
+<%@ attribute type="com.excilys.computerdatabase.utils.Pages" name="pagination" required="true" %>
 <%@ attribute name="isOrderBy" required="false" %>
 
 <c:if test="${ empty isOrderBy }">

@@ -5,10 +5,10 @@ import java.util.List;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
+import org.springframework.ui.ModelMap;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.bind.annotation.RequestParam;
-import org.springframework.web.servlet.ModelAndView;
 
 import com.excilys.computerdatabase.dto.CompanyDTO;
 import com.excilys.computerdatabase.dto.CompanyMapper;
@@ -34,11 +34,10 @@ public class EditComputer {
 	private Validatable<ComputerDTO> computerDtoValidator;
 	
 	@RequestMapping(method = RequestMethod.GET)
-	protected ModelAndView doGet(
+	protected String doGet(
+			ModelMap model,
 			@RequestParam(value = "computerId", required = false) String id) {
-		
-		ModelAndView model = new ModelAndView("editComputer");
-		
+
 		List<Company> companies = companyService.getAll();
 		ComputerDTO computerDTO = new ComputerDTO();
 		
@@ -61,22 +60,21 @@ public class EditComputer {
 			}
 		}
 
-		model.addObject("computerDTO", computerDTO);
-		model.addObject("companiesDTO", companiesDTO);
+		model.addAttribute("computerDTO", computerDTO);
+		model.addAttribute("companiesDTO", companiesDTO);
 		
-		return model;
+		return "editComputer";
 	}
 
 	@RequestMapping(method = RequestMethod.POST)
-	protected ModelAndView doPost(
+	protected String doPost(
+			ModelMap model,
 			@RequestParam(value = "computerName", required = true) String computerName,
 			@RequestParam(value = "introduced", required = true) String introduced,
 			@RequestParam(value = "discontinued", required = true) String discontinued,
 			@RequestParam(value = "companyId", required = true) String companyId,
 			@RequestParam(value = "computerId", required = false) String computerId) {
-		
-		ModelAndView model;
-		
+
 		//Received a computerDTO from the client
 		ComputerDTO computerDTO = new ComputerDTO();
 		computerDTO.setName(computerName);
@@ -100,7 +98,7 @@ public class EditComputer {
 			} else {
 				computerService.update(computer);
 			}
-			model = new ModelAndView("dashboard");
+			return "redirect:dashboard";
 		//Else, we return a list of errors
 		} else {
 			List<Company> companies = companyService.getAll();
@@ -108,12 +106,12 @@ public class EditComputer {
 			for (Company company : companies) {
 				companiesDTO.add(CompanyMapper.createCompanyDTO(company));
 			}
-			model = new ModelAndView("editComputer");
-			model.addObject("companiesDTO", companiesDTO);
-			model.addObject("errors", errors);
-			model.addObject("computerDTO", computerDTO);
+			model.addAttribute("companiesDTO", companiesDTO);
+			model.addAttribute("errors", errors);
+			model.addAttribute("computerDTO", computerDTO);
+			
+			return "editComputer";
 		}
-		return model;
 	}
 
 }

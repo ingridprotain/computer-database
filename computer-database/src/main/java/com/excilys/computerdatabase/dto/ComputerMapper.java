@@ -29,7 +29,11 @@ final public class ComputerMapper {
 			
 		}
 		if (computer.getDiscontinued() != null) {
-			computerDTO.setDiscontinued(computer.getDiscontinued().format(DateTimeFormatter.ofPattern("MM/dd/yyyy")));
+			if (locale.getLanguage() == "fr") {
+				computerDTO.setDiscontinued(computer.getDiscontinued().format(DateTimeFormatter.ofPattern("d MMMM yyyy", locale)));
+			} else {
+				computerDTO.setDiscontinued(computer.getDiscontinued().format(DateTimeFormatter.ofPattern("MMM, dd yyyy", locale)));
+			}
 		}
 		computerDTO.setCompanyId(computer.getCompany().getId());
 		computerDTO.setCompanyName(computer.getCompany().getName());
