@@ -2,21 +2,50 @@
    xmlns:context="http://www.springframework.org/schema/context"
    xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
    xmlns:tx="http://www.springframework.org/schema/tx"
+   xmlns:mvc="http://www.springframework.org/schema/mvc" 
    xsi:schemaLocation="
    http://www.springframework.org/schema/beans     
-   http://www.springframework.org/schema/beans/spring-beans-3.0.xsd
+   http://www.springframework.org/schema/beans/spring-beans-4.0.xsd
    http://www.springframework.org/schema/context 
-   http://www.springframework.org/schema/context/spring-context-3.0.xsd
+   http://www.springframework.org/schema/context/spring-context-4.0.xsd
+   http://www.springframework.org/schema/mvc
+   http://www.springframework.org/schema/mvc/spring-mvc-3.0.xsd
    http://www.springframework.org/schema/tx
    http://www.springframework.org/schema/tx/spring-tx-3.0.xsd">
 	
-	<context:annotation-config />  
+	<context:component-scan base-package="com.excilys.computerdatabase" />
+	<mvc:annotation-driven validator="validator"/>
 	
-	<tx:annotation-driven proxy-target-class="true" transaction-manager="transactionManager"/>
+	<mvc:interceptors>
+		<bean class="org.springframework.web.servlet.i18n.LocaleChangeInterceptor">
+		    <property name="paramName" value="lang" />
+		</bean>
+	</mvc:interceptors>
 	
- 	<context:component-scan base-package="com.excilys.computerdatabase" />
+	<bean id="localeResolver" class="org.springframework.web.servlet.i18n.CookieLocaleResolver">
+	    <property name="defaultLocale" value="en"/>
+	</bean>
+	
+	<bean id="localeChangeInterceptor" class="org.springframework.web.servlet.i18n.LocaleChangeInterceptor">
+	    <property name="paramName" value="lang" />
+	</bean>
+	
+	<bean id="messageSource" class="org.springframework.context.support.ReloadableResourceBundleMessageSource">
+	    <property name="basename" value="classpath:messages" />
+	    <property name="defaultEncoding" value="UTF-8" />
+	</bean>
 
-    <bean id="viewResolver"
+	<bean id="handlerMapping" class="org.springframework.web.servlet.mvc.annotation.DefaultAnnotationHandlerMapping">
+	    <property name="interceptors">
+	        <ref bean="localeChangeInterceptor" />
+	    </property>
+	</bean>
+	
+	<bean id="validator" class="org.springframework.validation.beanvalidation.LocalValidatorFactoryBean">
+		<property name="validationMessageSource" ref="messageSource"></property>
+	</bean>
+	
+	<bean id="viewResolver"
     	class="org.springframework.web.servlet.view.InternalResourceViewResolver" >
         <property name="prefix">
             <value>/WEB-INF/views/</value>
@@ -25,16 +54,5 @@
             <value>.jsp</value>
         </property>
     </bean>
-    
-    <!-- bdd -->
-    <import resource="datasource-context.xml" />
-    
-    <!-- i18n -->
-	<import resource="i18n-context.xml" />
-	
-	<!-- transaction -->
-	<bean id="transactionManager" class="org.springframework.jdbc.datasource.DataSourceTransactionManager">
-		<property name="dataSource" ref="dataSource"></property>
-	</bean>
-
+   
 </beans>

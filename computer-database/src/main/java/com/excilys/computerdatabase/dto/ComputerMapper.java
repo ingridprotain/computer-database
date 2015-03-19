@@ -7,7 +7,6 @@ import org.springframework.context.i18n.LocaleContextHolder;
 
 import com.excilys.computerdatabase.model.Company;
 import com.excilys.computerdatabase.model.Computer;
-import com.excilys.computerdatabase.utils.DateValidator;
 
 final public class ComputerMapper {
 	private ComputerMapper() {
@@ -22,21 +21,17 @@ final public class ComputerMapper {
 		computerDTO.setName(computer.getName());
 		if (computer.getIntroduced() != null) {
 			if (locale.getLanguage() == "fr") {
-				computerDTO.setIntroduced(computer.getIntroduced().format(DateTimeFormatter.ofPattern("d MMMM yyyy", locale)));
-				computerDTO.setIntroducedDateFormat(computer.getIntroduced().format(DateTimeFormatter.ofPattern("dd/MM/yyyy", locale)));
+				computerDTO.setIntroduced(computer.getIntroduced().format(DateTimeFormatter.ofPattern("dd/MM/yyyy", locale)));
 			} else {
-				computerDTO.setIntroduced(computer.getIntroduced().format(DateTimeFormatter.ofPattern("MMM, dd yyyy", locale)));
-				computerDTO.setIntroducedDateFormat(computer.getIntroduced().format(DateTimeFormatter.ofPattern("MM/dd/yyyy", locale)));
+				computerDTO.setIntroduced(computer.getIntroduced().format(DateTimeFormatter.ofPattern("MM/dd/yyyy", locale)));
 			}
 			
 		}
 		if (computer.getDiscontinued() != null) {
 			if (locale.getLanguage() == "fr") {
-				computerDTO.setDiscontinued(computer.getDiscontinued().format(DateTimeFormatter.ofPattern("d MMMM yyyy", locale)));
-				computerDTO.setDiscontinuedDateFormat(computer.getDiscontinued().format(DateTimeFormatter.ofPattern("dd/MM/yyyy", locale)));
+				computerDTO.setDiscontinued(computer.getDiscontinued().format(DateTimeFormatter.ofPattern("dd/MM/yyyy", locale)));
 			} else {
-				computerDTO.setDiscontinued(computer.getDiscontinued().format(DateTimeFormatter.ofPattern("MMM, dd yyyy", locale)));
-				computerDTO.setDiscontinuedDateFormat(computer.getDiscontinued().format(DateTimeFormatter.ofPattern("MM/dd/yyyy", locale)));
+				computerDTO.setDiscontinued(computer.getDiscontinued().format(DateTimeFormatter.ofPattern("MM/dd/yyyy", locale)));
 			}
 		}
 		computerDTO.setCompanyId(computer.getCompany().getId());

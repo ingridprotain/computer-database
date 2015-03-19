@@ -2,6 +2,7 @@
 <%@taglib tagdir="/WEB-INF/tags" prefix="my" %>
 <%@taglib uri="http://java.sun.com/jsp/jstl/core" prefix="c" %>
 <%@taglib uri="http://www.springframework.org/tags" prefix="spring"%>
+<%@ taglib uri="http://www.springframework.org/tags/form" prefix="form"%>
     <section id="main">
         <div class="container">
             <div class="row">
@@ -19,36 +20,31 @@
 	                    	</c:otherwise>
                     	</c:choose>
                     </h1>
-                    
-                    <c:forEach items="${ errors }" var="error">
-	                    <div class="alert alert-danger">
-						    <strong>${ error }</strong>
-						</div>
-                    </c:forEach>
 
-                    <form id="addComputer" action="editComputer" method="POST">
+                    <form:form id="addComputer" action="editComputer" method="POST" modelAttribute="computerDTO">
                         <fieldset>
                             <div class="form-group">
                                 <label for="computerName"><spring:message code="computer.name"/></label>
-                                <input type="text" value="${ computerDTO.name }" class="form-control" id="computerName" name="computerName" placeholder="<spring:message code="computer.name"/>">
+                                <form:input type="text" path="name" value="${ computerDTO.name }" class="form-control" id="computerName" name="computerName" />
+                                <form:errors path="name" element="div" cssClass="alert alert-danger"/>
                             </div>
                             <div class="form-group">
                                 <label for="introduced"><spring:message code="computer.introduced"/></label>
-                                <input type="date" value="${ computerDTO.introducedDateFormat }" class="form-control" id="introduced" name="introduced" placeholder="<spring:message code="computer.introduced"/>">
+                                <form:input type="date" path="introduced" value="${ computerDTO.introduced }" class="form-control" id="introduced" name="introduced" />
+                                <form:errors path="introduced" element="div" cssClass="alert alert-danger"/>
                             </div>
                             <div class="form-group">
                                 <label for="discontinued"><spring:message code="computer.discontinued"/></label>
-                                <input type="date" value="${ computerDTO.discontinuedDateFormat }" class="form-control" id="discontinued" name="discontinued" placeholder="<spring:message code="computer.discontinued"/>">
+                                <form:input type="date" path="discontinued" value="${ computerDTO.discontinued }" class="form-control" id="discontinued" name="discontinued" />
+                                <form:errors path="discontinued" element="div" cssClass="alert alert-danger"/>
                             </div>
-                            <input type="hidden" value="${ computerDTO.id }" name="computerId"/>
+                            <form:input type="hidden" path="id" value="${ computerDTO.id }" name="computerId" />
                             <div class="form-group">
                                 <label for="companyId"><spring:message code="company.name"/></label>
-                                <select class="form-control" id="companyId" name="companyId" >
-                                	<option value="0">--</option>
-                                	<c:forEach items="${ companiesDTO }" var="companyDTO">
-                                    	<option value="${ companyDTO.id }" <c:if test="${companyDTO.id == computerDTO.companyId}">selected</c:if>>${ companyDTO.name }</option>
-                                   	</c:forEach>
-                                </select>
+                                <form:select path="companyId" class="form-control" id="companyId" name="companyId" >
+								<form:option value="0" label="--"/>
+									<form:options items="${ companiesDTO }" itemLabel="name" itemValue="id"></form:options>
+								</form:select>
                             </div>                  
                         </fieldset>
                         <div class="actions pull-right">
@@ -56,7 +52,7 @@
                             or
                             <a href="/computer-database/dashboard" class="btn btn-default"><spring:message code="form.cancel"/></a>
                         </div>
-                    </form>
+                    </form:form>
                 </div>
             </div>
         </div>
@@ -80,8 +76,8 @@
 	}
 
   	var strings = new Array();
-  	strings['form.check.name'] = '<spring:message code="form.check.name" javaScriptEscape="true" />';
-  	strings['form.check.date'] = '<spring:message code="form.check.date" javaScriptEscape="true" />';
+  	strings['form.check.name'] = '<spring:message code="NotEmpty.Computer.name" javaScriptEscape="true" />';
+  	strings['form.check.date'] = '<spring:message code="DateTimeFormat.Computer.date" javaScriptEscape="true" />';
 	if (getCookie("org.springframework.web.servlet.i18n.CookieLocaleResolver.LOCALE") == "fr") {
 		strings['form.regex'] = /^(0[1-9]|1\d|2\d|3[01])\/(0[1-9]|1[0-2])\/(19|20)\d{2}$/;
 	} else {

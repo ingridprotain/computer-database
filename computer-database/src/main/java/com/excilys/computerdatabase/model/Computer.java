@@ -3,16 +3,27 @@ package com.excilys.computerdatabase.model;
 import java.time.LocalDateTime;
 import java.time.format.DateTimeFormatter;
 
-/**
- * 
- * @author ingrid
- * Décris la table Computer
- */
+import javax.persistence.Entity;
+import javax.persistence.GeneratedValue;
+import javax.persistence.Id;
+import javax.persistence.JoinColumn;
+import javax.persistence.OneToMany;
+import javax.persistence.Table;
+
+@Entity
+@Table(name="computer")
 public class Computer {
+	
+	@Id
+	@GeneratedValue
 	private int id;
+	
 	private String name;
 	private LocalDateTime introduced;
 	private LocalDateTime discontinued;
+	
+	@OneToMany
+	@JoinColumn(name = "company_id")
 	private Company company;
 	
 	/**

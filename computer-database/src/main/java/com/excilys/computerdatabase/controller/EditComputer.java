@@ -3,9 +3,12 @@ package com.excilys.computerdatabase.controller;
 import java.util.ArrayList;
 import java.util.List;
 
+import javax.validation.Valid;
+
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.ModelMap;
+import org.springframework.validation.BindingResult;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.bind.annotation.RequestParam;
@@ -18,7 +21,6 @@ import com.excilys.computerdatabase.model.Company;
 import com.excilys.computerdatabase.model.Computer;
 import com.excilys.computerdatabase.service.ICompanyService;
 import com.excilys.computerdatabase.service.IComputerService;
-import com.excilys.computerdatabase.utils.Validatable;
 
 @Controller
 @RequestMapping("/editComputer")
@@ -29,9 +31,6 @@ public class EditComputer {
 	
 	@Autowired
 	private IComputerService computerService;
-	
-	@Autowired
-	private Validatable<ComputerDTO> computerDtoValidator;
 	
 	@RequestMapping(method = RequestMethod.GET)
 	protected String doGet(
@@ -69,27 +68,19 @@ public class EditComputer {
 	@RequestMapping(method = RequestMethod.POST)
 	protected String doPost(
 			ModelMap model,
-			@RequestParam(value = "computerName", required = true) String computerName,
-			@RequestParam(value = "introduced", required = true) String introduced,
-			@RequestParam(value = "discontinued", required = true) String discontinued,
-			@RequestParam(value = "companyId", required = true) String companyId,
-			@RequestParam(value = "computerId", required = false) String computerId) {
-
-		//Received a computerDTO from the client
-		ComputerDTO computerDTO = new ComputerDTO();
-		computerDTO.setName(computerName);
-		computerDTO.setIntroduced(introduced);
-		computerDTO.setDiscontinued(discontinued);
-		computerDTO.setCompanyId(Integer.valueOf(companyId));
+			@Valid ComputerDTO computerDTO,
+			BindingResult result) {
 		
-		//Edit
-		if (computerId != null) {
-			computerDTO.setId(Integer.valueOf(computerId));
-		}
-		
-		//If the computerDTO is valid, we add the computer to the database
-		List<String> errors = computerDtoValidator.validate(computerDTO);
-		if (errors.isEmpty()) {
+		if (result.hasErrors()) {
+			List<Company> companies = companyService.getAll();
+			List<CompanyDTO> companiesDTO = new ArrayList<CompanyDTO>();
+			for (Company company : companies) {
+				companiesDTO.add(CompanyMapper.createCompanyDTO(company));
+			}
+			model.addAttribute("companiesDTO", companiesDTO);
+			model.addAttribute("computerDTO", computerDTO);
+			return "editComputer";
+		} else {
 			Computer computer = ComputerMapper.createComputer(computerDTO);
 			//Create
 			if (computer.getId() == 0) {
@@ -99,18 +90,6 @@ public class EditComputer {
 				computerService.update(computer);
 			}
 			return "redirect:dashboard";
-		//Else, we return a list of errors
-		} else {
-			List<Company> companies = companyService.getAll();
-			List<CompanyDTO> companiesDTO = new ArrayList<CompanyDTO>();
-			for (Company company : companies) {
-				companiesDTO.add(CompanyMapper.createCompanyDTO(company));
-			}
-			model.addAttribute("companiesDTO", companiesDTO);
-			model.addAttribute("errors", errors);
-			model.addAttribute("computerDTO", computerDTO);
-			
-			return "editComputer";
 		}
 	}
 
