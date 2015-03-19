@@ -6,9 +6,11 @@ import javax.sql.DataSource;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.jdbc.core.JdbcTemplate;
+import org.springframework.stereotype.Repository;
 
 import com.excilys.computerdatabase.model.Company;
 
+@Repository
 public class CompanyDAO implements ICompanyDAO {
 	@Autowired
 	private DataSource dataSource;

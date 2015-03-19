@@ -8,10 +8,12 @@ import javax.sql.DataSource;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.jdbc.core.JdbcTemplate;
+import org.springframework.stereotype.Repository;
 
 import com.excilys.computerdatabase.model.Computer;
 import com.excilys.computerdatabase.utils.Pages;
 
+@Repository
 public class ComputerDAO implements IComputerDAO {
 	
 	@Autowired
