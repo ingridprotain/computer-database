@@ -1,11 +1,10 @@
 package com.excilys.computerdatabase.persistence;
 
+import java.util.ArrayList;
 import java.util.List;
 
-import javax.sql.DataSource;
-
+import org.hibernate.SessionFactory;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.jdbc.core.JdbcTemplate;
 import org.springframework.stereotype.Repository;
 
 import com.excilys.computerdatabase.model.Company;
@@ -13,27 +12,19 @@ import com.excilys.computerdatabase.model.Company;
 @Repository
 public class CompanyDAO implements ICompanyDAO {
 	@Autowired
-	private DataSource dataSource;
+	private SessionFactory sessionFactory;
 	
 	@Override
 	public Company find(int id) {
-		JdbcTemplate jdbcTemplate = new JdbcTemplate(dataSource);
-		String query = "SELECT id, name FROM company WHERE id=?";
-		Company company = jdbcTemplate.queryForObject(query, new Object[] {id}, new CompanyMapper());
-		return company;
+		return (Company) sessionFactory.getCurrentSession().get(Company.class, id);
 	}
 
 	@Override
 	public List<Company> getAll() {
-		JdbcTemplate jdbcTemplate = new JdbcTemplate(dataSource);
-		String query = "SELECT id, name FROM company";
-		return jdbcTemplate.query(query, new CompanyMapper());
+		return new ArrayList<Company>();
 	}
 
 	@Override
 	public void delete(Company company) {
-		String query = "DELETE FROM company WHERE id=?;";
-		JdbcTemplate jdbcTemplate = new JdbcTemplate(dataSource);
-		jdbcTemplate.update(query, new Object[]{company.getId()});
 	}
 }
