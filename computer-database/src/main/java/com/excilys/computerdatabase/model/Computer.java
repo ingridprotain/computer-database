@@ -1,14 +1,19 @@
 package com.excilys.computerdatabase.model;
 
+import java.util.Date;
+import java.sql.Timestamp;
 import java.time.LocalDateTime;
-import java.time.format.DateTimeFormatter;
 
+import javax.persistence.Column;
 import javax.persistence.Entity;
+import javax.persistence.FetchType;
 import javax.persistence.GeneratedValue;
 import javax.persistence.Id;
 import javax.persistence.JoinColumn;
-import javax.persistence.OneToMany;
+import javax.persistence.ManyToOne;
 import javax.persistence.Table;
+import javax.persistence.Temporal;
+import javax.persistence.TemporalType;
 
 @Entity
 @Table(name="computer")
@@ -16,14 +21,22 @@ public class Computer {
 	
 	@Id
 	@GeneratedValue
+	@Column(name="id")
 	private int id;
 	
+	@Column(name="name")
 	private String name;
-	private LocalDateTime introduced;
-	private LocalDateTime discontinued;
 	
-	@OneToMany
-	@JoinColumn(name = "company_id")
+	@Column(name = "introduced", nullable=true)
+	@Temporal(TemporalType.TIMESTAMP)
+	private Date introduced;
+	
+	@Column(name = "discontinued", nullable=true)
+	@Temporal(TemporalType.TIMESTAMP)
+	private Date discontinued;
+	
+	@ManyToOne(fetch=FetchType.EAGER, optional=true)
+	@JoinColumn(name="company_id", referencedColumnName="id")
 	private Company company;
 	
 	/**
@@ -42,13 +55,13 @@ public class Computer {
 	 * @return the introduced
 	 */
 	public LocalDateTime getIntroduced() {
-		return introduced;
+		return (introduced != null ? new Timestamp(introduced.getTime()).toLocalDateTime() : null);
 	}
 	/**
 	 * @return the discontinued
 	 */
 	public LocalDateTime getDiscontinued() {
-		return discontinued;
+		return (discontinued != null ? new Timestamp(discontinued.getTime()).toLocalDateTime() : null);
 	}
 	/**
 	 * @return the company
@@ -72,13 +85,13 @@ public class Computer {
 	 * @param introduced the introduced to set
 	 */
 	public void setIntroduced(LocalDateTime introduced) {
-		this.introduced = introduced;
+		this.introduced = (introduced == null ? null : new Date(Timestamp.valueOf(introduced).getTime()));
 	}
 	/**
 	 * @param discontinued the discontinued to set
 	 */
 	public void setDiscontinued(LocalDateTime discontinued) {
-		this.discontinued = discontinued;
+		this.discontinued = (discontinued == null ? null : new Date(Timestamp.valueOf(discontinued).getTime()));
 	}
 	/**
 	 * @param company the company to set
@@ -91,8 +104,8 @@ public class Computer {
 	public String toString() {
 		StringBuilder message = new StringBuilder();
 		message.append("Computer ").append(id).append(": ").append(name)
-			.append((introduced == null ? "" : ", introduced in " + introduced.format(DateTimeFormatter.ofPattern("MM/dd/yyyy"))))
-			.append((discontinued == null ? "" : ", discontinued in " + discontinued.format(DateTimeFormatter.ofPattern("MM/dd/yyyy"))))
+//			.append((introduced == null ? "" : ", introduced in " + introduced.format(DateTimeFormatter.ofPattern("MM/dd/yyyy"))))
+//			.append((discontinued == null ? "" : ", discontinued in " + discontinued.format(DateTimeFormatter.ofPattern("MM/dd/yyyy"))))
 			.append((company.getName() == null ? "" : " - Company : " + company.getName()));
 		
 		return message.toString();

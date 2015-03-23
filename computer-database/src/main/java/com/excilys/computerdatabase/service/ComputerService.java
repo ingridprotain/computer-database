@@ -44,12 +44,7 @@ public class ComputerService implements IComputerService{
 	public List<Computer> getAll(Pages pagination) {
 		return computerDao.getAll(pagination);
 	}
-
-	@Override
-	public List<Computer> getByName(Pages pagination) {
-		return computerDao.getByName(pagination);
-	}
-
+	
 	@Override
 	public int count() {
 		return computerDao.count();

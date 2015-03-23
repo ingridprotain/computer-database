@@ -13,7 +13,6 @@ public interface IComputerService {
 	
 	public List<Computer> getAll();
 	public List<Computer> getAll(Pages pagination);
-	public List<Computer> getByName(Pages pagination);
 	
 	public int count();
 	public int countSearch(String name);

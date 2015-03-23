@@ -31,7 +31,6 @@ public class CompanyService implements ICompanyService{
 	@Override
 	@Transactional
 	public void delete(Company company) {
-		// TODO Auto-generated method stub
 		computerDao.deleteByCompanyId(company.getId());
 		companyDao.delete(company);
 	}

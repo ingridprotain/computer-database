@@ -56,9 +56,10 @@ public class Pages {
 		return orderBy;
 	}
 	public void setOrderBy(String orderBy) {
-		if (orderBy != "ASC" || orderBy != "DESC") {
-			this.orderBy = orderBy;
+		if (orderBy.equals("DESC")) {
+			this.orderBy = "DESC";
 		} else {
+			this.orderBy = "ASC";
 		}
 	}
 	public String getOrderByColumn() {

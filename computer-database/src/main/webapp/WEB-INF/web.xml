@@ -23,6 +23,14 @@ id="WebApp_ID" version="3.0">
 	    <servlet-name>default</servlet-name>
 	    <url-pattern>*.js</url-pattern>
 	</servlet-mapping>
+	<servlet-mapping>
+	    <servlet-name>default</servlet-name>
+	    <url-pattern>*.woff</url-pattern>
+	</servlet-mapping>
+	<servlet-mapping>
+	    <servlet-name>default</servlet-name>
+	    <url-pattern>*.ttf</url-pattern>
+	</servlet-mapping>
 	
   	<context-param>
 		<param-name>contextConfigLocation</param-name>

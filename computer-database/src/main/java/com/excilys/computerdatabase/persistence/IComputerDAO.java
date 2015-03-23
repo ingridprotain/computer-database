@@ -17,5 +17,4 @@ public interface IComputerDAO {
 	
 	public List<Computer> getAll();
 	public List<Computer> getAll(Pages pagination);
-	public List<Computer> getByName(Pages pagination);
 }

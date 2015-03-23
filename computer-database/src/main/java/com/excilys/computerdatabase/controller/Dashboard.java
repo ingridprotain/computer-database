@@ -54,11 +54,11 @@ public class Dashboard {
 		if (search != null) {
 			pagination.setSearch(search);
 			count = computerService.countSearch(search);
-			computers = computerService.getByName(pagination);
 		} else {
 			count = computerService.count();
-			computers = computerService.getAll(pagination);
 		}
+		computers = computerService.getAll(pagination);
+		
 		pagination.setTotalPages(count / pagination.getLimit());
 		
 		//get the computers to display

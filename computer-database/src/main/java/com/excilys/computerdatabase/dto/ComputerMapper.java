@@ -34,8 +34,10 @@ final public class ComputerMapper {
 				computerDTO.setDiscontinued(computer.getDiscontinued().format(DateTimeFormatter.ofPattern("MM/dd/yyyy", locale)));
 			}
 		}
-		computerDTO.setCompanyId(computer.getCompany().getId());
-		computerDTO.setCompanyName(computer.getCompany().getName());
+		if (computer.getCompany() != null) {
+			computerDTO.setCompanyId(computer.getCompany().getId());
+			computerDTO.setCompanyName(computer.getCompany().getName());
+		}
 		return computerDTO;
 	}
 	
