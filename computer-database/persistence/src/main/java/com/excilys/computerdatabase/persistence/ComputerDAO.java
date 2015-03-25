@@ -9,13 +9,11 @@ import org.springframework.stereotype.Repository;
 import org.springframework.transaction.annotation.Transactional;
 
 import com.excilys.computerdatabase.model.Computer;
-import com.excilys.computerdatabase.model.QCompany;
 import com.excilys.computerdatabase.model.QComputer;
 import com.excilys.computerdatabase.utils.Pages;
 import com.mysema.query.jpa.JPQLQuery;
 import com.mysema.query.jpa.hibernate.HibernateDeleteClause;
 import com.mysema.query.jpa.hibernate.HibernateQuery;
-import com.mysema.query.jpa.impl.JPADeleteClause;
 
 @Repository
 public class ComputerDAO implements IComputerDAO {
