@@ -6,24 +6,11 @@
 	http://www.springframework.org/schema/security
 	http://www.springframework.org/schema/security/spring-security-3.2.xsd">
 
-	<global-method-security proxy-target-class="false"
-		pre-post-annotations="enabled" />
-		
 	<http entry-point-ref="digestAuthenticationEntryPoint">
 		<intercept-url pattern="/admin/**" access="ROLE_ADMIN" />
-
-		<access-denied-handler error-page="/403" />
- 
-		<form-login 
-		    login-page="/login" 
-		    default-target-url="/dashboard" 
-			authentication-failure-url="/login?error" 
-			username-parameter="username"
-			password-parameter="password" />
-		<logout logout-success-url="/login?logout"  />
 		
 		<custom-filter ref="digestAuthenticationFilter"
-			position="BASIC_AUTH_FILTER" />
+			after="BASIC_AUTH_FILTER" />
 	</http>
 	
 	<authentication-manager>
@@ -31,12 +18,14 @@
 	</authentication-manager>
 	
 	<beans:bean id="digestAuthenticationFilter"
-		class="org.springframework.security.web.authentication.www.DigestAuthenticationFilter"
-		p:authenticationEntryPoint-ref="digestAuthenticationEntryPoint"
-		p:userDetailsService-ref="userService" />
+		class="org.springframework.security.web.authentication.www.DigestAuthenticationFilter">
+		<beans:property name="userDetailsService" ref="userService" />
+		<beans:property name="authenticationEntryPoint" ref="digestAuthenticationEntryPoint" />
+	</beans:bean>
 		
 	<beans:bean id="digestAuthenticationEntryPoint"
-		class="org.springframework.security.web.authentication.www.DigestAuthenticationEntryPoint"
-		p:realmName="ComputerDatabase" p:nonceValiditySeconds="10" p:key="acegi" />
-
+		class="org.springframework.security.web.authentication.www.DigestAuthenticationEntryPoint">
+			<beans:property name="realmName" value="Http Digest Authentication" />
+			<beans:property name="key" value="realmsalt" />
+	</beans:bean>
 </beans:beans>
