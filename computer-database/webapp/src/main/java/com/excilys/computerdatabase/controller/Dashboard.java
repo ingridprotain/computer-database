@@ -74,7 +74,7 @@ public class Dashboard {
 		return "dashboard";
 	}
 
-	@RequestMapping(value="/deleteComputers", method = RequestMethod.POST)
+	@RequestMapping(value="/admin/deleteComputers", method = RequestMethod.POST)
 	protected String doPost(
 			@RequestParam(value = "selection", required = true) String selection) {
 

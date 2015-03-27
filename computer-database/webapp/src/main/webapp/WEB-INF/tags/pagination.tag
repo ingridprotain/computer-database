@@ -5,7 +5,7 @@
 <c:if test="${ empty isOrderBy }">
 	<div class="container text-center">
 		<ul class="pagination">
-			<li><a href="/computer-database/dashboard?page=1<c:if test="${ not empty page.orderBy }">&orderBy=${ page.orderBy }</c:if><c:if test="${ not empty page.search }">&search=${ page.search }</c:if><c:if test="${ not empty page.limit }">&limit=${ page.limit }</c:if>">
+			<li><a href="/webapp/dashboard?page=1<c:if test="${ not empty page.orderBy }">&orderBy=${ page.orderBy }</c:if><c:if test="${ not empty page.search }">&search=${ page.search }</c:if><c:if test="${ not empty page.limit }">&limit=${ page.limit }</c:if>">
 	 			&laquo;
 	 		</a></li>
 			
@@ -13,7 +13,7 @@
 				<c:when test="${ page.totalPages > 20 }">
 					<c:forEach var="i" begin="1" step="5" end="${page.totalPages +1}">
 					 	<li>
-					 		<a href="/computer-database/dashboard?page=${i}<c:if test="${ not empty page.orderBy }">&orderBy=${ page.orderBy }</c:if><c:if test="${ not empty page.search }">&search=${ page.search }</c:if><c:if test="${ not empty page.limit }">&limit=${ page.limit }</c:if>">
+					 		<a href="/webapp/dashboard?page=${i}<c:if test="${ not empty page.orderBy }">&orderBy=${ page.orderBy }</c:if><c:if test="${ not empty page.search }">&search=${ page.search }</c:if><c:if test="${ not empty page.limit }">&limit=${ page.limit }</c:if>">
 					 			${ i }
 					 		</a>
 					 	</li>
@@ -22,7 +22,7 @@
 				<c:otherwise>
 					 <c:forEach var="i" begin="1" step="1" end="${page.totalPages +1}">
 					 	<li>
-					 		<a href="/computer-database/dashboard?page=${i}<c:if test="${ not empty page.orderBy }">&orderBy=${ page.orderBy }</c:if><c:if test="${ not empty page.search }">&search=${ page.search }</c:if><c:if test="${ not empty page.limit }">&limit=${ page.limit }</c:if>">
+					 		<a href="/webapp/dashboard?page=${i}<c:if test="${ not empty page.orderBy }">&orderBy=${ page.orderBy }</c:if><c:if test="${ not empty page.search }">&search=${ page.search }</c:if><c:if test="${ not empty page.limit }">&limit=${ page.limit }</c:if>">
 					 			${ i }
 					 		</a>
 					 	</li>
@@ -30,7 +30,7 @@
 				</c:otherwise>
 			</c:choose>
 			
-			<li><a href="/computer-database/dashboard?page=${ page.totalPages + 1 }<c:if test="${ not empty page.orderBy }">&orderBy=${ page.orderBy }</c:if><c:if test="${ not empty page.search }">&search=${ page.search }</c:if><c:if test="${ not empty page.limit }">&limit=${ page.limit }</c:if>">
+			<li><a href="/webapp/dashboard?page=${ page.totalPages + 1 }<c:if test="${ not empty page.orderBy }">&orderBy=${ page.orderBy }</c:if><c:if test="${ not empty page.search }">&search=${ page.search }</c:if><c:if test="${ not empty page.limit }">&limit=${ page.limit }</c:if>">
 	 			&raquo;
 	 		</a></li>
 		</ul>
@@ -38,18 +38,18 @@
 		
 	
 		<div class="btn-group btn-group-sm pull-right" role="group" >
-			<a class="btn btn-default" href="/computer-database/dashboard?limit=10<c:if test="${ not empty page.orderBy }">&orderBy=${ page.orderBy }</c:if><c:if test="${ not empty page.search }">&search=${ page.search }</c:if>">10</a>
-			<a class="btn btn-default" href="/computer-database/dashboard?limit=50<c:if test="${ not empty page.orderBy }">&orderBy=${ page.orderBy }</c:if><c:if test="${ not empty page.search }">&search=${ page.search }</c:if>">50</a>
-			<a class="btn btn-default" href="/computer-database/dashboard?limit=100<c:if test="${ not empty page.orderBy }">&orderBy=${ page.orderBy }</c:if><c:if test="${ not empty page.search }">&search=${ page.search }</c:if>">100</a>
+			<a class="btn btn-default" href="/webapp/dashboard?limit=10<c:if test="${ not empty page.orderBy }">&orderBy=${ page.orderBy }</c:if><c:if test="${ not empty page.search }">&search=${ page.search }</c:if>">10</a>
+			<a class="btn btn-default" href="/webapp/dashboard?limit=50<c:if test="${ not empty page.orderBy }">&orderBy=${ page.orderBy }</c:if><c:if test="${ not empty page.search }">&search=${ page.search }</c:if>">50</a>
+			<a class="btn btn-default" href="/webapp/dashboard?limit=100<c:if test="${ not empty page.orderBy }">&orderBy=${ page.orderBy }</c:if><c:if test="${ not empty page.search }">&search=${ page.search }</c:if>">100</a>
 	 	</div>
 	</div>
 </c:if>
 
 <c:if test="${ not empty isOrderBy }">
-	<a href="/computer-database/dashboard?orderBy=ASC&orderByColumn=name<c:if test="${ not empty page.search }">&search=${ page.search }</c:if><c:if test="${ not empty page.limit }">&limit=${ page.limit }</c:if>">
+	<a href="/webapp/dashboard?orderBy=ASC&orderByColumn=name<c:if test="${ not empty page.search }">&search=${ page.search }</c:if><c:if test="${ not empty page.limit }">&limit=${ page.limit }</c:if>">
 		&uarr;
 	</a>
-	<a href="/computer-database/dashboard?orderBy=DESC&orderByColumn=name<c:if test="${ not empty page.search }">&search=${ page.search }</c:if><c:if test="${ not empty page.limit }">&limit=${ page.limit }</c:if>">
+	<a href="/webapp/dashboard?orderBy=DESC&orderByColumn=name<c:if test="${ not empty page.search }">&search=${ page.search }</c:if><c:if test="${ not empty page.limit }">&limit=${ page.limit }</c:if>">
 		&darr;
 	</a>
 </c:if>

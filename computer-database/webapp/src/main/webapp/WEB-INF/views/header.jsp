@@ -14,7 +14,7 @@
 <body>
     <header class="navbar navbar-inverse navbar-fixed-top">
         <div class="container">
-        	<my:link name="Application - Computer Database" target="dashboard" myClass="navbar-brand"/>
+        	<my:link name="Application - Computer Database" target="/webapp/dashboard" myClass="navbar-brand"/>
         </div>
     </header>
    	<div style="text-align : right;"><a href="?lang=en">EN</a>/<a href="?lang=fr">FR</a></div>

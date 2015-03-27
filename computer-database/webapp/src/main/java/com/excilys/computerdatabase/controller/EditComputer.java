@@ -23,7 +23,7 @@ import com.excilys.computerdatabase.service.ICompanyService;
 import com.excilys.computerdatabase.service.IComputerService;
 
 @Controller
-@RequestMapping("/editComputer")
+@RequestMapping("/admin/editComputer")
 public class EditComputer {
 	
 	@Autowired
@@ -89,7 +89,7 @@ public class EditComputer {
 			} else {
 				computerService.update(computer);
 			}
-			return "redirect:dashboard";
+			return "redirect:/dashboard";
 		}
 	}
 

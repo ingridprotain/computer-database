@@ -11,7 +11,7 @@
             
             <div id="actions" class="form-horizontal">
                 <div class="pull-left">
-                    <form id="searchForm" action="/computer-database/dashboard" method="GET" class="form-inline">
+                    <form id="searchForm" action="/webapp/dashboard" method="GET" class="form-inline">
                         <input type="search" id="searchbox" name="search" class="form-control" placeholder="<spring:message code="form.searchbox"></spring:message>" value="${ page.search }"/>
                         <input type="submit" id="searchsubmit" value="<spring:message code="form.filter"></spring:message>"
                         class="btn btn-primary" />
@@ -20,13 +20,13 @@
                     
                 </div>
                 <div class="pull-right">
-                	<a class="btn btn-success" href="/computer-database/editComputer"><spring:message code="computer.add"/></a>
+                	<a class="btn btn-success" href="/webapp/admin/editComputer"><spring:message code="computer.add"/></a>
                     <a class="btn btn-default" id="editComputer" href="#" onclick="$.fn.toggleEditMode();"><spring:message code="form.edit"></spring:message></a>
                 </div>
             </div>
         </div>
 
-        <form id="deleteForm" action="deleteComputers" method="POST">
+        <form id="deleteForm" action="admin/deleteComputers" method="POST">
             <input type="hidden" name="selection" value="${ computer.id }">
         </form>
 
@@ -69,7 +69,7 @@
 	                            <input type="checkbox" name="cb" class="cb" value="${ computer.id }">
 	                        </td>
 	                        <td>
-	                        	<my:link name="${ computer.name }" target="editComputer" computerId="${ computer.id }"/>
+	                        	<my:link name="${ computer.name }" target="admin/editComputer" computerId="${ computer.id }"/>
 	                        </td>
 	                        
 	                        <td>${ computer.introduced }</td>
