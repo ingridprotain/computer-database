@@ -1,3 +1,4 @@
+<?xml version="1.0" encoding="UTF-8"?>
 <project xmlns="http://maven.apache.org/POM/4.0.0" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
 	xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/maven-v4_0_0.xsd">
 	<modelVersion>4.0.0</modelVersion>
@@ -15,6 +16,7 @@
 		<module>persistence</module>
 		<module>binding</module>
 		<module>console</module>
+		<module>webservice</module>
 	</modules>
 
 	<properties>
@@ -30,6 +32,7 @@
 		<spring-version>4.0.2.RELEASE</spring-version>
 		<querydsl-version>3.6.2</querydsl-version>
 		<spring-security-version>3.2.6.RELEASE</spring-security-version>
+		<jersey-version>2.17</jersey-version>
 	</properties>
 	<dependencyManagement>
 		<dependencies>
@@ -52,6 +55,11 @@
 			<dependency>
 				<groupId>${project-groupId}</groupId>
 				<artifactId>binding</artifactId>
+				<version>${project-version}</version>
+			</dependency>
+			<dependency>
+				<groupId>${project-groupId}</groupId>
+				<artifactId>webservice</artifactId>
 				<version>${project-version}</version>
 			</dependency>
 
@@ -154,12 +162,48 @@
 				<artifactId>spring-security-taglibs</artifactId>
 				<version>${spring-security-version}</version>
 			</dependency>
-			
+
 			<dependency>
 				<groupId>org.springframework.security</groupId>
 				<artifactId>spring-security-core</artifactId>
 				<version>${spring-security-version}</version>
 			</dependency>
+
+			<!-- JAX RS (Web service) -->
+			<dependency>
+				<groupId>org.glassfish.jersey.core</groupId>
+				<artifactId>jersey-server</artifactId>
+				<version>${jersey-version}</version>
+				<exclusions>
+					<exclusion>
+						<groupId>org.springframework</groupId>
+						<artifactId>spring</artifactId>
+					</exclusion>
+					<exclusion>
+						<groupId>org.springframework</groupId>
+						<artifactId>spring-core</artifactId>
+					</exclusion>
+					<exclusion>
+						<groupId>org.springframework</groupId>
+						<artifactId>spring-web</artifactId>
+					</exclusion>
+					<exclusion>
+						<groupId>org.springframework</groupId>
+						<artifactId>spring-beans</artifactId>
+					</exclusion>
+					<exclusion>
+						<groupId>org.springframework</groupId>
+						<artifactId>spring-context</artifactId>
+					</exclusion>
+				</exclusions>
+			</dependency>
+
+			<dependency>
+				<groupId>org.glassfish.jersey.containers</groupId>
+				<artifactId>jersey-container-servlet</artifactId>
+				<version>${jersey-version}</version>
+			</dependency>
+
 		</dependencies>
 	</dependencyManagement>
 	<build>

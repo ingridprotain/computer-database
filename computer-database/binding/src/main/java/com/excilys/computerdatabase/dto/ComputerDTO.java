@@ -51,4 +51,22 @@ public class ComputerDTO {
 	public void setCompanyName(String companyName) {
 		this.companyName = companyName;
 	}
+	@Override
+	public String toString() {
+		StringBuilder string = new StringBuilder();
+		string.append(id).append(" - ").append(name);
+		if (introduced != null) {
+			string.append(" introduced : ").append(introduced);
+		}
+		if (discontinued != null) {
+			string.append(", discontinued : ").append(discontinued);
+		}
+		if (companyName != null) {
+			string.append(" - ").append(companyName);
+		}
+		
+		return string.toString();
+	}
+	
+	
 }

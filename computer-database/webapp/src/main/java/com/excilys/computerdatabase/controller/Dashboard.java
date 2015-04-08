@@ -17,7 +17,6 @@ import com.excilys.computerdatabase.service.IComputerService;
 import com.excilys.computerdatabase.utils.Pages;
 
 @Controller
-
 public class Dashboard {
 
 	@Autowired
@@ -70,7 +69,7 @@ public class Dashboard {
 		model.addAttribute("page", pagination);
 		model.addAttribute("computers", cDTOs);
 		model.addAttribute("count", count);
-		
+
 		return "dashboard";
 	}
 

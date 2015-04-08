@@ -1,8 +1,8 @@
 <project xmlns="http://maven.apache.org/POM/4.0.0" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
 	xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/maven-v4_0_0.xsd">
 	<modelVersion>4.0.0</modelVersion>
-	<artifactId>console</artifactId>
-	<packaging>jar</packaging>
+	<artifactId>webservice</artifactId>
+	<packaging>war</packaging>
 	<name>computer-database Maven Webapp</name>
 	<url>http://maven.apache.org</url>
 	<parent>
@@ -12,18 +12,20 @@
 		<version>1.0</version>
 	</parent>
 	<dependencies>
+
 		<dependency>
 			<groupId>${project-groupId}</groupId>
 			<artifactId>binding</artifactId>
 		</dependency>
 		
 		<dependency>
+			<groupId>${project-groupId}</groupId>
+			<artifactId>service</artifactId>
+		</dependency>
+		
+		<dependency>
 			<groupId>mysql</groupId>
 			<artifactId>mysql-connector-java</artifactId>
-		</dependency>
-		<dependency>
-			<groupId>jstl</groupId>
-			<artifactId>jstl</artifactId>
 		</dependency>
 		
 		<dependency>
@@ -39,23 +41,16 @@
 			<artifactId>spring-orm</artifactId>
 		</dependency>	
 		
-		<!-- Spring security -->
-		<!-- Use for user authentification -->
-		<dependency>
-			<groupId>org.springframework.security</groupId>
-			<artifactId>spring-security-web</artifactId>
-		</dependency>
-		<dependency>
-			<groupId>org.springframework.security</groupId>
-			<artifactId>spring-security-config</artifactId>
-		</dependency>
-		<dependency>
-			<groupId>org.springframework.security</groupId>
-			<artifactId>spring-security-taglibs</artifactId>
-		</dependency>
-		<dependency>
-			<groupId>org.springframework.security</groupId>
-			<artifactId>spring-security-core</artifactId>
-		</dependency>
+		<!-- JAX RS (Web service) -->
+			<dependency>
+				<groupId>org.glassfish.jersey.core</groupId>
+				<artifactId>jersey-server</artifactId>
+			</dependency>
+
+			<dependency>
+				<groupId>org.glassfish.jersey.containers</groupId>
+				<artifactId>jersey-container-servlet</artifactId>
+			</dependency>
+
 	</dependencies>
 </project>

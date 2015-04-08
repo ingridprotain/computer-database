@@ -106,7 +106,8 @@ public class Computer {
 		message.append("Computer ").append(id).append(": ").append(name)
 //			.append((introduced == null ? "" : ", introduced in " + introduced.format(DateTimeFormatter.ofPattern("MM/dd/yyyy"))))
 //			.append((discontinued == null ? "" : ", discontinued in " + discontinued.format(DateTimeFormatter.ofPattern("MM/dd/yyyy"))))
-			.append((company.getName() == null ? "" : " - Company : " + company.getName()));
+//			.append((company.getName() == null ? "" : " - Company : " + company.getName()))
+		;
 		
 		return message.toString();
 	}
