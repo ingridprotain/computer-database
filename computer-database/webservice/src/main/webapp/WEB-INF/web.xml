@@ -12,7 +12,7 @@ id="WebApp_ID" version="3.0">
 	
 	<context-param>
 		<param-name>contextConfigLocation</param-name>
-		<param-value>classpath:webservice-context.xml</param-value>
+		<param-value>classpath*:/webservice-context.xml</param-value>
 	</context-param>
 	
 	<servlet>

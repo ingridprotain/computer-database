@@ -1,9 +1,17 @@
 package com.excilys.computerdatabase.ui;
 
-import java.net.MalformedURLException;
 import java.util.List;
 import java.util.Scanner;
 
+import javax.ws.rs.client.Client;
+import javax.ws.rs.client.ClientBuilder;
+import javax.ws.rs.client.Entity;
+import javax.ws.rs.client.WebTarget;
+import javax.ws.rs.core.GenericType;
+import javax.ws.rs.core.MediaType;
+import javax.ws.rs.core.Response;
+
+import org.glassfish.jersey.jackson.JacksonFeature;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Component;
 
@@ -23,7 +31,10 @@ public class MainView {
 	@Autowired
 	private ICompanyService companyService;
 	
-	public void start() throws MalformedURLException {
+	private Client client = ClientBuilder.newBuilder().register(JacksonFeature.class).build();
+	private WebTarget target = client.target("http://localhost:8080/webservice/rest/computer");
+	
+	public void start() {
 		String choixUser = ""; 
 		while (!choixUser.equals("exit"))
 		{
@@ -41,106 +52,54 @@ public class MainView {
 				System.out.println("7. Delete a company with related computers: -d company");
 				System.out.println("Exit: exit");
 				break;
-			
-//			case "0":
-//				URL url = new URL("http://localhost:3333/webapp/findComputer?wsdl");
-//				QName qname = new QName("http://ws.computerdatabase.excilys.com/", "ComputerWebServiceService");
-//				Service service = Service.create(url, qname);
-//				
-//				IComputerWebService computerWebService = service.getPort(IComputerWebService.class);
-//				
-//				ComputerDTO computerDTO = computerWebService.find(1);
-//				System.out.println(computerDTO);
-//				
-//				System.out.println(computerService.find(1));
-//				
-//				break;
-			
+
 			//Display the computers list
 			case "-l computers":
 			case "1":
-				System.out.println("List computers");
-				List<Computer> computers = computerService.getAll();
-				for (Computer c : computers) {
-					System.out.println(c);
-				}
+				getAllComputers();
 				break;
 				
 			//Display the companies list
 			case "-l companies":
 			case "2":
-				System.out.println("List companies");
-
-				List<Company> companies = companyService.getAll();
-				
-				for (Company c : companies) {
-					System.out.println(c);
-				}
+				getAllCompanies();
 				break;
 			
 			//Display one computer's details
 			case "-l computer":
 			case "3":
-				System.out.println("Identifiant of the computer to research ?");
-				String idComputerString = scan.nextLine();
-				
-				Computer computer = computerService.find(Integer.parseInt(idComputerString));
-				if (computer != null) {
-					System.out.println(computer);
-				} else {
-					System.out.println("Computer doesn't exist");
-				}
+				String computer_id = userChoice("Identifiant of the computer to research ?");
+				getComputer(computer_id);
 				break;
 				
 			case "-l company":
-				System.out.println("Identifiant of the company to research ?");
-				String companyIdString = scan.nextLine();
-
-				Company company = companyService.find(Integer.valueOf(companyIdString));
-				if (company != null) {
-					System.out.println(company);
-				} else {
-					System.out.println("Company doesn't exist");
-				}
+//				int company_id = userChoice("Identifiant of the company to research ?");
+//				getCompany(company_id);
 				break;
 				
 			//Add a computer
 			case "-c computer":
 			case "4":
-				//editComputer("Insert");
+				createComputer();
 				break;
 
 			//Update a computer
 			case "-u computer":
 			case "5":
-				//editComputer("Update");
 				break;
 			
 			//Delete a computer
 			case "-d computer":
 			case "6":
-				System.out.println("Identifiant of the computer to delete ?");
-				String idComputerToDelString = scan.nextLine();
-				Computer computerToDel = computerService.find(Integer.parseInt(idComputerToDelString));
-				if (computerToDel != null) {
-					computerService.delete(computerToDel);
-					System.out.println("Computer deleted");
-				} else {
-					System.out.println("Computer doesn't exist");
-				}
+//				int computer_del_id = userChoice("Identifiant of the computer to delete ?");
+//				deleteComputer(computer_del_id);
 				break;
 			
+			//Delete a company with computers related
 			case "-d company":
 			case "7":
-				System.out.println("Identifiant of the company to delete ?");
-				String companyIdToDelString = scan.nextLine();
-				Company companyToDel = companyService.find(Integer.parseInt(companyIdToDelString));
-				if (companyToDel != null) {
-					companyService.delete(companyToDel);
-					System.out.println("Company and computers related deleted");
-				} else {
-					System.out.println("Company doesn't exist");
-				}
+//				int company_del_id = userChoice("Identifiant of the company to delete ?");
+//				deleteCompany(company_del_id);
 				break;
 			
 			default:
@@ -149,70 +108,87 @@ public class MainView {
 		}
 	}
 	
-	/**
-	 * Under the edit menu
-	 */
-	public void editComputer(String mode)
-	{
-		ComputerDTO computerDTO = new ComputerDTO();
+	
+	public void getComputer(String id) {
+		ComputerDTO computerDTO = target.path("find").path(id).request(MediaType.APPLICATION_JSON).get(new GenericType<ComputerDTO>() {});
+		System.out.println(computerDTO.toString());
+	}
+	
+	public void getCompany(int id) {
 		
-		/*if (mode == "Update") {
-			System.out.println("Identifiant of the computer to update ?");
-			String idComputerToUpdString = scan.nextLine();
-			Computer computer = computerService.find(Integer.parseInt(idComputerToUpdString));
-			if (computer != null) {
-				System.out.println(computer);
-			} else {
-				System.out.println("Computer doesn't exist");
-			}
-		}*/
-		
-		
-		//champ name
-		if (mode == "Insert") {
-			System.out.println("Name of the computer?");
-			computerDTO.setName(scan.nextLine());
-		} else if (mode == "Update") {
-			System.out.println("Change name of the computer? Y/N");
-			if (userConfirm() == true) {
-				computerDTO.setName(scan.nextLine());
-			}
+	}
+	
+	public void getAllComputers() {
+		List<ComputerDTO> computerDTOs = target.path("all").request(MediaType.APPLICATION_JSON).get(new GenericType<List<ComputerDTO>>() {});
+		for(ComputerDTO cDTO : computerDTOs) {
+			System.out.println(cDTO.toString());
 		}
-		
-		//champ introducted
-		System.out.println(mode + " the introduction date (format = mm/jj/aaaa)? Y/N");
-		if (userConfirm() == true) {
-			System.out.print("Introduced in : ");
-			computerDTO.setIntroduced(scan.nextLine());
+	}
+	
+	public void getAllCompanies() {
+		System.out.println("List companies");
+		List<Company> companies = companyService.getAll();
+		for (Company c : companies) {
+			System.out.println(c);
 		}
-		
-		//champ discontinued
-		System.out.println(mode + " the discontinued date (format = mm/jj/aaaa)? Y/N");
-		if (userConfirm() == true) {
-			System.out.print("Discontinued in : ");
-			computerDTO.setDiscontinued(scan.nextLine());
-		}
-		
-		//champ company_id
-		System.out.println(mode + " the company? Y/N");
-		if (userConfirm() == true) {
-			System.out.print("Company's id: ");
-			computerDTO.setCompanyId((Integer.parseInt(scan.nextLine())));
-		}
-		
-		/*List<String> errors = ComputerDTOValidator.validate(computerDTO);
-		if (errors.isEmpty()) {
-			Computer computer = ComputerMapper.createComputer(computerDTO);
-			if (mode == "Insert") {
-				computerService.create(computer);
-			} else {
-				//ComputerDAO.getInstance().update(ComputerValidator.getComputer());
-			}
+	}
+	
+	public void deleteComputer(int id) {
+		Computer computer = computerService.find(id);
+		if (computer != null) {
+			computerService.delete(computer);
+			System.out.println("Computer deleted");
 		} else {
-			for(String error : errors) {
-				System.out.println(error);
-			}
-		}*/
+			System.out.println("Computer doesn't exist");
+		}
+	}
+	
+	public void deleteCompany(int id) {
+		Company company = companyService.find(id);
+		if (company != null) {
+			companyService.delete(company);
+			System.out.println("Company and computers related deleted");
+		} else {
+			System.out.println("Company doesn't exist");
+		}
+	}
+	
+	public void createComputer() {
+		String name = userChoice("Name of the computer?");
+		editComputer(name);
+	}
+	
+	public void updateComputer() {
+		String name = userChoiceWithConfirm("Edit the name of the computer? Y/N", "Name : ");
+		editComputer(name);
+	}
+	
+	
+	public void editComputer(String name)
+	{
+		
+		String introduced = userChoiceWithConfirm("Edit the introduction date (format = mm/jj/aaaa)? Y/N", "Introduced in : ");
+		String discontinued = userChoiceWithConfirm("Edit the discontinued date (format = mm/jj/aaaa)? Y/N", "Discontinued in : ");
+		String company = userChoiceWithConfirm("Edit the company? Y/N", "Company's id: ");
+		
+		ComputerDTO computerDTO = new ComputerDTO();
+		if (name != null) {
+			computerDTO.setName(name);
+		}
+		if (introduced != null) {
+			computerDTO.setIntroduced(introduced);
+		}
+		if (discontinued != null) {
+			computerDTO.setDiscontinued(discontinued);
+		}
+		if (company != null) {
+			computerDTO.setCompanyId(Integer.valueOf(company));
+		}
+		
+		Response response = target.request(MediaType.APPLICATION_JSON).post(Entity.entity(computerDTO, MediaType.APPLICATION_JSON));
+		if (response.getStatus() != 200 && response.getStatus() != 204) {
+			System.out.println("Error " + response.getStatus());
+		}
 	}
 	
 	private boolean userConfirm() {
@@ -222,5 +198,19 @@ public class MainView {
 		} else {
 			return false;
 		}
+	}
+	
+	public String userChoice (String message) {
+		System.out.println(message);
+		return scan.nextLine();
+	}
+	
+	public String userChoiceWithConfirm(String message, String submessage) {
+		System.out.println(message);
+		if (userConfirm() == true) {
+			System.out.print(submessage);
+			return scan.nextLine();
+		}
+		return null;
 	}
 }
