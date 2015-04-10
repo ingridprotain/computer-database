@@ -1,47 +1,37 @@
 package com.excilys.computerdatabase.webservice;
 
-
 import java.util.ArrayList;
 import java.util.List;
 
-import javax.ws.rs.Consumes;
-import javax.ws.rs.GET;
-import javax.ws.rs.POST;
-import javax.ws.rs.Path;
-import javax.ws.rs.PathParam;
-import javax.ws.rs.Produces;
-import javax.ws.rs.core.MediaType;
-
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.stereotype.Component;
+import org.springframework.web.bind.annotation.PathVariable;
+import org.springframework.web.bind.annotation.RequestMapping;
+import org.springframework.web.bind.annotation.RequestMethod;
+import org.springframework.web.bind.annotation.RestController;
 
 import com.excilys.computerdatabase.dto.ComputerDTO;
 import com.excilys.computerdatabase.dto.ComputerMapper;
 import com.excilys.computerdatabase.model.Computer;
 import com.excilys.computerdatabase.service.IComputerService;
 
-@Component
-@Path("/computer")
-public class ComputerWebService implements IComputerWebService{
+@RestController
+@RequestMapping("/computer")
+public class ComputerWebService {
 	
 	@Autowired
 	private IComputerService computerService;
 	
-	public ComputerWebService() {
+	@RequestMapping(value="/find/{id}", method = RequestMethod.GET)
+	public ComputerDTO find(@PathVariable int id) {
+		Computer computer = computerService.find(id);
+		if (computer != null) {
+			return ComputerMapper.createComputerDTO(computer);
+		} else {
+			return null;
+		}
 	}
 	
-	@Override
-	@GET
-	@Path("/find/{id}")
-	@Produces(MediaType.APPLICATION_JSON)
-	public ComputerDTO find(@PathParam("id") int id) {
-		return ComputerMapper.createComputerDTO(computerService.find(id));
-	}
-
-	@Override
-	@GET
-	@Path("/all")
-	@Produces(MediaType.APPLICATION_JSON)
+	@RequestMapping(value="/all", method = RequestMethod.GET)
 	public List<ComputerDTO> getAll() {
 		List<Computer> computers = computerService.getAll();
 		List<ComputerDTO> cDTOs = new ArrayList<ComputerDTO>();
@@ -51,11 +41,17 @@ public class ComputerWebService implements IComputerWebService{
 		return cDTOs;
 	}
 	
-	@Override
-	@POST
-	@Consumes(MediaType.APPLICATION_JSON)
+	@RequestMapping(method = RequestMethod.POST)
 	public void insert(ComputerDTO computerDTO) {
 		Computer computer = ComputerMapper.createComputer(computerDTO);
 		computerService.create(computer);
+	}
+	
+	@RequestMapping(value="/delete/{id}", method = RequestMethod.DELETE)
+	public void delete(@PathVariable int id) {
+		Computer computer = computerService.find(id);
+		if (computer != null) {
+			computerService.delete(computer);
+		}
 	}
 }
