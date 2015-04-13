@@ -1,4 +1,4 @@
-package com.excilys.computerdatabase.util;
+package com.excilys.computerdatabase.utils;
 
 public class Pages {
 	private int limit;

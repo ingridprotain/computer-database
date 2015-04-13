@@ -8,7 +8,7 @@ import org.springframework.stereotype.Service;
 import com.excilys.computerdatabase.model.Computer;
 import com.excilys.computerdatabase.persistence.IComputerDAO;
 import com.excilys.computerdatabase.service.IComputerService;
-import com.excilys.computerdatabase.util.Pages;
+import com.excilys.computerdatabase.utils.Pages;
 
 @Service
 public class ComputerService implements IComputerService{

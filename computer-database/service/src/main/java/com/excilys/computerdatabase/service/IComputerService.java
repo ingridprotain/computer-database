@@ -3,7 +3,7 @@ package com.excilys.computerdatabase.service;
 import java.util.List;
 
 import com.excilys.computerdatabase.model.Computer;
-import com.excilys.computerdatabase.util.Pages;
+import com.excilys.computerdatabase.utils.Pages;
 
 public interface IComputerService {
 	public Computer find(int id);

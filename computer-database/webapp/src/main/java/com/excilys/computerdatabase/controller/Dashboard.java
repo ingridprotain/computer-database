@@ -14,7 +14,7 @@ import com.excilys.computerdatabase.dto.ComputerDTO;
 import com.excilys.computerdatabase.mapper.ComputerDTOMapper;
 import com.excilys.computerdatabase.model.Computer;
 import com.excilys.computerdatabase.service.IComputerService;
-import com.excilys.computerdatabase.util.Pages;
+import com.excilys.computerdatabase.utils.Pages;
 
 @Controller
 public class Dashboard {
@@ -85,6 +85,6 @@ public class Dashboard {
 			}
 		}
 		
-		return "redirect:dashboard";
+		return "dashboard";
 	}
 }
