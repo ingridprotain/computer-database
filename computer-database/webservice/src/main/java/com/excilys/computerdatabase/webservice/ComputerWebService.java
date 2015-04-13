@@ -41,11 +41,22 @@ public class ComputerWebService {
 		return cDTOs;
 	}
 	
-	@RequestMapping(method = RequestMethod.POST)
-	public void insert(ComputerDTO computerDTO) {
-		Computer computer = ComputerMapper.createComputer(computerDTO);
+	@RequestMapping(value="/edit", method = RequestMethod.POST)
+	public String edit(@PathVariable ComputerDTO computerDTO) {
+//		Computer computer = ComputerMapper.createComputer(computerDTO);
+//		if (computer.getId() == 0) {
+//			computerService.create(computer);
+//		} else {
+//			computerService.update(computer);
+//		}
+//		return "";
+		Computer computer = new Computer();
+		computer.setName("aaaaa");
 		computerService.create(computer);
+		return null;
 	}
+	
+	
 	
 	@RequestMapping(value="/delete/{id}", method = RequestMethod.DELETE)
 	public void delete(@PathVariable int id) {

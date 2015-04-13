@@ -72,7 +72,7 @@ public class ComputerDAO implements IComputerDAO {
 		JPQLQuery query = new HibernateQuery(sessionFactory.getCurrentSession());
 
 		return query.from(computer)
-				.where(computer.name.like("%" + name + "%"))
+				.where(computer.name.like("%" + name + "%").or(computer.company.name.like("%" + name + "%")))
 				.list(computer)
 				.size();
 	}
@@ -96,7 +96,7 @@ public class ComputerDAO implements IComputerDAO {
 		
 		if (pagination.getSearch() != null) {
 			computers = query.from(computer)
-				.where(computer.name.like("%" + pagination.getSearch() + "%"))
+				.where(computer.name.like("%" + pagination.getSearch() + "%").or(computer.company.name.like("%" + pagination.getSearch() + "%")))
 				.orderBy((pagination.getOrderBy() == "ASC" ? computer.name.asc() : computer.name.desc() ))
 				.limit(pagination.getLimit())
 				.offset(pagination.getOffset())
