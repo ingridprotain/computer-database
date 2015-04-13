@@ -11,10 +11,10 @@ import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.bind.annotation.RequestParam;
 
 import com.excilys.computerdatabase.dto.ComputerDTO;
-import com.excilys.computerdatabase.dto.ComputerMapper;
+import com.excilys.computerdatabase.mapper.ComputerDTOMapper;
 import com.excilys.computerdatabase.model.Computer;
 import com.excilys.computerdatabase.service.IComputerService;
-import com.excilys.computerdatabase.utils.Pages;
+import com.excilys.computerdatabase.util.Pages;
 
 @Controller
 public class Dashboard {
@@ -63,7 +63,7 @@ public class Dashboard {
 		//get the computers to display
 		List<ComputerDTO> cDTOs = new ArrayList<ComputerDTO>();
 		for (Computer c : computers) {
-			cDTOs.add(ComputerMapper.createComputerDTO(c));
+			cDTOs.add(ComputerDTOMapper.createComputerDTO(c));
 		}
 		
 		model.addAttribute("page", pagination);

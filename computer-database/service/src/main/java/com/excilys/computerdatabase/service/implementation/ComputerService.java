@@ -1,4 +1,4 @@
-package com.excilys.computerdatabase.service;
+package com.excilys.computerdatabase.service.implementation;
 
 import java.util.List;
 
@@ -7,7 +7,8 @@ import org.springframework.stereotype.Service;
 
 import com.excilys.computerdatabase.model.Computer;
 import com.excilys.computerdatabase.persistence.IComputerDAO;
-import com.excilys.computerdatabase.utils.Pages;
+import com.excilys.computerdatabase.service.IComputerService;
+import com.excilys.computerdatabase.util.Pages;
 
 @Service
 public class ComputerService implements IComputerService{

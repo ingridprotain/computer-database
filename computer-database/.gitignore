@@ -25,4 +25,6 @@
 /webapp/.gitignore
 /webapp/.project
 /webapp/.settings/
+webservice/.settings/org.eclipse.wst.common.project.facet.core.prefs.xml
+.gitignore~
 

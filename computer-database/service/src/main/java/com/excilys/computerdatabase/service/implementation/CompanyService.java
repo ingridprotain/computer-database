@@ -1,4 +1,4 @@
-package com.excilys.computerdatabase.service;
+package com.excilys.computerdatabase.service.implementation;
 
 import java.util.List;
 
@@ -9,6 +9,7 @@ import org.springframework.transaction.annotation.Transactional;
 import com.excilys.computerdatabase.model.Company;
 import com.excilys.computerdatabase.persistence.ICompanyDAO;
 import com.excilys.computerdatabase.persistence.IComputerDAO;
+import com.excilys.computerdatabase.service.ICompanyService;
 
 @Service
 public class CompanyService implements ICompanyService{

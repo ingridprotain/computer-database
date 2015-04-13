@@ -1,4 +1,4 @@
-package com.excilys.computerdatabase.dto;
+package com.excilys.computerdatabase.util;
 
 import java.lang.annotation.Documented;
 import java.lang.annotation.ElementType;

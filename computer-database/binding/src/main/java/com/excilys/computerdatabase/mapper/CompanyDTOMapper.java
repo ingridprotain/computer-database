@@ -1,9 +1,10 @@
-package com.excilys.computerdatabase.dto;
+package com.excilys.computerdatabase.mapper;
 
+import com.excilys.computerdatabase.dto.CompanyDTO;
 import com.excilys.computerdatabase.model.Company;
 
-final public class CompanyMapper {
-	private CompanyMapper() {
+final public class CompanyDTOMapper {
+	private CompanyDTOMapper() {
 		
 	}
 	

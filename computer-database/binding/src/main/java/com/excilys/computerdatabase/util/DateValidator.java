@@ -1,10 +1,12 @@
-package com.excilys.computerdatabase.dto;
+package com.excilys.computerdatabase.util;
 import java.time.LocalDateTime;
 import java.time.format.DateTimeFormatter;
 import java.time.format.DateTimeParseException;
 import java.util.Locale;
+
 import javax.validation.ConstraintValidator;
 import javax.validation.ConstraintValidatorContext;
+
 import org.apache.commons.validator.GenericValidator;
 import org.springframework.context.i18n.LocaleContextHolder;
 public class DateValidator implements ConstraintValidator<MyDate, String> {

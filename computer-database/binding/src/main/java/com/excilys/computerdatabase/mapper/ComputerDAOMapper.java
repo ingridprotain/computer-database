@@ -1,4 +1,4 @@
-package com.excilys.computerdatabase.dto;
+package com.excilys.computerdatabase.mapper;
 
 import java.sql.ResultSet;
 import java.sql.SQLException;

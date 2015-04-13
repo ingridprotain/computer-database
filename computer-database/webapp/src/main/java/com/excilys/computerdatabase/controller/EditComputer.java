@@ -14,9 +14,9 @@ import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.bind.annotation.RequestParam;
 
 import com.excilys.computerdatabase.dto.CompanyDTO;
-import com.excilys.computerdatabase.dto.CompanyMapper;
 import com.excilys.computerdatabase.dto.ComputerDTO;
-import com.excilys.computerdatabase.dto.ComputerMapper;
+import com.excilys.computerdatabase.mapper.CompanyDTOMapper;
+import com.excilys.computerdatabase.mapper.ComputerDTOMapper;
 import com.excilys.computerdatabase.model.Company;
 import com.excilys.computerdatabase.model.Computer;
 import com.excilys.computerdatabase.service.ICompanyService;
@@ -48,14 +48,14 @@ public class EditComputer {
 		//Creation of the DTOs
 		List<CompanyDTO> companiesDTO = new ArrayList<CompanyDTO>();
 		for (Company company : companies) {
-			companiesDTO.add(CompanyMapper.createCompanyDTO(company));
+			companiesDTO.add(CompanyDTOMapper.createCompanyDTO(company));
 		}
 		
 		//If isset computerId then we edit
 		if (computerId != 0) {
 			Computer computer = computerService.find(computerId);
 			if (computer != null) {
-				computerDTO = ComputerMapper.createComputerDTO(computer);
+				computerDTO = ComputerDTOMapper.createComputerDTO(computer);
 			}
 		}
 
@@ -75,13 +75,13 @@ public class EditComputer {
 			List<Company> companies = companyService.getAll();
 			List<CompanyDTO> companiesDTO = new ArrayList<CompanyDTO>();
 			for (Company company : companies) {
-				companiesDTO.add(CompanyMapper.createCompanyDTO(company));
+				companiesDTO.add(CompanyDTOMapper.createCompanyDTO(company));
 			}
 			model.addAttribute("companiesDTO", companiesDTO);
 			model.addAttribute("computerDTO", computerDTO);
 			return "editComputer";
 		} else {
-			Computer computer = ComputerMapper.createComputer(computerDTO);
+			Computer computer = ComputerDTOMapper.createComputer(computerDTO);
 			//Create
 			if (computer.getId() == 0) {
 				computerService.create(computer);

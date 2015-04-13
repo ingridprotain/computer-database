@@ -1,15 +1,17 @@
-package com.excilys.computerdatabase.dto;
+package com.excilys.computerdatabase.mapper;
 
 import java.time.format.DateTimeFormatter;
 import java.util.Locale;
 
 import org.springframework.context.i18n.LocaleContextHolder;
 
+import com.excilys.computerdatabase.dto.ComputerDTO;
 import com.excilys.computerdatabase.model.Company;
 import com.excilys.computerdatabase.model.Computer;
+import com.excilys.computerdatabase.util.DateValidator;
 
-final public class ComputerMapper {
-	private ComputerMapper() {
+final public class ComputerDTOMapper {
+	private ComputerDTOMapper() {
 		
 	}
 	

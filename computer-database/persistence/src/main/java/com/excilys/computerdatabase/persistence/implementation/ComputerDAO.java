@@ -11,7 +11,7 @@ import org.springframework.transaction.annotation.Transactional;
 import com.excilys.computerdatabase.model.Computer;
 import com.excilys.computerdatabase.model.QComputer;
 import com.excilys.computerdatabase.persistence.IComputerDAO;
-import com.excilys.computerdatabase.utils.Pages;
+import com.excilys.computerdatabase.util.Pages;
 import com.mysema.query.jpa.JPQLQuery;
 import com.mysema.query.jpa.hibernate.HibernateDeleteClause;
 import com.mysema.query.jpa.hibernate.HibernateQuery;

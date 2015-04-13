@@ -2,6 +2,8 @@ package com.excilys.computerdatabase.dto;
 
 import org.hibernate.validator.constraints.NotEmpty;
 
+import com.excilys.computerdatabase.util.MyDate;
+
 public class ComputerDTO {
 	private int id;
 	@NotEmpty(message="{NotEmpty.Computer.name}")
