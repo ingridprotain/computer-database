@@ -1,4 +1,4 @@
-package com.excilys.computerdatabase.persistence;
+package com.excilys.computerdatabase.persistence.implementation;
 
 import org.hibernate.SessionFactory;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -7,6 +7,7 @@ import org.springframework.transaction.annotation.Transactional;
 
 import com.excilys.computerdatabase.model.QUser;
 import com.excilys.computerdatabase.model.User;
+import com.excilys.computerdatabase.persistence.IUserDAO;
 import com.mysema.query.jpa.JPQLQuery;
 import com.mysema.query.jpa.hibernate.HibernateQuery;
 

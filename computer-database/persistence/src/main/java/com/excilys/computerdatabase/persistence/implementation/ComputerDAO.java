@@ -1,4 +1,4 @@
-package com.excilys.computerdatabase.persistence;
+package com.excilys.computerdatabase.persistence.implementation;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -10,6 +10,7 @@ import org.springframework.transaction.annotation.Transactional;
 
 import com.excilys.computerdatabase.model.Computer;
 import com.excilys.computerdatabase.model.QComputer;
+import com.excilys.computerdatabase.persistence.IComputerDAO;
 import com.excilys.computerdatabase.utils.Pages;
 import com.mysema.query.jpa.JPQLQuery;
 import com.mysema.query.jpa.hibernate.HibernateDeleteClause;
@@ -21,6 +22,7 @@ public class ComputerDAO implements IComputerDAO {
 	@Autowired
 	private SessionFactory sessionFactory;
 
+	//TODO Transactional dans service?
 	@Override
 	@Transactional
 	public Computer find(int id) {
@@ -72,7 +74,7 @@ public class ComputerDAO implements IComputerDAO {
 		JPQLQuery query = new HibernateQuery(sessionFactory.getCurrentSession());
 
 		return query.from(computer)
-				.where(computer.name.like("%" + name + "%").or(computer.company.name.like("%" + name + "%")))
+				.where(computer.name.like("%" + name + "%"))
 				.list(computer)
 				.size();
 	}
@@ -96,7 +98,7 @@ public class ComputerDAO implements IComputerDAO {
 		
 		if (pagination.getSearch() != null) {
 			computers = query.from(computer)
-				.where(computer.name.like("%" + pagination.getSearch() + "%").or(computer.company.name.like("%" + pagination.getSearch() + "%")))
+				.where(computer.name.like("%" + pagination.getSearch() + "%"))
 				.orderBy((pagination.getOrderBy() == "ASC" ? computer.name.asc() : computer.name.desc() ))
 				.limit(pagination.getLimit())
 				.offset(pagination.getOffset())

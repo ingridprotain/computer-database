@@ -14,7 +14,7 @@ import org.springframework.stereotype.Service;
 
 import com.excilys.computerdatabase.model.User;
 import com.excilys.computerdatabase.model.UserRole;
-import com.excilys.computerdatabase.persistence.UserDAO;
+import com.excilys.computerdatabase.persistence.implementation.UserDAO;
 
 @Service("userService")
 public class UserService implements UserDetailsService {

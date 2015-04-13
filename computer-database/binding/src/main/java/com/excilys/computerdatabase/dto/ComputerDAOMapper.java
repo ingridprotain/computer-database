@@ -1,4 +1,4 @@
-package com.excilys.computerdatabase.persistence;
+package com.excilys.computerdatabase.dto;
 
 import java.sql.ResultSet;
 import java.sql.SQLException;
@@ -8,7 +8,7 @@ import org.springframework.jdbc.core.RowMapper;
 import com.excilys.computerdatabase.model.Company;
 import com.excilys.computerdatabase.model.Computer;
 
-public class ComputerMapper implements RowMapper<Computer> {
+public class ComputerDAOMapper implements RowMapper<Computer> {
 	@Override
 	public Computer mapRow(ResultSet result, int rowNum) throws SQLException {
 		Computer computer = new Computer();

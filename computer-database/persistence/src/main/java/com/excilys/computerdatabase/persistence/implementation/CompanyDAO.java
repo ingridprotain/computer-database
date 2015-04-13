@@ -1,4 +1,4 @@
-package com.excilys.computerdatabase.persistence;
+package com.excilys.computerdatabase.persistence.implementation;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -10,12 +10,19 @@ import org.springframework.transaction.annotation.Transactional;
 
 import com.excilys.computerdatabase.model.Company;
 import com.excilys.computerdatabase.model.QCompany;
+import com.excilys.computerdatabase.persistence.ICompanyDAO;
 import com.mysema.query.jpa.JPQLQuery;
 import com.mysema.query.jpa.hibernate.HibernateDeleteClause;
 import com.mysema.query.jpa.hibernate.HibernateQuery;
 
+/**
+ * DAOs manage the interaction with the database
+ */
+
 @Repository
 public class CompanyDAO implements ICompanyDAO {
+	
+	
 	@Autowired
 	private SessionFactory sessionFactory;
 	
