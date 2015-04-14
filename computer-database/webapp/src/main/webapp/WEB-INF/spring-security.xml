@@ -27,7 +27,7 @@
 			username:realmName:password
 		For example, for the user ingrid using password 123456 :
 			ingrid:Authentication:123456
-		-> 4a87b69caaa238fe214f5786ba781c55
+		-> 4a87b69caaa238fe214f5786ba781c55 
 	 -->
 	<beans:bean id="digestAuthenticationFilter"
 		class="org.springframework.security.web.authentication.www.DigestAuthenticationFilter">

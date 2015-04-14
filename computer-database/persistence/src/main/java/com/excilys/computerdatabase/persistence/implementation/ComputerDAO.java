@@ -9,6 +9,7 @@ import org.springframework.stereotype.Repository;
 import org.springframework.transaction.annotation.Transactional;
 
 import com.excilys.computerdatabase.model.Computer;
+import com.excilys.computerdatabase.model.QCompany;
 import com.excilys.computerdatabase.model.QComputer;
 import com.excilys.computerdatabase.persistence.IComputerDAO;
 import com.excilys.computerdatabase.utils.Pages;
@@ -71,10 +72,12 @@ public class ComputerDAO implements IComputerDAO {
 	@Transactional
 	public int countSearch(String name) {
 		QComputer computer = QComputer.computer;
+		QCompany company = QCompany.company;
 		JPQLQuery query = new HibernateQuery(sessionFactory.getCurrentSession());
 
 		return query.from(computer)
-				.where(computer.name.like("%" + name + "%"))
+				.leftJoin(computer.company, company)
+				.where(computer.name.like("%" + name + "%").or(company.name.like("%" + name + "%")))
 				.list(computer)
 				.size();
 	}
@@ -94,11 +97,13 @@ public class ComputerDAO implements IComputerDAO {
 		
 		List<Computer> computers = new ArrayList<Computer>();
 		QComputer computer = QComputer.computer;
+		QCompany company = QCompany.company;
 		JPQLQuery query = new HibernateQuery(sessionFactory.getCurrentSession());
 		
 		if (pagination.getSearch() != null) {
 			computers = query.from(computer)
-				.where(computer.name.like("%" + pagination.getSearch() + "%"))
+				.leftJoin(computer.company, company)
+				.where(computer.name.like("%" + pagination.getSearch() + "%").or(company.name.like("%" + pagination.getSearch() + "%")))
 				.orderBy((pagination.getOrderBy() == "ASC" ? computer.name.asc() : computer.name.desc() ))
 				.limit(pagination.getLimit())
 				.offset(pagination.getOffset())
