@@ -8,7 +8,6 @@
 
 	<http entry-point-ref="digestAuthenticationEntryPoint">
 		<intercept-url pattern="/admin/**" access="ROLE_ADMIN" />
-		
 		<custom-filter ref="digestAuthenticationFilter"
 			after="BASIC_AUTH_FILTER" />
 	</http>
@@ -17,15 +16,33 @@
 		<authentication-provider user-service-ref="userService" />
 	</authentication-manager>
 	
+	<!-- 
+		 - userDetailsService - 
+		@see /com/excilys/computerdatabase/service/implementation
+	
+		 - passwordAlreadyEncoded -
+		By default, DigestAuthenticationFilter encrypts password
+		To encrypt password in database, we should use the option passwordAlreadyEncoded
+		In database, we should encrypt password using MD5 :
+			username:realmName:password
+		For example, for the user ingrid using password 123456 :
+			ingrid:Authentication:123456
+		-> 4a87b69caaa238fe214f5786ba781c55
+	 -->
 	<beans:bean id="digestAuthenticationFilter"
 		class="org.springframework.security.web.authentication.www.DigestAuthenticationFilter">
 		<beans:property name="userDetailsService" ref="userService" />
 		<beans:property name="authenticationEntryPoint" ref="digestAuthenticationEntryPoint" />
+		<beans:property name="passwordAlreadyEncoded" value="true" />
 	</beans:bean>
-		
+	
+	<!-- 
+		 - realmName - 
+		 realmName is use by digest to generate the password in database
+	 -->
 	<beans:bean id="digestAuthenticationEntryPoint"
 		class="org.springframework.security.web.authentication.www.DigestAuthenticationEntryPoint">
-			<beans:property name="realmName" value="Http Digest Authentication" />
+			<beans:property name="realmName" value="Authentication" />
 			<beans:property name="key" value="realmsalt" />
 	</beans:bean>
 </beans:beans>
