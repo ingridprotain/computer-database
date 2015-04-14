@@ -16,6 +16,7 @@ import com.excilys.computerdatabase.utils.Pages;
 import com.mysema.query.jpa.JPQLQuery;
 import com.mysema.query.jpa.hibernate.HibernateDeleteClause;
 import com.mysema.query.jpa.hibernate.HibernateQuery;
+import com.mysema.query.types.OrderSpecifier;
 
 @Repository
 public class ComputerDAO implements IComputerDAO {
@@ -100,17 +101,37 @@ public class ComputerDAO implements IComputerDAO {
 		QCompany company = QCompany.company;
 		JPQLQuery query = new HibernateQuery(sessionFactory.getCurrentSession());
 		
+		OrderSpecifier<?> order;
+		switch (pagination.getOrderByColumn()) {
+		case "name":
+			order = (pagination.getOrderBy() == "ASC" ? computer.name.asc() : computer.name.desc());
+			break;
+		case "introduced":
+			order = (pagination.getOrderBy() == "ASC" ? computer.introduced.asc() : computer.introduced.desc());
+			break;
+		case "discontinued":
+			order = (pagination.getOrderBy() == "ASC" ? computer.discontinued.asc() : computer.discontinued.desc());
+			break;
+		case "company":
+			order = (pagination.getOrderBy() == "ASC" ? computer.company.name.asc() : computer.company.name.desc());
+			break;
+		default:
+			order = computer.name.asc();
+			break;
+		}
+		
+		
 		if (pagination.getSearch() != null) {
 			computers = query.from(computer)
 				.leftJoin(computer.company, company)
 				.where(computer.name.like("%" + pagination.getSearch() + "%").or(company.name.like("%" + pagination.getSearch() + "%")))
-				.orderBy((pagination.getOrderBy() == "ASC" ? computer.name.asc() : computer.name.desc() ))
+				.orderBy(order)
 				.limit(pagination.getLimit())
 				.offset(pagination.getOffset())
 				.list(computer);
 		} else {
 			computers = query.from(computer)
-				.orderBy((pagination.getOrderBy() == "ASC" ? computer.name.asc() : computer.name.desc() ))
+				.orderBy(order)
 				.limit(pagination.getLimit())
 				.offset(pagination.getOffset())
 				.list(computer);

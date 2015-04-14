@@ -85,6 +85,6 @@ public class Dashboard {
 			}
 		}
 		
-		return "dashboard";
+		return "redirect:/dashboard";
 	}
 }

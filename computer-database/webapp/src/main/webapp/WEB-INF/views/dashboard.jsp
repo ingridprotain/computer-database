@@ -47,16 +47,19 @@
                         </th>
                         <th>
                             <spring:message code="computer.name"></spring:message>
-                            <my:pagination pagination="${ pagination }" isOrderBy="true"/>
+                            <my:pagination pagination="${ pagination }" isOrderBy="true" orderByColumn="name"/>
                         </th>
                         <th>
                             <spring:message code="computer.introduced"></spring:message>
+                            <my:pagination pagination="${ pagination }" isOrderBy="true" orderByColumn="introduced"/>
                         </th>
                         <th>
                             <spring:message code="computer.discontinued"></spring:message>
+                            <my:pagination pagination="${ pagination }" isOrderBy="true" orderByColumn="discontinued"/>
                         </th>
                         <th>
                             <spring:message code="company.name"></spring:message>
+                            <my:pagination pagination="${ pagination }" isOrderBy="true" orderByColumn="company"/>
                         </th>
 
                     </tr>

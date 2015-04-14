@@ -25,18 +25,18 @@
                         <fieldset>
                             <div class="form-group">
                                 <label for="computerName"><spring:message code="computer.name"/></label>
-                                <form:input type="text" path="name" value="${ computerDTO.name }" class="form-control" id="computerName" name="computerName" />
-                                <form:errors path="name" element="div" cssClass="alert alert-danger"/>
+                                <form:input type="text" path="name" value="${ computerDTO.name }" class="form-control" id="name" name="name" />
+                                <form:errors path="name" element="label" cssClass="error"/>
                             </div>
                             <div class="form-group">
                                 <label for="introduced"><spring:message code="computer.introduced"/></label>
                                 <form:input type="date" path="introduced" value="${ computerDTO.introduced }" class="form-control" id="introduced" name="introduced" />
-                                <form:errors path="introduced" element="div" cssClass="alert alert-danger"/>
+                                <form:errors path="introduced" element="label" cssClass="error"/>
                             </div>
                             <div class="form-group">
                                 <label for="discontinued"><spring:message code="computer.discontinued"/></label>
                                 <form:input type="date" path="discontinued" value="${ computerDTO.discontinued }" class="form-control" id="discontinued" name="discontinued" />
-                                <form:errors path="discontinued" element="div" cssClass="alert alert-danger"/>
+                                <form:errors path="discontinued" element="label" cssClass="error"/>
                             </div>
                             <form:input type="hidden" path="id" value="${ computerDTO.id }" name="computerId" />
                             <div class="form-group">
@@ -84,7 +84,7 @@
 		strings['form.regex'] = /^(0[1-9]|1[0-2])\/(0[1-9]|1\d|2\d|3[01])\/(19|20)\d{2}$/;
 	}
 </script>
-<script src="static/js/jquery.min.js"></script>
-<script src="static/js/jquery.validate.min.js"></script>
-<script src="static/js/addComputerValidate.js"></script>
+<script src="${pageContext.request.contextPath}/static/js/jquery.min.js"></script>
+<script src="${pageContext.request.contextPath}/static/js/jquery.validate.min.js"></script>
+<script src="${pageContext.request.contextPath}/static/js/addComputerValidate.js"></script>
 </html>

@@ -19,7 +19,7 @@ public class Pages {
 		page =1;
 		search = "";
 		orderBy = "ASC";
-		orderByColumn = "c.name";
+		orderByColumn = "name";
 	}
 	
 	public int getLimit() {
@@ -67,18 +67,13 @@ public class Pages {
 	}
 	public void setOrderByColumn(String orderByColumn) {
 		if (orderByColumn != null) {
-			if (orderByColumn.equals("name")) {
-				this.orderByColumn = "c.name";
-			}
-			else if(orderByColumn.equals("company")) {
-				this.orderByColumn = "co.name";
-			} else if (orderByColumn.equals("introduced")) {
-				this.orderByColumn = "c.introduced";
-			} else if (orderByColumn.equals("discontinued")) {
-				this.orderByColumn = "c.discontinued";
+			if (!(orderByColumn.equals("name") || !orderByColumn.equals("company") || !orderByColumn.equals("introduced") || !orderByColumn.equals("discontinued"))) {
+				this.orderByColumn = "name";
+			} else {
+				this.orderByColumn = orderByColumn;
 			}
 		} else {
-			this.orderByColumn = "c.name";
+			this.orderByColumn = "name";
 		}
 	}
 }

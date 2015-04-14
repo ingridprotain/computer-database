@@ -12,7 +12,7 @@ $(document).ready(function(){
 		
 		$("#addComputer").validate({
 	        rules: {
-	        	computerName: {
+	        	name: {
 	        		"required": true
 	        	},
 	        	introduced: {
@@ -26,7 +26,7 @@ $(document).ready(function(){
 	        
 	        // Specify the validation error messages
 	        messages: {
-	        	computerName: strings['form.check.name'],
+	        	name: strings['form.check.name'],
 	        	introduced: strings['form.check.date'],
 	        	discontinued: strings['form.check.date']
 	        },

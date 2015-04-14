@@ -15,6 +15,9 @@
     <header class="navbar navbar-inverse navbar-fixed-top">
         <div class="container">
         	<my:link name="Application - Computer Database" target="/webapp/dashboard" myClass="navbar-brand"/>
+        	<div class="pull-right">
+	        	<a href="?lang=en"><img alt="uk" src="${pageContext.request.contextPath}/static/img/flag_uk.png" /></a>
+	   		<a href="?lang=fr"><img alt="fr" src="${pageContext.request.contextPath}/static/img/flag_fr.png" /></a>
+   			</div>
         </div>
     </header>
-   	<div style="text-align : right;"><a href="?lang=en">EN</a>/<a href="?lang=fr">FR</a></div>
