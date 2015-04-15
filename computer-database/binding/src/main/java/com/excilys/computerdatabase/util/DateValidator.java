@@ -9,10 +9,22 @@ import javax.validation.ConstraintValidatorContext;
 
 import org.apache.commons.validator.GenericValidator;
 import org.springframework.context.i18n.LocaleContextHolder;
+
+/**
+ * the method isValid is use to validate if a date is in correct format or not
+ */
 public class DateValidator implements ConstraintValidator<MyDate, String> {
 	@Override
 	public void initialize(MyDate arg0) {
 	}
+	
+	/**
+	 * Depending on the language used by the user, the format is not the same
+	 * @param date it's the date to valid in string format
+	 * @param ctx ConstraintValidatorContext
+	 * @return true if the date is in the good format depending on the language; else return false
+	 * (in french : dd/MM/yyyy - in english : MM/dd/yyyy)
+	 */
 	@Override
 	public boolean isValid(String date, ConstraintValidatorContext ctx) {
 		if (date == null || date.equals("")) {

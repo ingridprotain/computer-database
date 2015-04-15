@@ -9,6 +9,9 @@ public class ComputerDTO {
 	@NotEmpty(message="{NotEmpty.Computer.name}")
 	private String name;
 	
+	/**
+	 * @see com.excilys.computerdatabase.util.MyDate
+	 */
 	@MyDate
 	private String introduced;
 	@MyDate

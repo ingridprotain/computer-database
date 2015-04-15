@@ -54,7 +54,7 @@ public class ComputerWebService implements IComputerWebService {
 		} else {
 			computerService.update(computer);
 		}
-		return "";
+		return "ok";
 	}
 
 	@Override

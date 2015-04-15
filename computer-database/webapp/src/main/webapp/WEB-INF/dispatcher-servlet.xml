@@ -12,6 +12,7 @@
 	
 	<mvc:annotation-driven validator="validator"/>
 	
+	<!-- Scan the controllers -->
 	<context:component-scan base-package="com.excilys.computerdatabase.controller" />
 	
 	<mvc:interceptors>
@@ -20,14 +21,23 @@
 		</bean>
 	</mvc:interceptors>
 	
+	<!-- defaultLocale in english -->
 	<bean id="localeResolver" class="org.springframework.web.servlet.i18n.CookieLocaleResolver">
 	    <property name="defaultLocale" value="en"/>
 	</bean>
 	
+	<!-- intercepts the language -->
 	<bean id="localeChangeInterceptor" class="org.springframework.web.servlet.i18n.LocaleChangeInterceptor">
 	    <property name="paramName" value="lang" />
 	</bean>
 	
+	<!-- 
+		basename is where the transaltions are. 
+		see in src/main/resources :
+			- messages_en.properties
+			- messages_fr.properties
+		We can add other properties file in function of the languages we want to add.
+	 -->
 	<bean id="messageSource" class="org.springframework.context.support.ReloadableResourceBundleMessageSource">
 	    <property name="basename" value="classpath:messages" />
 	    <property name="defaultEncoding" value="UTF-8" />

@@ -20,6 +20,8 @@ id="WebApp_ID" version="3.0">
   		<servlet-name>dispatcher</servlet-name>
   		<url-pattern>/</url-pattern>
   	</servlet-mapping>
+  	
+  	<!-- it's to scan the .css .png .js . ... files -->
 	<servlet-mapping>
 	    <servlet-name>default</servlet-name>
 	    <url-pattern>*.css</url-pattern>
@@ -41,6 +43,7 @@ id="WebApp_ID" version="3.0">
 	    <url-pattern>*.ttf</url-pattern>
 	</servlet-mapping>
 	
+	<!-- load context spring -->
   	<context-param>
 		<param-name>contextConfigLocation</param-name>
 		<param-value>
@@ -66,6 +69,7 @@ id="WebApp_ID" version="3.0">
 		<url-pattern>/*</url-pattern>
 	</filter-mapping>
 	
+	<!-- error pages -->
 	<error-page>
 		<error-code>401</error-code>
 		<location>/WEB-INF/views/401.jsp</location>

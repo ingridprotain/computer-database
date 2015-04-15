@@ -6,6 +6,7 @@
 	http://www.springframework.org/schema/security
 	http://www.springframework.org/schema/security/spring-security-3.2.xsd">
 
+	<!-- use Digest http -->
 	<http entry-point-ref="digestAuthenticationEntryPoint">
 		<intercept-url pattern="/admin/**" access="ROLE_ADMIN" />
 		<custom-filter ref="digestAuthenticationFilter"

@@ -15,7 +15,14 @@ final public class ComputerDTOMapper {
 		
 	}
 	
+	/**
+	 * Convert a computer to a computerDTO
+	 * @param computer
+	 * @return ComputerDTO
+	 */
 	public static ComputerDTO createComputerDTO(Computer computer) {
+		
+		//Get the locale language of the user to display the dates
 		Locale locale = LocaleContextHolder.getLocale();
 		
 		ComputerDTO computerDTO = new ComputerDTO();
@@ -43,6 +50,11 @@ final public class ComputerDTOMapper {
 		return computerDTO;
 	}
 	
+	/**
+	 * Convert a computerDTO to a computer
+	 * @param computerDTO
+	 * @return Computer
+	 */
 	public static Computer createComputer(ComputerDTO computerDTO) {
 		Computer computer = new Computer();
 

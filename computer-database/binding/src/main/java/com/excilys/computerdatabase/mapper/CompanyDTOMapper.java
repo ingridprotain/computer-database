@@ -8,6 +8,11 @@ final public class CompanyDTOMapper {
 		
 	}
 	
+	/**
+	 * Convert a company to a companyDTO
+	 * @param company
+	 * @return CompanyDTO
+	 */
 	public static CompanyDTO createCompanyDTO(Company company) {
 		CompanyDTO companyDTO = new CompanyDTO();
 		if (company == null) {
@@ -19,6 +24,11 @@ final public class CompanyDTOMapper {
 		return companyDTO;
 	}
 	
+	/**
+	 * Convert a companyDTO to a company
+	 * @param companyDTO
+	 * @return Company
+	 */
 	public static Company createCompany(CompanyDTO companyDTO) {
 		Company company = new Company();
 		
